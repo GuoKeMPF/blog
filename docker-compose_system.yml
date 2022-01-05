@@ -1,0 +1,51 @@
+version: "3"
+
+
+services:
+  blog_server:
+    build:
+      context: ./blog_server
+    volumes:
+      - ./blog_server/static/:/blog_server/static/
+    ports:
+      - "8000:8000"
+    image: blog_server
+    container_name: blog_server
+    networks:
+      - blogs
+
+  blog_ssr:
+    build:
+      context: ./blog_ssr
+    depends_on:
+      - blog_site
+    ports:
+      - "8001:8001"
+    image: blog_ssr
+    container_name: blog_ssr
+    networks:
+      - blogs
+  
+  blog_nginx:
+    build:
+      context: blog_nginx
+    image: blog_nginx
+    container_name: blog_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - blog_ssr
+      - blog_server
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 100000
+        hard: 200000
+    networks:
+      - blogs
+
+
+networks:
+  blogs:
+    driver: bridge

@@ -1,0 +1,22 @@
+@import '../assets/css/const.less';
+
+.context {
+  min-height: 100vh;
+  background-color: @themeColor;
+  color: @themeFontColor;
+  width: 100%;
+  box-sizing: border-box;
+  background: url('../assets/images/home-banner.jpg') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+
+
+@media screen and (min-width: 1024px) {
+  .context {
+    width: 1024px;
+    margin: 0 auto;
+    background-color: inherit;
+  }
+}

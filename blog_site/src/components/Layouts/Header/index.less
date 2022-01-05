@@ -1,0 +1,23 @@
+@import '../../../assets/css/const.less';
+
+.header {
+  width: 100%;
+  height: @headerHight;
+  z-index: 50;
+}
+
+.nav {
+  max-width: 300px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  .navlink {
+    color: @themeFontColorHover;
+  }
+  a:hover {
+    color: inherit;
+  }
+  .active {
+    color: inherit;
+  }
+}

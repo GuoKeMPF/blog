@@ -1,0 +1,218 @@
+import React, { useState, useRef, useEffect } from 'react';
+
+import styles from './index.less';
+// import canvasImage from './test.png';
+import canvasImage from './canvas_flag.png';
+
+const requestAnimFrame = window?.requestAnimationFrame;
+const cancelAnimationFrame = window?.cancelAnimationFrame;
+
+const canvasW = 400,
+  density = 10,
+  range = 10,
+  speed = 100,
+  megane = 130,
+  jimble = 2,
+  stroke_megane = 25,
+  drow_round = {
+    circles: 20,
+    r: 12,
+  };
+
+let imageW: number = 0,
+  imageH: number = 0,
+  canvasH: number = 0,
+  windoW = 0,
+  mouseX: number = 0,
+  mouseY: number = 0;
+
+const Background = () => {
+  const [image, setImage] = useState<any>(null);
+  const [particles, setParticles] = useState<any[]>([]);
+  const [animFrameID, setAnimFrameID] = useState<number>(0);
+
+  const canvas: any = useRef(null);
+  useEffect(() => {
+    init();
+    return () => {
+      destroy();
+    };
+  }, []);
+
+  const init = async () => {
+    const image = new Image();
+    image.src = canvasImage;
+    image.onload = () => {
+      windoW = window.innerWidth;
+      loadImage(image);
+      setImage(image);
+      window.addEventListener('mousemove', mousemove);
+    };
+  };
+
+  const destroy = () => {
+    window.removeEventListener('mousemove', mousemove);
+    cancelAnimationFrame(animFrameID);
+  };
+
+  const loadImage = (image: HTMLImageElement) => {
+    imageW = image.width;
+    imageH = image.height;
+
+    if (canvas && canvas.current) {
+      const current: any = canvas.current;
+      const ctx = current.getContext('2d');
+      current.width = canvasW;
+      const cH = (imageH * canvasW) / imageW;
+      current.height = cH;
+      canvasH = cH;
+      draw_bg(image);
+      setupParticles();
+    }
+  };
+
+  useEffect(() => {
+    if (image) {
+      animFrame();
+    }
+  }, [image]);
+
+  const setupParticles = () => {
+    const current: any = canvas.current;
+    const ctx = current.getContext('2d');
+    if (ctx) {
+      let particles = [];
+      let f, d, b;
+      f = ctx.getImageData(0, 0, canvasW, canvasH);
+      d = f.data;
+      for (let e = 0; e <= canvasW; e += density * 1) {
+        for (let a = 0; a <= canvasH; a += density * 1) {
+          b = d[(e + a * canvasW) * 4 - 1];
+          if (b == 255) {
+            particles.push({
+              x: e,
+              y: a,
+              x0: e,
+              y0: a,
+            });
+          }
+        }
+      }
+      setParticles(particles);
+    }
+  };
+
+  const mousemove = (e: MouseEvent) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  };
+
+  const draw_bg = (image: HTMLImageElement) => {
+    const current: any = canvas.current;
+    const ctx = current.getContext('2d');
+    ctx.drawImage(image, 0, 0, imageW, imageH, 0, 0, canvasW, canvasH);
+  };
+
+  const animFrame = () => {
+    const current: any = canvas.current;
+    const ctx = current?.getContext('2d');
+    if (windoW > 400 && ctx) {
+      ctx.clearRect(0, 0, canvasW, canvasH);
+      draw_bg(image);
+      draw_roundy();
+      draw_line();
+      const id = requestAnimFrame(animFrame);
+      setAnimFrameID(id);
+    }
+  };
+
+  const draw_roundy = () => {
+    const current: any = canvas.current;
+    const ctx = current.getContext('2d');
+    if (windoW > 400 && current) {
+      const ctxP = current?.getClientRects()[0];
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0)';
+      for (var b = 0; b <= drow_round.circles; b++) {
+        var d = drow_round.r + (drow_round.r * b) / 10;
+        var x = mouseX - ctxP.x;
+        var y = mouseY - ctxP.y;
+        if (x > 0 && x < canvasW && y > 0 && y < canvasH) {
+          ctx.beginPath();
+          ctx.arc(x, y, d, 0, Math.PI * 2, true);
+          ctx.stroke();
+          ctx.fill();
+        }
+      }
+    }
+  };
+
+  const draw_line = () => {
+    const current: any = canvas.current;
+    const ctx = current.getContext('2d');
+    if (!current) {
+      return;
+    }
+    ctx.globalCompositeOperation = 'destination-out';
+
+    const ctxP = current.getClientRects()[0];
+    var x = mouseX - ctxP.x;
+    var y = mouseY - ctxP.y;
+    for (var g = 0; g <= 10; g++) {
+      var j = 1 - g / 10;
+      var b = 80 + g * 3;
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,255,255,' + j + ')';
+      ctx.arc(x, y, b, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    for (var g = 0, l = particles.length; g < l; ++g) {
+      var d = particles[g],
+        dx = x - d.x,
+        dy = y - d.y,
+        distance = Math.sqrt(dx * dx + dy * dy);
+      d.x =
+        d.x - (dx / distance) * (range / distance) * speed - (d.x - d.x0) / 2;
+      d.y =
+        d.y - (dy / distance) * (range / distance) * speed - (d.y - d.y0) / 2;
+      var o = d.x - x;
+      var m = d.y - y;
+      var q = Math.sqrt(Math.pow(o, 2) + Math.pow(m, 2));
+      if (q < megane) {
+        for (var e = 1; e < particles.length; e++) {
+          var f = particles[e];
+          var k = d.x - f.x;
+          var h = d.y - f.y;
+          var a = Math.sqrt(Math.pow(k, 2) + Math.pow(h, 2));
+          if (a < stroke_megane) {
+            ctx.beginPath();
+            ctx.lineWidth = 0.3;
+            ctx.strokeStyle = 'rgba(255,255,255,1)';
+            ctx.lineTo(
+              d.x + (Math.random() * jimble - jimble / 2),
+              d.y + (Math.random() * jimble - jimble / 2),
+            );
+            ctx.lineTo(
+              f.x + (Math.random() * jimble - jimble / 2),
+              f.y + (Math.random() * jimble - jimble / 2),
+            );
+            ctx.lineTo(d.x0, d.y0);
+            ctx.lineTo(f.x0, f.y0);
+            ctx.closePath();
+            ctx.stroke();
+          }
+        }
+      }
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+      <canvas className={styles.canvas} id="canvas" ref={canvas} />
+    </div>
+  );
+};
+
+export default Background;

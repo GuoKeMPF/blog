@@ -1,0 +1,15 @@
+version: "3"
+
+
+services:
+  blog_site:
+    build:
+      context: ./blog_site
+    image: blog_site
+    container_name: blog_site
+
+  blog_admin:
+    build:
+      context: ./blog_admin
+    image: blog_admin
+    container_name: blog_admin
