@@ -6,8 +6,7 @@ services:
     build:
       context: ./blog_server
     volumes:
-      - ./blog_server/static/:/blog_server/static/
-      - ./blog_server/db.sqlite3:/blog_server/db.sqlite3
+      - ./blog_server/:/blog_server/
     ports:
       - "8000:8000"
     image: blog_server

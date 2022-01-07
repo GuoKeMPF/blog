@@ -1,4 +1,7 @@
 FROM python:3.10.0
+
+
+WORKDIR /blog_server
 ENV PYTHONUNBUFFERED 1
 COPY ./ ./
 RUN pip config set global.index-url http://mirrors.aliyun.com/pypi/simple
