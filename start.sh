@@ -7,6 +7,9 @@ echo "start project"
 
 usage="./start.sh [-b|--build]"
 
+
+source ./build_static.sh
+
 if [[ $# -gt 0 ]]; then
     args=("$@")
     for ((i = 0; i < $#; i++)); do
