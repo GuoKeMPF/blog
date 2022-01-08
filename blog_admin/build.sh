@@ -1,6 +1,7 @@
 echo "build admin"
+eval "cd ./blog_admin"
 
-if [ ! -e "/node_modules" ] 
+if [ ! -d "./node_modules" ] 
 then
     echo "install first"
     eval "tyarn"
@@ -8,10 +9,10 @@ fi
 
 
 
-if [ ! -e "/dist" ] 
+if [ ! -d "./dist" ] 
 then
-    echo "install first"
+    echo "build admin"
     eval "npm run build"
 fi
 
-exit 0
+eval "cd ../"
