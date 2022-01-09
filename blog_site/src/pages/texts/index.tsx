@@ -2,6 +2,7 @@ import { FC, Fragment, useEffect } from 'react';
 import Spin from '@/components/Spin';
 import { Dispatch, InitTextStateType, TextsType, connect } from 'umi';
 import TextItem from './TextItem';
+import styles from './index.less';
 
 interface PageProps {
   dispatch: Dispatch;
@@ -20,7 +21,14 @@ const Index: FC<PageProps> = ({ dispatch, loadingTexts, texts }) => {
     <Fragment>
       <Spin loading={loadingTexts}>
         {texts.map((item) => (
-          <TextItem key={item.id} text={item} />
+          <div key={item.id} className={styles.container}>
+            <div className={styles.line}>
+              <div className={styles.index}></div>
+            </div>
+            <div className={styles.texts}>
+              <TextItem text={item} />
+            </div>
+          </div>
         ))}
       </Spin>
     </Fragment>

@@ -3,6 +3,8 @@
 .text {
   display: block;
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
   padding: @padding @padding 0 @padding;
   border-radius: 8px;
   color: @themeFontColorGrey;
@@ -14,10 +16,6 @@
     line-height: 24px;
     font-weight: 500;
     cursor: pointer;
-  }
-
-  .title:hover {
-    color: @themeLinkColor;
   }
 
   .description {
@@ -37,18 +35,22 @@
     overflow: hidden;
   }
 }
-  .text:after {
-    opacity: 1;
-    position: absolute;
-    content: '';
-    width: 100%;
-    max-height: 30px;
-    height: 50%;
-    left: 0;
-    bottom: 0;
-    background: linear-gradient(#00000000, @themeColor);
-  }
+.text:after {
+  opacity: 1;
+  position: absolute;
+  content: '';
+  width: 100%;
+  max-height: 30px;
+  height: 50%;
+  left: 0;
+  bottom: 0;
+  background: linear-gradient(#00000000, @themeColor);
+}
 .text:hover {
   box-shadow: 0 0 20px @shadowColor;
   color: @themeFontColorGrey;
+
+  .title {
+    color: @themeLinkColor;
+  }
 }

@@ -1,0 +1,30 @@
+@import '../../../assets/css/const.less';
+
+.footer{
+    padding: @padding;
+}
+
+
+.copyright {
+  text-align: center;
+}
+
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  .beianicon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+
+@media screen and (max-width: 650px) {
+    
+.info {
+    display: flex;
+    flex-direction: column;
+  }
+}

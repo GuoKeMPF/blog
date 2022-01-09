@@ -1,19 +1,14 @@
 import { Request, Response } from 'express';
 import { setTimeOut } from './mockHelper';
-import mockjs from 'mockjs';
+import mockjs,{Random} from 'mockjs';
 
 const text: [] = mockjs.mock({
   'text|100': [
     {
-      author: {
-        name: '@title()',
-        'avatar|+1': [
-          'https://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1602167530&t=77eb09635da0e74f5fbcb2e7b1a34ab9',
-          '',
-        ],
-      },
+      author: '@title()',
       'ifPublic|1': '@boolean()',
       'id|+1': 0,
+      create_time: Random.datetime('yyyy-MM-dd HH:mm:ss'),
       title: '@title()',
       content: '@cparagraph()',
       description: '@cparagraph()',
