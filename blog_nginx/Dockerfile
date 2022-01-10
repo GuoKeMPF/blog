@@ -7,6 +7,9 @@ WORKDIR /blog_nginx
 
 
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY ./blog_static /blog_static
 COPY mapanfeng.com_bundle.crt /etc/nginx/ssl/mapanfeng.com_bundle.crt
 COPY mapanfeng.com.key /etc/nginx/ssl/mapanfeng.com.key
 
+HEALTHCHECK --interval=30s --timeout=5s --retries=10 \
+    CMD (curl --fail http://blog_server:8000/ && curl --fail http://blog_ssr:8001/) || exit 1
