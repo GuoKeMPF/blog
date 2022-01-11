@@ -1,30 +1,36 @@
 @import '../../../assets/css/const.less';
 
-.footer{
+@media screen and (min-width: 650px) {
+  .footer {
     padding: @padding;
-}
+  }
+  a {
+    margin: 0 @margin;
+  }
 
+  .copyright {
+    text-align: center;
+  }
 
-.copyright {
-  text-align: center;
-}
-
-
-.info {
-  display: flex;
-  justify-content: space-between;
-  flex: 1;
-  .beianicon {
-    width: 16px;
-    height: 16px;
+  .info {
+    display: flex;
+    justify-content: center;
   }
 }
 
-
 @media screen and (max-width: 650px) {
-    
-.info {
+  a {
+    margin: 0;
+  }
+  .info {
     display: flex;
     flex-direction: column;
   }
+}
+
+.beianicon {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin: 0 @px4;
 }
