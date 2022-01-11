@@ -1,3 +1,3 @@
 export default {
-  home_title: '首页',
+  home_title: '那个老麻的网站',
 };

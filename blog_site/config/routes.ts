@@ -15,10 +15,6 @@ export const routes = [
         path: '/text/:id',
         component: '@/pages/text/index',
       },
-      // {
-      //   path: '/music',
-      //   component: '@/pages/music/index',
-      // },
     ],
   },
 ];
