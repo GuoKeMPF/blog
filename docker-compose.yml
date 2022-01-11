@@ -6,8 +6,7 @@ services:
     build:
       context: ./blog_server
     volumes:
-      - ./blog_server/static/:/blog_server/static/
-      - ./blog_server/db.sqlite3:/blog_server/db.sqlite3
+      - ./blog_server/:/blog_server/
     ports:
       - "8000:8000"
     image: blog_server
@@ -15,24 +14,9 @@ services:
     networks:
       - blogs
 
-  blog_site:
-    build:
-      context: ./blog_site
-    image: blog_site
-    container_name: blog_site
-
-  blog_admin:
-    build:
-      context: ./blog_admin
-    image: blog_admin
-    container_name: blog_admin
-
   blog_ssr:
     build:
       context: ./blog_ssr
-    depends_on:
-      - blog_site
-      - blog_admin
     ports:
       - "8001:8001"
     image: blog_ssr

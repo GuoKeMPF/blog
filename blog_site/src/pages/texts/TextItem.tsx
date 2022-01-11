@@ -21,7 +21,7 @@ const TextItem: FC<PageProps> = ({ text }) => {
       <section
         className={styles.content}
         dangerouslySetInnerHTML={{ __html: content }}
-      ></section>
+      />
     </Link>
   );
 };
