@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { setTimeOut } from './mockHelper';
-import mockjs,{Random} from 'mockjs';
+import mockjs, { Random } from 'mockjs';
 
 const text: [] = mockjs.mock({
-  'text|100': [
+  'text|10': [
     {
       author: '@title()',
       'ifPublic|1': '@boolean()',
@@ -19,7 +19,7 @@ const text: [] = mockjs.mock({
 export default {
   'GET /api/text': async (req: Request, res: Response) => {
     const response = await setTimeOut(text, 1000);
-    res.send({data:response});
+    res.send({ data: response });
   },
   'GET /api/text/:id': (req: Request, res: Response) => {
     const { id } = req.params;
