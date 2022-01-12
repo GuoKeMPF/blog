@@ -2,7 +2,7 @@ source ./blog_admin/build.sh
 
 eval 'mkdir -p  ./blog_nginx/blog_static/admin/'
 
-eval 'cp -r ./blog_admin/dist/ ./blog_nginx/blog_static/admin/'
+eval 'cp -r ./blog_admin/dist/* ./blog_nginx/blog_static/admin/'
 
 source ./blog_site/build.sh
-eval 'cp -r ./blog_site/dist/ ./blog_ssr/app/public'
+eval 'cp -r ./blog_site/dist/* ./blog_ssr/app/public/'
