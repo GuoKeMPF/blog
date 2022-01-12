@@ -1,14 +1,16 @@
 
 from django.contrib import admin
 from django.urls import path, include, re_path
+from rest_framework.documentation import include_docs_urls
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from rest_framework.routers import DefaultRouter
+
+
 from draft.views import DraftViewSet
 from text.views import TextViewSet
-
-from rest_framework.documentation import include_docs_urls
+from picture.views import PictureAPIView
 from user.views import LoginView, LogoutView
 from upload.views import upload_view
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 router = DefaultRouter()
 router.register(prefix="viewsets", viewset=DraftViewSet)
@@ -36,6 +38,9 @@ urlpatterns = [
     path("api/login/", LoginView.as_view(), name="login"),
     path("api/logout/", LogoutView.as_view(), name="logout"),
     path("api/upload/", upload_view, name="upload"),
+
+
+    path("api/picture/", PictureAPIView.as_view(), name="picture"),
 
 
     path('admin/', admin.site.urls),

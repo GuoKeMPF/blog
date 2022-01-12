@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     "draft.apps.DraftConfig",
     "text.apps.TextConfig",
     "user.apps.UserConfig",
-    "upload.apps.UploadConfig"
+    "upload.apps.UploadConfig",
+    "picture.apps.PictureConfig"
 ]
 
 MIDDLEWARE = [
