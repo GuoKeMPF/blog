@@ -1,9 +1,19 @@
 @import '../../../assets/css/const.less';
 
+.footer {
+  padding: @padding;
+  min-height: @footerHight;
+}
+
+.beianicon {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin: 0 @px4;
+}
+
+
 @media screen and (min-width: 650px) {
-  .footer {
-    padding: @padding;
-  }
   a {
     margin: 0 @margin;
   }
@@ -22,15 +32,9 @@
   a {
     margin: 0;
   }
+
   .info {
     display: flex;
     flex-direction: column;
   }
-}
-
-.beianicon {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  margin: 0 @px4;
 }
