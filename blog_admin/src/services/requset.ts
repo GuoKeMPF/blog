@@ -1,7 +1,7 @@
 import { extend } from 'umi-request';
 import { history } from 'umi';
 import { notification } from 'antd';
-import { get } from '@/utils/sessionStorage';
+import { getCookie } from '@/utils/cookies';
 
 // handling error in response interceptor
 const errorHandler = (error: any) => {
@@ -41,7 +41,7 @@ const request = extend({
 // request request
 request.interceptors.request.use((url, options) => {
   const { headers = {} }: { headers?: any } = options;
-  const csrftoken: string | undefined = get('csrftoken');
+  const csrftoken: string | null = getCookie('csrftoken');
   if (csrftoken) {
     headers['X-CSRFToken'] = csrftoken;
   }

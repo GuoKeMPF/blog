@@ -44,9 +44,6 @@ const UserModel: UserModelType = {
           },
         });
         set('username', res.data);
-        window.cookieStore.get('csrftoken').then((cookie: any) => {
-          set('csrftoken', cookie.value);
-        });
         history.push('/dashboard');
       }
       return res;
