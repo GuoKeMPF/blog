@@ -8,7 +8,7 @@ from rest_framework.routers import DefaultRouter
 
 from draft.views import DraftViewSet
 from text.views import TextViewSet
-from picture.views import PictureAPIView
+from picture.views import PictureViewSet
 from user.views import LoginView, LogoutView
 from upload.views import upload_view
 
@@ -40,7 +40,8 @@ urlpatterns = [
     path("api/upload/", upload_view, name="upload"),
 
 
-    path("api/picture/", PictureAPIView.as_view(), name="picture"),
+    path("api/picture/", PictureViewSet.as_view( {"get": "list", "post": "create"}), name="picture"),
+    path("api/picture/<int:id>/", PictureViewSet.as_view({"delete": "destroy"}), name="picture"),
 
 
     path('admin/', admin.site.urls),

@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from picture.models import Picture
 import os
 import time
 # Create your views here.
@@ -17,4 +18,6 @@ def upload_view(request):
     for chrunk in f.chunks():
         fobj.write(chrunk)
     fobj.close()
+    picture = Picture(src=loaction)
+    picture.save()
     return JsonResponse({"data": loaction})

@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-from django.db import models
 
 class Picture(models.Model):
     src = models.TextField(help_text='src', unique=True)
