@@ -8,3 +8,5 @@ export const upload = '/api/upload/';
 export const draft = '/api/draft';
 
 export const text = '/api/text';
+
+export const picture = '/api/picture';
