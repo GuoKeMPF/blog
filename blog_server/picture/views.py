@@ -1,4 +1,4 @@
-from django.shortcuts import render
+
 from django.http import JsonResponse
 from .models import Picture
 from .serializers import PictureSerializer
@@ -19,19 +19,19 @@ class PictureViewSet(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         id = kwargs.get('id')
-        print(id)
-        print('destroy')
         picture = Picture.objects.get(id=id)
         if picture is None:
-            return JsonResponse({"code": 1, "message": "file dose't exist"}, status=200, safe=False)
+            return JsonResponse({"code": 0, "message": "file dose't exist"}, status=200, safe=False)
         else:
             try:
+                print(picture.src)
                 baseDir = os.path.dirname(os.path.abspath(__name__))
-                path =os.path.join('./', picture.src)
-                print(path)
-                os.remove(path)
+                print(baseDir)
+                p = os.path.join(baseDir, './'+picture.src)
+                print(p)
+                os.remove(p)
             except(FileNotFoundError):
-                return JsonResponse({"code": 1, "message": "delete file failed"}, status=200, safe=False)
+                return JsonResponse({"code": 0, "message": "delete file failed"}, status=200, safe=False)
             res = picture.delete()
-            return JsonResponse({}, status=200, safe=False)
+            return JsonResponse({"message": res}, status=200, safe=False)
         # picture = Picture.objects.get(id=13)
