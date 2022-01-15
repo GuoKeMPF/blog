@@ -1,15 +1,23 @@
-import { ReactElement, useEffect } from 'react';
-import { Skeleton, Card, Button, Image } from 'antd';
+import { useEffect } from 'react';
+import { Skeleton, Card, Button, Image, Col, Row, Popconfirm } from 'antd';
+import { DeleteOutlined, DownloadOutlined } from '@ant-design/icons';
 import { connect } from 'umi';
+import { formLayout } from '@/utils/layoutFrom';
+
+import styles from './index.less';
+import errorImg from '@/assets/images/errorImg.png';
+
+import type { ReactElement } from 'react';
 import type { PictureStateType, Dispatch, Loading } from 'umi';
-import { formColums } from '@/utils/layoutFrom';
+
+const { Meta } = Card;
 
 const Picture = ({
   pictures,
   dispatch,
   loading,
 }: {
-  drafts: PictureStateType.PictureTypes;
+  pictures: PictureStateType.PictureTypes;
   dispatch: Dispatch;
   loading: boolean;
 }): ReactElement => {
@@ -19,22 +27,45 @@ const Picture = ({
     });
   }, []);
 
-  const addDraft = () => {
-    dispatch({
-      type: 'draft/toEdit',
-      payload: {},
-    });
+  const onUpload = () => {};
+
+  const onDelete = (picture: PictureStateType.PictureType) => {
+    console.log('picture', picture);
   };
 
   return (
-    <Card title="图片" extra={<Button onClick={addDraft}>新建</Button>}>
+    <Card title="图片" extra={<Button onClick={onUpload}>新建</Button>}>
       <Skeleton loading={loading} active>
-        <Image.PreviewGroup>
-          <Image
-            width={200}
-            src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
-          />
-        </Image.PreviewGroup>
+        <Row gutter={[16, 16]}>
+          <Image.PreviewGroup>
+            {pictures.map((p: PictureStateType.PictureType) => (
+              <Col {...formLayout(24, 24, 12, 8, 6, 4)} key={p.id}>
+                <Card
+                  hoverable
+                  cover={<Image fallback={errorImg} className={styles.picture} src={p.src} />}
+                  actions={[
+                    <a href={p.src} key="download" download={p.name}>
+                      <DownloadOutlined />
+                    </a>,
+                    <Popconfirm
+                      key="delete"
+                      title="是否确认删除当前图片？"
+                      onConfirm={() => onDelete(p)}
+                      okText="是"
+                      cancelText="否"
+                    >
+                      <Button type="link" danger>
+                        <DeleteOutlined />
+                      </Button>
+                    </Popconfirm>,
+                  ]}
+                >
+                  <Meta title={p.name} description={<span>上传时间：{p.create_time}</span>} />
+                </Card>
+              </Col>
+            ))}
+          </Image.PreviewGroup>
+        </Row>
       </Skeleton>
     </Card>
   );

@@ -11,6 +11,7 @@ export namespace PictureStateType {
     id: string;
     src: string;
     create_time?: string;
+    name: string;
   };
   export type PictureTypes = PictureType[];
 }

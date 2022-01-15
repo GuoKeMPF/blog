@@ -3,11 +3,12 @@ import { Request, Response } from 'express';
 import mockjs, { Random } from 'mockjs';
 
 const pictures: any[] = mockjs.mock({
-  'picture|100': [
+  'picture|50': [
     {
       'id|+1': 0,
       src: Random.image('200x100', '#FF6600'),
       create_time: '2021-12-10 11:54:29',
+      name: 'mock picture.png',
     },
   ],
 }).picture;
