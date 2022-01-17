@@ -1,6 +1,6 @@
 import { ReactElement, useEffect } from 'react';
 import { Skeleton, Card, Button, List } from 'antd';
-import { connect, withRouter } from 'umi';
+import { connect } from 'umi';
 import type { DraftsStateType, DraftStateType, Dispatch, Loading } from 'umi';
 import { formColums } from '@/utils/layoutFrom';
 import { formType } from '@/utils/enum';
@@ -10,12 +10,10 @@ const Draft = ({
   drafts,
   dispatch,
   loading,
-  history,
 }: {
   drafts: DraftsStateType.Drafts;
   dispatch: Dispatch;
   loading: boolean;
-  history: any;
 }): ReactElement => {
   useEffect(() => {
     dispatch({
@@ -48,9 +46,7 @@ const Draft = ({
     </Card>
   );
 };
-export default withRouter(
-  connect(({ draft, loading }: { draft: DraftStateType; loading: Loading }) => ({
-    drafts: draft.drafts,
-    loading: !!loading.effects['draft/queryDrafts'] || !!loading.effects['draft/deleteDraft'],
-  }))(Draft),
-);
+export default connect(({ draft, loading }: { draft: DraftStateType; loading: Loading }) => ({
+  drafts: draft.drafts,
+  loading: !!loading.effects['draft/queryDrafts'] || !!loading.effects['draft/deleteDraft'],
+}))(Draft);

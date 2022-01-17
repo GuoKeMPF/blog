@@ -3,7 +3,10 @@ export default [
     path: '/user',
     layout: false,
     routes: [
-      { path: '/user', routes: [{ name: '登录', path: '/user/login', component: './user/Login' }] },
+      {
+        path: '/user',
+        routes: [{ name: '登录', path: '/user/login', component: './user/Login' }],
+      },
       { component: './404' },
     ],
   },
@@ -14,9 +17,11 @@ export default [
     icon: 'BarChartOutlined',
     component: './Dashboard',
   },
+
   {
     name: '说说管理',
     icon: 'FileTextOutlined',
+    path: '/texts',
     routes: [
       {
         path: '/texts/drafts',
@@ -30,8 +35,13 @@ export default [
         icon: 'FileTextOutlined',
         component: './texts/text',
       },
-      { component: './404' },
     ],
+  },
+  {
+    path: '/picture',
+    name: '图片管理',
+    icon: 'FileImageOutlined',
+    component: './picture/index',
   },
   { component: './404' },
 ];

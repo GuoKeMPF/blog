@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { connect } from 'umi';
 import { Form, Input, Modal } from 'antd';
 import FormFooter from '@/components/Footer/FormFooter';
@@ -49,7 +49,7 @@ const Draft = ({
   return (
     <Modal onCancel={onConcel} footer={null} destroyOnClose visible={visable} width={'100%'}>
       <Form
-        name="validate_other"
+        name="draft"
         {...formItemLayout}
         onFinish={onFinish}
         initialValues={{
