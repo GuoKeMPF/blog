@@ -57,7 +57,7 @@ const Text = ({
       width={'80%'}
     >
       <Form
-        name="validate_other"
+        name="text"
         {...formItemLayout}
         onFinish={onFinish}
         initialValues={{

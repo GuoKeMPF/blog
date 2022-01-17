@@ -3,7 +3,8 @@ export const user = {
   logout: '/api/logout/',
 };
 
-export const upload = '/api/upload/';
+export const upload = '/api/upload';
+export const uploads = '/api/uploads';
 
 export const draft = '/api/draft';
 

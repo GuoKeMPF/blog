@@ -10,7 +10,7 @@ from draft.views import DraftViewSet
 from text.views import TextViewSet
 from picture.views import PictureViewSet
 from user.views import LoginView, LogoutView
-from upload.views import upload_view
+from upload.views import upload_view, uploads_view
 
 router = DefaultRouter()
 router.register(prefix="viewsets", viewset=DraftViewSet)
@@ -38,10 +38,13 @@ urlpatterns = [
     path("api/login/", LoginView.as_view(), name="login"),
     path("api/logout/", LogoutView.as_view(), name="logout"),
     path("api/upload/", upload_view, name="upload"),
+    path("api/uploads/", uploads_view, name="uploads"),
 
 
-    path("api/picture/", PictureViewSet.as_view( {"get": "list", "post": "create"}), name="picture"),
-    path("api/picture/<int:id>/", PictureViewSet.as_view({"delete": "destroy"}), name="picture"),
+    path("api/picture/",
+         PictureViewSet.as_view({"get": "list", "post": "create"}), name="picture"),
+    path("api/picture/<int:id>/",
+         PictureViewSet.as_view({"delete": "destroy"}), name="picture"),
 
 
     path('admin/', admin.site.urls),

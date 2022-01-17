@@ -17,6 +17,12 @@ declare module 'mockjs';
 declare module 'react-fittext';
 declare module 'bizcharts-plugin-slider';
 
+type ResponseDateType = {
+  code: number;
+  data: any;
+  message?: string;
+};
+
 type StorageMock = {
   get: (key: string) => Promise;
 };

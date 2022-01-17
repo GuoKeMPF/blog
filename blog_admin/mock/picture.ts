@@ -20,7 +20,12 @@ export default {
 
   'POST /api/picture': (req: Request, res: Response) => {
     const picture = { ...req.body, id: pictures.length };
-    pictures.unshift(picture);
+    pictures.unshift({
+      id: pictures.length,
+      src: Random.image('200x100', '#FF6600'),
+      create_time: '2021-12-10 11:54:29',
+      name: 'mock picture.png',
+    });
     res.status(200).send(picture);
   },
 

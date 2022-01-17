@@ -1,4 +1,5 @@
 import { queryPictures, addPicture, deletePicture } from '@/services/picture';
+import { message } from 'antd';
 
 // export interface PictureType {
 //   id: string;
@@ -18,10 +19,12 @@ export namespace PictureStateType {
 
 export interface PictureStateType {
   pictures: PictureStateType.PictureTypes;
+  visiable: boolean;
 }
 
 const initState: PictureStateType = {
   pictures: [],
+  visiable: false,
 };
 
 const Picture = {
@@ -39,8 +42,12 @@ const Picture = {
     },
 
     *addPicture({ payload }: any, { put, call }: any) {
-      const response: PictureStateType.PictureType = yield call(addPicture, payload);
-      if (response) {
+      const response: ResponseDateType = yield call(addPicture, payload);
+      if (!response.code) {
+        message.error(response.message);
+        return;
+      }
+      if (response && response?.code) {
         const texts: { data: PictureStateType.PictureTypes } = yield call(queryPictures);
         if (texts) {
           yield put({
@@ -52,7 +59,11 @@ const Picture = {
     },
 
     *deletePicture({ payload }: any, { put, call }: any) {
-      yield call(deletePicture, payload);
+      const response: ResponseDateType = yield call(deletePicture, payload);
+      if (!response.code) {
+        message.error(response.message);
+        return;
+      }
       const pictures: { data: PictureStateType.PictureTypes } = yield call(queryPictures);
       if (pictures) {
         yield put({
@@ -64,6 +75,12 @@ const Picture = {
   },
   reducers: {
     update(state: PictureStateType, action: { payload: any }) {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    },
+    setVisiable(state: PictureStateType, action: { payload: { visiable: boolean } }) {
       return {
         ...state,
         ...action.payload,
