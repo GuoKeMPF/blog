@@ -19,6 +19,13 @@ router.register(prefix="viewsets", viewset=TextViewSet)
 
 urlpatterns = [
 
+    path("api/login/", LoginView.as_view(), name="login"),
+    path("api/logout/", LogoutView.as_view(), name="logout"),
+    path("api/upload/", upload_view, name="upload"),
+    path("api/uploads/", uploads_view, name="uploads"),
+
+
+
     path("api/draft/", DraftViewSet.as_view(
         {"get": "list", "post": "create"}
     ), name="draft"),
@@ -35,10 +42,6 @@ urlpatterns = [
             "patch": "partial_update", "delete": "destroy"}
     ), name="draft"),
 
-    path("api/login/", LoginView.as_view(), name="login"),
-    path("api/logout/", LogoutView.as_view(), name="logout"),
-    path("api/upload/", upload_view, name="upload"),
-    path("api/uploads/", uploads_view, name="uploads"),
 
 
     path("api/picture/",
