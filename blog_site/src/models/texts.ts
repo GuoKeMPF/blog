@@ -42,8 +42,8 @@ const Text: ModelType = {
   namespace: 'texts',
   state: initState,
   effects: {
-    *queryTexts(_action: any, { put, call }: any) {
-      const response = yield call(queryTexts);
+    *queryTexts({ payload }: any, { put, call }: any) {
+      const response = yield call(queryTexts, payload);
       if (response) {
         yield put({
           type: 'update',

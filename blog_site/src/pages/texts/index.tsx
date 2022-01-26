@@ -1,6 +1,8 @@
-import { FC, Fragment, useEffect } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 import Spin from '@/components/Spin';
-import { Dispatch, InitTextStateType, TextsType, connect } from 'umi';
+import { useLocation, useHistory, connect } from 'umi';
+import Pagination from '@/components/Pagination';
+import type { Dispatch, InitTextStateType, TextsType, Location } from 'umi';
 import TextItem from './TextItem';
 import styles from './index.less';
 
@@ -11,15 +13,32 @@ interface PageProps {
 }
 
 const Index: FC<PageProps> = ({ dispatch, loadingTexts, texts }) => {
+  const location: Location = useLocation();
+  const history = useHistory();
+  const { page = 1 } = location?.query ?? {};
+
   useEffect(() => {
     dispatch({
       type: 'texts/queryTexts',
+      payload: {
+        // size,
+        page,
+      },
     });
-  }, []);
+  }, [page]);
+
+  const changePage = (value: string | number) => {
+    console.log(value);
+    history.push({
+      pathname: 'texts',
+      search: `?page=${value}`,
+    });
+  };
 
   return (
-    <Fragment>
-      <Spin loading={loadingTexts}>
+    <Spin loading={loadingTexts}>
+      <Fragment>
+        <Pagination page={page} total={100} onChange={changePage} />
         {texts.map((item) => (
           <div key={item.id} className={styles.container}>
             <div className={styles.line}>
@@ -30,8 +49,8 @@ const Index: FC<PageProps> = ({ dispatch, loadingTexts, texts }) => {
             </div>
           </div>
         ))}
-      </Spin>
-    </Fragment>
+      </Fragment>
+    </Spin>
   );
 };
 export default connect(
