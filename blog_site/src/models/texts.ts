@@ -12,6 +12,7 @@ export interface TextsType {
 export interface InitTextStateType {
   texts: TextsType[];
   text: TextsType;
+  total: number;
 }
 
 export interface ModelType {
@@ -35,6 +36,7 @@ const initText = {
 
 export const initState: InitTextStateType = {
   texts: [],
+  total: 0,
   text: initText,
 };
 
@@ -47,7 +49,7 @@ const Text: ModelType = {
       if (response) {
         yield put({
           type: 'update',
-          payload: { texts: response.data },
+          payload: { texts: response.data, total: response.count },
         });
       }
     },

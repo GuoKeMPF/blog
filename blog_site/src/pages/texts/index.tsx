@@ -10,12 +10,13 @@ interface PageProps {
   dispatch: Dispatch;
   loadingTexts: boolean;
   texts: TextsType[];
+  total: number;
 }
 
-const Index: FC<PageProps> = ({ dispatch, loadingTexts, texts }) => {
+const Index: FC<PageProps> = ({ dispatch, loadingTexts, texts, total }) => {
   const location: Location = useLocation();
   const history = useHistory();
-  const { page = 1 } = location?.query ?? {};
+  const page = location?.query?.page?.toString() ?? '1';
 
   useEffect(() => {
     dispatch({
@@ -27,8 +28,7 @@ const Index: FC<PageProps> = ({ dispatch, loadingTexts, texts }) => {
     });
   }, [page]);
 
-  const changePage = (value: string | number) => {
-    console.log(value);
+  const changePage = (value: string) => {
     history.push({
       pathname: 'texts',
       search: `?page=${value}`,
@@ -36,9 +36,8 @@ const Index: FC<PageProps> = ({ dispatch, loadingTexts, texts }) => {
   };
 
   return (
-    <Spin loading={loadingTexts}>
-      <Fragment>
-        <Pagination page={page} total={100} onChange={changePage} />
+    <Fragment>
+      <Spin loading={loadingTexts}>
         {texts.map((item) => (
           <div key={item.id} className={styles.container}>
             <div className={styles.line}>
@@ -49,13 +48,21 @@ const Index: FC<PageProps> = ({ dispatch, loadingTexts, texts }) => {
             </div>
           </div>
         ))}
-      </Fragment>
-    </Spin>
+      </Spin>
+      <Pagination
+        disable={loadingTexts}
+        page={page}
+        total={total}
+        onChange={changePage}
+        position="center"
+      />
+    </Fragment>
   );
 };
 export default connect(
   ({ loading, texts }: { loading: any; texts: InitTextStateType }) => ({
     loadingTexts: !!loading.effects['texts/queryTexts'],
     texts: texts.texts,
+    total: texts.total,
   }),
 )(Index);
