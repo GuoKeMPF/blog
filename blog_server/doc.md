@@ -29,3 +29,9 @@ pip freeze > requirements.txt
 # install dependence form requirements.txt
 
 pip install -r requirements.txt
+
+
+
+# clear session
+
+django manage.py clearsessions
