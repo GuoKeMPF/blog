@@ -1,8 +1,8 @@
 import { Fragment, useEffect } from 'react';
-import { Skeleton, Card, Button, Image, Col, Row, Popconfirm } from 'antd';
+import { Skeleton, Card, Button, Image, Popconfirm, List } from 'antd';
 import { DeleteOutlined, DownloadOutlined } from '@ant-design/icons';
 import { connect } from 'umi';
-import { formLayout } from '@/utils/layoutFrom';
+import { formColums } from '@/utils/layoutFrom';
 import ImageForm from './ImageForm';
 
 import styles from './index.less';
@@ -50,12 +50,23 @@ const Picture = ({
   return (
     <Fragment>
       <ImageForm />
-      <Card title="图片" extra={<Button onClick={onUpload}>新建</Button>}>
+      <Card
+        title="图片"
+        className={styles.pictures}
+        extra={<Button onClick={onUpload}>新建</Button>}
+      >
         <Skeleton loading={loading} active>
-          <Row gutter={[16, 16]}>
-            <Image.PreviewGroup>
-              {pictures.map((p: PictureStateType.PictureType) => (
-                <Col {...formLayout(24, 24, 12, 8, 6, 4)} key={p.id}>
+          <Image.PreviewGroup>
+            <List
+              grid={{ gutter: 16, ...formColums(1, 1, 2, 3, 4, 6) }}
+              dataSource={pictures}
+              pagination={{
+                position: 'both',
+                size: 'small',
+                showSizeChanger: true,
+              }}
+              renderItem={(p: PictureStateType.PictureType) => (
+                <List.Item>
                   <Card
                     hoverable
                     cover={
@@ -90,10 +101,10 @@ const Picture = ({
                   >
                     <Meta title={p.name} description={<span>上传时间：{p.create_time}</span>} />
                   </Card>
-                </Col>
-              ))}
-            </Image.PreviewGroup>
-          </Row>
+                </List.Item>
+              )}
+            />
+          </Image.PreviewGroup>
         </Skeleton>
       </Card>
     </Fragment>

@@ -10,8 +10,8 @@ import logo from '@/assets/images/logo.png';
 interface PageProps {
   loading: boolean;
 }
-const Login: ConnectRC<PageProps> = ({ loading, dispatch }) => {
-  const handleSubmit = async (values: API.LoginParams) => {
+const Login: ConnectRC<PageProps> = ({ dispatch }) => {
+  const handleSubmit = async (values: { username: string; password: string }) => {
     const { username, password } = values;
     const encodeNmae = encrypt(username);
     const encodePwd = encrypt(password);
@@ -30,10 +30,10 @@ const Login: ConnectRC<PageProps> = ({ loading, dispatch }) => {
       <div className={styles.content}>
         <LoginForm
           logo={<img alt="logo" src={logo} />}
-          title="Admin Platform"
+          title="数据管理中心"
           subTitle={'孤舟江海寄余生的后台网站'}
           onFinish={async (values) => {
-            await handleSubmit(values as API.LoginParams);
+            await handleSubmit(values as { username: string; password: string });
           }}
         >
           <ProFormText

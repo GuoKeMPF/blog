@@ -6,6 +6,8 @@ import { formColums } from '@/utils/layoutFrom';
 import { formType } from '@/utils/enum';
 import DraftItem from './draftItem';
 
+import styles from './index.less';
+
 const Draft = ({
   drafts,
   dispatch,
@@ -31,11 +33,20 @@ const Draft = ({
   };
 
   return (
-    <Card title="草稿箱" extra={<Button onClick={addDraft}>新建</Button>}>
+    <Card
+      title="草稿箱"
+      className={styles.container}
+      extra={<Button onClick={addDraft}>新建</Button>}
+    >
       <Skeleton loading={loading} active>
         <List
           grid={{ gutter: 16, ...formColums(1, 1, 2, 3, 4, 6) }}
           dataSource={drafts}
+          pagination={{
+            position: 'both',
+            size: 'small',
+            showSizeChanger: true,
+          }}
           renderItem={(item: DraftsStateType.Draft) => (
             <List.Item>
               <DraftItem key={item.id} draft={item} />

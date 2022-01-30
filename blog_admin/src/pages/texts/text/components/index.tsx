@@ -7,6 +7,8 @@ import { formColums } from '@/utils/layoutFrom';
 import { formType } from '@/utils/enum';
 import TextItem from './textItem';
 
+import styles from './index.less';
+
 const Text = ({
   texts,
   dispatch,
@@ -32,11 +34,16 @@ const Text = ({
   };
 
   return (
-    <Card title="说说" extra={<Button onClick={addText}>新建</Button>}>
+    <Card title="说说" className={styles.text} extra={<Button onClick={addText}>新建</Button>}>
       <Skeleton loading={loading} active>
         <List
           grid={{ gutter: 16, ...formColums(1, 1, 2, 3, 4, 6) }}
           dataSource={texts}
+          pagination={{
+            position: 'both',
+            size: 'small',
+            showSizeChanger: true,
+          }}
           renderItem={(item: TextsStateType.Text) => (
             <List.Item>
               <TextItem key={item.id} text={item} />
