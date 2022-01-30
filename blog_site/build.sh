@@ -9,6 +9,9 @@ fi
 
 
 
+echo "build site"
+eval "npm run build"
+
 
 eval "cd ../"
 
