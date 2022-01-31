@@ -2,8 +2,8 @@ import { Get, Post, Put, Delete } from './requset';
 import { draft } from './api';
 import type { DraftType } from 'umi';
 
-export async function queryDrafts() {
-  return Get(draft);
+export async function queryDrafts(params: any) {
+  return Get(draft, { size: 12, page: 1, ...params });
 }
 
 export async function queryDraft({ id }: { id: string }) {

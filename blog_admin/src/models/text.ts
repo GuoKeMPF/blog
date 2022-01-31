@@ -23,9 +23,20 @@ export namespace TextsStateType {
   export type Texts = TextType[];
 }
 
+
+export interface TextsResponseType {
+  data: TextType[];
+  count: number,
+  size: number,
+  page: number,
+}
+
 export interface TextStateType {
   texts: TextsStateType.Texts;
   text: TextsStateType.Text;
+  total: number,
+  size: number,
+  page: number,
 }
 
 const initText = {
@@ -40,18 +51,24 @@ const initText = {
 const initState: TextStateType = {
   texts: [],
   text: initText,
+  total: 0,
+  size: 0,
+  page: 0,
 };
 
 const Text = {
   namespace: 'text',
   state: initState,
   effects: {
-    *queryTexts(_action: any, { put, call }: any) {
-      const response: { data: TextsStateType.Texts } = yield call(queryTexts);
+    *queryTexts({ payload }: any, { put, call }: any) {
+      const response: TextsResponseType = yield call(queryTexts, payload);
       if (response) {
+        const { data = [], count: total = 0, size = 0, page = 1 } = response;
+        console.log({ texts: data, total, size, page });
+
         yield put({
           type: 'update',
-          payload: { texts: response.data },
+          payload: { texts: data, total, size, page },
         });
       }
     },
