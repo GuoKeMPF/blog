@@ -22,7 +22,6 @@ export default {
     size = Number(req?.query?.size) || 10;
     page = Number(req?.query?.page) || 1;
     const data = text.slice((page - 1) * size, page * size);
-    const response = await setTimeOut(text, 1000);
     res.send({ data, size, page, count: text.length });
   },
   'GET /api/text/:id': (req: Request, res: Response) => {

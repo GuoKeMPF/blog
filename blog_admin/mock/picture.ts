@@ -15,7 +15,11 @@ const pictures: any[] = mockjs.mock({
 
 export default {
   'GET /api/picture': (req: Request, res: Response) => {
-    res.send({ data: pictures });
+    let size: number, page: number;
+    size = Number(req?.query?.size) || 10;
+    page = Number(req?.query?.page) || 1;
+    const data = pictures.slice((page - 1) * size, page * size);
+    res.send({ data, size, page, count: pictures.length });
   },
 
   'POST /api/picture': (req: Request, res: Response) => {

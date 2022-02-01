@@ -1,11 +1,6 @@
 import { queryPictures, addPicture, deletePicture } from '@/services/picture';
 import { message } from 'antd';
 
-// export interface PictureType {
-//   id: string;
-//   src: string;
-//   create_time: string;
-// }
 
 export namespace PictureStateType {
   export type PictureType = {
@@ -17,26 +12,39 @@ export namespace PictureStateType {
   export type PictureTypes = PictureType[];
 }
 
+export interface PicturesResponseType {
+  data: PictureStateType.PictureType[];
+  count: number,
+  size: number,
+  page: number,
+}
 export interface PictureStateType {
   pictures: PictureStateType.PictureTypes;
   visiable: boolean;
+  total: number;
+  size: number;
+  page: number;
 }
 
 const initState: PictureStateType = {
   pictures: [],
   visiable: false,
+  total: 0,
+  size: 0,
+  page: 0,
 };
 
 const Picture = {
   namespace: 'picture',
   state: initState,
   effects: {
-    *queryPictures(_action: any, { put, call }: any) {
-      const response: { data: PictureStateType.PictureTypes } = yield call(queryPictures);
+    *queryPictures({ payload }: any, { put, call }: any) {
+      const response: PicturesResponseType = yield call(queryPictures, payload);
+      const { data = [], count: total = 0, size = 0, page = 1 } = response;
       if (response) {
         yield put({
           type: 'update',
-          payload: { pictures: response.data },
+          payload: { pictures: data, total, size, page },
         });
       }
     },

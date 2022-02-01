@@ -18,7 +18,11 @@ const drafts: any[] = mockjs.mock({
 
 export default {
   'GET /api/draft': (req: Request, res: Response) => {
-    res.send({ data: drafts });
+    let size: number, page: number;
+    size = Number(req?.query?.size) || 10;
+    page = Number(req?.query?.page) || 1;
+    const data = drafts.slice((page - 1) * size, page * size);
+    res.send({ data, size, page, count: drafts.length });
   },
   'GET /api/draft/:id': (req: Request, res: Response) => {
     const { id } = req.params;

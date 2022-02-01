@@ -13,10 +13,16 @@ const Text = ({
   texts,
   dispatch,
   loading,
+  total,
+  page,
+  size,
 }: {
   texts: TextsStateType.Texts;
   dispatch: Dispatch;
   loading: boolean;
+  total: number;
+  page: number;
+  size: number;
 }): ReactElement => {
   useEffect(() => {
     dispatch({
@@ -32,6 +38,14 @@ const Text = ({
       },
     });
   };
+  const onChange = (p: number, s: number) => {
+    dispatch({
+      type: 'text/queryTexts',
+      payload: {
+        page: p, size: s
+      }
+    });
+  }
 
   return (
     <Card title="说说" className={styles.text} extra={<Button onClick={addText}>新建</Button>}>
@@ -43,6 +57,10 @@ const Text = ({
             position: 'both',
             size: 'small',
             showSizeChanger: true,
+            total,
+            pageSize: size,
+            current: page,
+            onChange: onChange
           }}
           renderItem={(item: TextsStateType.Text) => (
             <List.Item>
@@ -57,6 +75,9 @@ const Text = ({
 export default withRouter(
   connect(({ text, loading }: { text: TextStateType; loading: Loading }) => ({
     texts: text.texts,
+    total: text.total,
+    size: text.size,
+    page: text.page,
     loading: !!loading.effects['text/queryTexts'] || !!loading.effects['text/deleteText'],
   }))(Text),
 );
