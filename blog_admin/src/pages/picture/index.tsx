@@ -18,10 +18,16 @@ const Picture = ({
   pictures,
   dispatch,
   loading,
+  total,
+  size,
+  page,
 }: {
   pictures: PictureStateType.PictureTypes;
   dispatch: Dispatch;
   loading: boolean;
+  total: number;
+  size: number;
+  page: number;
 }): ReactElement => {
   useEffect(() => {
     dispatch({
@@ -37,6 +43,18 @@ const Picture = ({
       },
     });
   };
+
+
+  const onChange = (p: number, s: number) => {
+    console.log(p,s);
+    
+    dispatch({
+      type: 'picture/queryPictures',
+      payload: {
+        page: p, size: s
+      }
+    });
+  }
 
   const onDelete = (picture: PictureStateType.PictureType) => {
     dispatch({
@@ -64,6 +82,10 @@ const Picture = ({
                 position: 'both',
                 size: 'small',
                 showSizeChanger: true,
+                total,
+                pageSize: size,
+                current: page,
+                onChange: onChange
               }}
               renderItem={(p: PictureStateType.PictureType) => (
                 <List.Item>
@@ -113,4 +135,7 @@ const Picture = ({
 export default connect(({ picture, loading }: { picture: PictureStateType; loading: Loading }) => ({
   pictures: picture.pictures,
   loading: !!loading.effects['picture/queryPictures'],
+  total: picture.total,
+  size: picture.size,
+  page: picture.page,
 }))(Picture);

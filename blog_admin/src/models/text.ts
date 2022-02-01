@@ -64,8 +64,6 @@ const Text = {
       const response: TextsResponseType = yield call(queryTexts, payload);
       if (response) {
         const { data = [], count: total = 0, size = 0, page = 1 } = response;
-        console.log({ texts: data, total, size, page });
-
         yield put({
           type: 'update',
           payload: { texts: data, total, size, page },
