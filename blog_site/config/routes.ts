@@ -15,6 +15,10 @@ export const routes = [
         path: '/text/:id',
         component: '@/pages/text/index',
       },
+      {
+        path: '/picture',
+        component: '@/pages/picture/index',
+      },
     ],
   },
 ];
