@@ -13,10 +13,9 @@ logs/
 !.autod.conf.js
 
 app/**/*.js
+app/public/
 test/**/*.js
 config/**/*.js
 app/**/*.map
 test/**/*.map
 config/**/*.map
-
-app/public

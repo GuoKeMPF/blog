@@ -23,9 +23,19 @@ export namespace DraftsStateType {
   export type Drafts = DraftType[];
 }
 
+export interface DraftsResponseType {
+  data: DraftType[];
+  count: number,
+  size: number,
+  page: number,
+}
+
 export interface DraftStateType {
   drafts: DraftsStateType.Drafts;
   draft: DraftsStateType.Draft;
+  total: number,
+  size: number,
+  page: number,
 }
 
 const initDraft = {
@@ -39,19 +49,26 @@ const initDraft = {
 
 const initState: DraftStateType = {
   drafts: [],
+  total: 0,
+  size: 0,
+  page: 0,
   draft: initDraft,
 };
+
+
+
 
 const Draft = {
   namespace: 'draft',
   state: initState,
   effects: {
-    *queryDrafts(_action: any, { put, call }: any) {
-      const response: { data: DraftsStateType.Drafts } = yield call(queryDrafts);
+    *queryDrafts({ payload }: any, { put, call }: any) {
+      const response: DraftsResponseType = yield call(queryDrafts, payload);
       if (response) {
+        const { data = [], count: total = 0, size = 0, page = 1 } = response
         yield put({
           type: 'update',
-          payload: { drafts: response.data },
+          payload: { drafts: data, total, size, page },
         });
       }
     },

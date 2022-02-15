@@ -13,7 +13,7 @@ class Text(models.Model):
     update_time = models.DateTimeField(auto_now=True, verbose_name='update at')
 
     class Meta:
-        verbose_name = 'blog'
+        verbose_name = 'text'
         verbose_name_plural = verbose_name
         ordering = ['title']
 

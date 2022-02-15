@@ -3,7 +3,7 @@ import { setTimeOut } from './mockHelper';
 import mockjs, { Random } from 'mockjs';
 
 const text: [] = mockjs.mock({
-  'text|10': [
+  'text|100': [
     {
       author: '@title()',
       'ifPublic|1': '@boolean()',
@@ -18,8 +18,11 @@ const text: [] = mockjs.mock({
 
 export default {
   'GET /api/text': async (req: Request, res: Response) => {
-    const response = await setTimeOut(text, 1000);
-    res.send({ data: response });
+    let size: number, page: number;
+    size = Number(req?.query?.size) || 10;
+    page = Number(req?.query?.page) || 1;
+    const data = text.slice((page - 1) * size, page * size);
+    res.send({ data, size, page, count: text.length });
   },
   'GET /api/text/:id': (req: Request, res: Response) => {
     const { id } = req.params;

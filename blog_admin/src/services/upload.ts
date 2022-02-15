@@ -10,7 +10,7 @@ export const uploadImage = async (
   const file = blobInfo.blob(); // 转化为易于理解的file对象
   const formData = new FormData();
   formData.append('file', file, file.name);
-  const res = await Upload(upload, formData);
+  const res = await Upload(`${upload}/`, formData);
   console.log(res);
   if (!res || typeof res.data !== 'string') {
     failFun(`Invalid JSON: ${res.responseText}`);
