@@ -1,13 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 import styles from './index.less';
-// import canvasImage from './test.png';
-import canvasImage from './canvas_flag.png';
+import textConfig from '@/utils/textConfig';
+
+import { getLocale } from 'umi';
 
 const requestAnimFrame = window?.requestAnimationFrame;
 const cancelAnimationFrame = window?.cancelAnimationFrame;
 
-const canvasW = 400,
+const canvasW = 600,
   density = 10,
   range = 10,
   speed = 100,
@@ -24,30 +25,51 @@ let imageW: number = 0,
   canvasH: number = 0,
   windoW = 0,
   mouseX: number = 0,
-  mouseY: number = 0;
+  mouseY: number = 0,
+  image: HTMLCanvasElement;
 
 const Background = () => {
-  const [image, setImage] = useState<any>(null);
   const [particles, setParticles] = useState<any[]>([]);
   const [animFrameID, setAnimFrameID] = useState<number>(0);
 
-  const canvas: any = useRef(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
+  const bg = useRef<HTMLCanvasElement>(null);
+
   useEffect(() => {
+    createBG();
     init();
     return () => {
       destroy();
     };
   }, []);
 
+  const createBG = () => {
+    if (bg.current) {
+      const { width, height, texts } = textConfig;
+      const { zh, en } = texts;
+      const ifenglish = getLocale().includes('en');
+      const info = ifenglish ? en : zh;
+      const { current } = bg;
+      current.height = height;
+      current.width = width;
+      const ctx = current.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0)';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#fff';
+        info.forEach((item) => {
+          ctx.font = item.font;
+          ctx.fillText(item.text, item.x, item.y, item.width);
+        });
+      }
+      image = current;
+    }
+  };
+
   const init = async () => {
-    const image = new Image();
-    image.src = canvasImage;
-    image.onload = () => {
-      windoW = window.innerWidth;
-      loadImage(image);
-      setImage(image);
-      window.addEventListener('mousemove', mousemove);
-    };
+    windoW = window.innerWidth;
+    loadImage(image);
+    window.addEventListener('mousemove', mousemove);
   };
 
   const destroy = () => {
@@ -55,13 +77,13 @@ const Background = () => {
     cancelAnimationFrame(animFrameID);
   };
 
-  const loadImage = (image: HTMLImageElement) => {
-    imageW = image.width;
-    imageH = image.height;
+  const loadImage = (image: HTMLImageElement | HTMLCanvasElement) => {
+    const { width, height, texts } = textConfig;
+    imageW = width;
+    imageH = height;
 
     if (canvas && canvas.current) {
       const current: any = canvas.current;
-      const ctx = current.getContext('2d');
       current.width = canvasW;
       const cH = (imageH * canvasW) / imageW;
       current.height = cH;
@@ -107,7 +129,7 @@ const Background = () => {
     mouseY = e.clientY;
   };
 
-  const draw_bg = (image: HTMLImageElement) => {
+  const draw_bg = (image: HTMLImageElement | HTMLCanvasElement) => {
     const current: any = canvas.current;
     const ctx = current.getContext('2d');
     ctx.drawImage(image, 0, 0, imageW, imageH, 0, 0, canvasW, canvasH);
@@ -210,6 +232,7 @@ const Background = () => {
 
   return (
     <div className={styles.container}>
+      <canvas className={styles.bg} ref={bg} />
       <canvas className={styles.canvas} id="canvas" ref={canvas} />
     </div>
   );
