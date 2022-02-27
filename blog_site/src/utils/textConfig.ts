@@ -17,7 +17,7 @@ export default {
         y: cellZh * 2,
       },
       {
-        text: '事',
+        text: '物',
         font: fontStyleZh,
         width: width,
         x: width / 2,
@@ -45,7 +45,7 @@ export default {
         y: cellZh * 7,
       },
       {
-        text: '物',
+        text: '事',
         font: fontStyleZh,
         width: width,
         x: width / 2,
