@@ -32,6 +32,8 @@ const Background = () => {
   const [particles, setParticles] = useState<any[]>([]);
   const [animFrameID, setAnimFrameID] = useState<number>(0);
 
+  const locale = getLocale();
+
   const canvas = useRef<HTMLCanvasElement>(null);
   const bg = useRef<HTMLCanvasElement>(null);
 
@@ -41,9 +43,11 @@ const Background = () => {
     return () => {
       destroy();
     };
-  }, []);
+  }, [locale]);
 
   const createBG = () => {
+    console.log('生成图片');
+    
     if (bg.current) {
       const { width, height, texts } = textConfig;
       const { zh, en } = texts;
@@ -63,12 +67,12 @@ const Background = () => {
         });
       }
       image = current;
+      loadImage(image);
     }
   };
 
   const init = async () => {
     windoW = window.innerWidth;
-    loadImage(image);
     window.addEventListener('mousemove', mousemove);
   };
 
@@ -82,6 +86,8 @@ const Background = () => {
     imageW = width;
     imageH = height;
 
+    console.log('loadImage');
+    
     if (canvas && canvas.current) {
       const current: any = canvas.current;
       current.width = canvasW;
@@ -100,6 +106,8 @@ const Background = () => {
   }, [image]);
 
   const setupParticles = () => {
+    
+    console.log('setupParticles');
     const current: any = canvas.current;
     const ctx = current.getContext('2d');
     if (ctx) {
