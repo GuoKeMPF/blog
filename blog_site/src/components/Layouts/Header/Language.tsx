@@ -9,14 +9,19 @@ import { setLocale } from 'umi';
 type Languages = 'zh-CN' | 'en-US';
 
 const Language: FC = () => {
-  const switchLangues = (type:Languages) => {
-    setLocale(type, false)
+  const switchLangues = (type: Languages) => {
+    setLocale(type, false);
   };
 
   return (
     <ul className={styles.languages}>
-      <li className={styles.Language}>
-        <IconFont type="Languages" />
+      <li className={styles.english}>
+        <button
+          className={styles.button}
+          onClick={() => switchLangues('en-US')}
+        >
+          En
+        </button>
       </li>
       <li className={styles.chinese}>
         <button
@@ -26,13 +31,8 @@ const Language: FC = () => {
           中
         </button>
       </li>
-      <li className={styles.english}>
-        <button
-          className={styles.button}
-          onClick={() => switchLangues('en-US')}
-        >
-          En
-        </button>
+      <li className={styles.Language}>
+        <IconFont type="Languages" />
       </li>
     </ul>
   );

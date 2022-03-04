@@ -25,29 +25,44 @@ let imageW: number = 0,
   canvasH: number = 0,
   windoW = 0,
   mouseX: number = 0,
-  mouseY: number = 0,
-  image: HTMLCanvasElement;
+  mouseY: number = 0;
 
 const Background = () => {
   const [particles, setParticles] = useState<any[]>([]);
   const [animFrameID, setAnimFrameID] = useState<number>(0);
 
+  const [image, setImage] = useState<HTMLCanvasElement | null>();
   const locale = getLocale();
 
   const canvas = useRef<HTMLCanvasElement>(null);
   const bg = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    createBG();
     init();
     return () => {
       destroy();
     };
+  }, []);
+
+  useEffect(() => {
+    setImage(null);
+    createBG();
   }, [locale]);
 
+  useEffect(() => {
+    if (image) {
+      loadImage();
+      setupParticles();
+    }
+  }, [image, locale]);
+
+  useEffect(() => {
+    if (particles && particles.length > 0) {
+      animFrame();
+    }
+  }, [particles]);
+
   const createBG = () => {
-    console.log('生成图片');
-    
     if (bg.current) {
       const { width, height, texts } = textConfig;
       const { zh, en } = texts;
@@ -66,8 +81,7 @@ const Background = () => {
           ctx.fillText(item.text, item.x, item.y, item.width);
         });
       }
-      image = current;
-      loadImage(image);
+      setImage(current);
     }
   };
 
@@ -81,37 +95,25 @@ const Background = () => {
     cancelAnimationFrame(animFrameID);
   };
 
-  const loadImage = (image: HTMLImageElement | HTMLCanvasElement) => {
-    const { width, height, texts } = textConfig;
+  const loadImage = () => {
+    const { width, height } = textConfig;
     imageW = width;
     imageH = height;
-
-    console.log('loadImage');
-    
     if (canvas && canvas.current) {
       const current: any = canvas.current;
       current.width = canvasW;
       const cH = (imageH * canvasW) / imageW;
       current.height = cH;
       canvasH = cH;
-      draw_bg(image);
-      setupParticles();
+      draw_bg();
     }
   };
 
-  useEffect(() => {
-    if (image) {
-      animFrame();
-    }
-  }, [image]);
-
   const setupParticles = () => {
-    
-    console.log('setupParticles');
     const current: any = canvas.current;
     const ctx = current.getContext('2d');
-    if (ctx) {
-      let particles = [];
+    if (ctx && image) {
+      const particles = [];
       let f, d, b;
       f = ctx.getImageData(0, 0, canvasW, canvasH);
       d = f.data;
@@ -137,18 +139,20 @@ const Background = () => {
     mouseY = e.clientY;
   };
 
-  const draw_bg = (image: HTMLImageElement | HTMLCanvasElement) => {
-    const current: any = canvas.current;
-    const ctx = current.getContext('2d');
-    ctx.drawImage(image, 0, 0, imageW, imageH, 0, 0, canvasW, canvasH);
+  const draw_bg = () => {
+    if (image) {
+      const current: any = canvas.current;
+      const ctx = current.getContext('2d');
+      ctx.drawImage(image, 0, 0, imageW, imageH, 0, 0, canvasW, canvasH);
+    }
   };
 
   const animFrame = () => {
     const current: any = canvas.current;
     const ctx = current?.getContext('2d');
-    if (windoW > 400 && ctx) {
+    if (windoW > 400 && ctx && image) {
       ctx.clearRect(0, 0, canvasW, canvasH);
-      draw_bg(image);
+      draw_bg();
       draw_roundy();
       draw_line();
       const id = requestAnimFrame(animFrame);
