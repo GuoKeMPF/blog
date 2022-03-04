@@ -3,6 +3,7 @@ import { NavLink, useIntl } from 'umi';
 
 import { Context } from '@/components/Layouts/Context';
 import { MenuIcon } from './MenuIcon';
+import Language from "./Language";
 
 import styles from './index.less';
 
@@ -12,6 +13,7 @@ export const Header = () => {
     <header className={styles.header}>
       <Context>
         <MenuIcon />
+        <Language/>
         <nav className={styles.nav}>
           <NavLink
             exact
