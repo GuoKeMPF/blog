@@ -17,7 +17,7 @@ const navConfig = [
     title: () =>
       formatMessage({ id: 'header_nav_text' }, { defaultMessage: '动态' }) ||
       '动态',
-    href: '/text',
+    href: '/texts',
     icon: 'pen',
   },
 ];
