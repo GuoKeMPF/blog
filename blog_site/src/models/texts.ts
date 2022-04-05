@@ -24,6 +24,7 @@ export interface ModelType {
   };
   reducers: {
     update: Reducer<InitTextStateType>;
+    reset: Reducer<InitTextStateType>;
   };
 }
 const initText = {
@@ -75,6 +76,13 @@ const Text: ModelType = {
       return {
         ...state,
         ...payload,
+      };
+    },
+    reset() {
+      return {
+        texts: [],
+        total: undefined,
+        text: initText,
       };
     },
   },
