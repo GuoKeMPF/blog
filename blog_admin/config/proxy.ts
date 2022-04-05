@@ -1,17 +1,10 @@
 /**
- * proxy host
- */
-const host = 'http://localhost';
-
-/**
- * proxy port
- */
-const port = '8000';
-
-/**
  * proxy target
  */
-const target = `${host}:${port}`;
+
+let target = '';
+// target = `http://localhost:8000`;
+target = `https://mapanfeng.com`;
 
 /**
  * proxy config
