@@ -17,11 +17,15 @@ interface PageProps {
 const Index: FC<PageProps> = ({ dispatch, loadingTexts, texts, total }) => {
   const [page, setPage] = useState<number>(1);
 
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: 'texts/reset',
+      });
+    };
+  }, []);
   const queryDate = async () => {
     const p = page;
-    if (total === texts.length) {
-      return;
-    }
     const res = await dispatch({
       type: 'texts/queryTexts',
       payload: {
