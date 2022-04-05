@@ -12,7 +12,7 @@ export interface TextsType {
 export interface InitTextStateType {
   texts: TextsType[];
   text: TextsType;
-  total: number;
+  total: number | undefined;
 }
 
 export interface ModelType {
@@ -36,7 +36,7 @@ const initText = {
 
 export const initState: InitTextStateType = {
   texts: [],
-  total: 0,
+  total: undefined,
   text: initText,
 };
 
@@ -44,13 +44,18 @@ const Text: ModelType = {
   namespace: 'texts',
   state: initState,
   effects: {
-    *queryTexts({ payload }: any, { put, call }: any) {
+    *queryTexts({ payload }: any, { put, call, select }: any) {
       const response = yield call(queryTexts, payload);
+      const pretexts = yield select((store: any) => store.texts.texts);
       if (response) {
         yield put({
           type: 'update',
-          payload: { texts: response.data, total: response.count },
+          payload: {
+            texts: [...pretexts, response.data],
+            total: response.count,
+          },
         });
+        return response.data;
       }
     },
 
