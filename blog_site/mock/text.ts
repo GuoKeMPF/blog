@@ -3,7 +3,7 @@ import { setTimeOut } from './mockHelper';
 import mockjs, { Random } from 'mockjs';
 
 const text: [] = mockjs.mock({
-  'text|100': [
+  'text|50': [
     {
       author: '@title()',
       'ifPublic|1': '@boolean()',

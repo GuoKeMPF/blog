@@ -1,8 +1,9 @@
 import { FC, Fragment, useEffect, useState } from 'react';
 import Spin from '@/components/Spin';
-import { useLocation, useHistory, connect } from 'umi';
-import Pagination from '@/components/Pagination';
-import type { Dispatch, InitTextStateType, TextsType, Location } from 'umi';
+
+import VirtualScroll from '@/components/VirtualScroll';
+import { connect } from 'umi';
+import type { InitTextStateType, Dispatch, TextsType } from 'umi';
 import TextItem from './TextItem';
 import styles from './index.less';
 
@@ -10,53 +11,49 @@ interface PageProps {
   dispatch: Dispatch;
   loadingTexts: boolean;
   texts: TextsType[];
-  total: number;
+  total: number | undefined;
 }
 
 const Index: FC<PageProps> = ({ dispatch, loadingTexts, texts, total }) => {
-  const location: Location = useLocation();
-  const history = useHistory();
-  const page = location?.query?.page?.toString() ?? '1';
+  const [page, setPage] = useState<number>(1);
 
-  useEffect(() => {
-    dispatch({
+  const queryDate = async () => {
+    const p = page;
+    if (total === texts.length) {
+      return;
+    }
+    const res = await dispatch({
       type: 'texts/queryTexts',
       payload: {
         // size,
         page,
       },
     });
-  }, [page]);
-
-  const changePage = (value: string) => {
-    history.push({
-      pathname: 'texts',
-      search: `?page=${value}`,
-    });
+    setPage(p + 1);
+    return res;
   };
 
   return (
-    <Fragment>
-      <Spin loading={loadingTexts}>
-        {texts.map((item) => (
-          <div key={item.id} className={styles.container}>
-            <div className={styles.line}>
-              <div className={styles.index}></div>
-            </div>
-            <div className={styles.texts}>
-              <TextItem text={item} />
-            </div>
-          </div>
-        ))}
-      </Spin>
-      <Pagination
-        disable={loadingTexts}
-        page={page}
-        total={total}
-        onChange={changePage}
-        position="center"
-      />
-    </Fragment>
+    <Spin loading={loadingTexts}>
+      <div className={styles.container}>
+        <VirtualScroll
+          loadDate={queryDate}
+          end={total === texts.length}
+          preSetCellHeight={60}
+          cellClassName={styles.row}
+          onRenderCell={(data: any) => (
+            <Fragment>
+              <div className={styles.line}>
+                <div className={styles.index}></div>
+              </div>
+              <div className={styles.texts}>
+                <TextItem text={data} />
+              </div>
+            </Fragment>
+          )}
+        />
+      </div>
+    </Spin>
   );
 };
 export default connect(
