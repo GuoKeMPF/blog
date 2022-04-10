@@ -10,6 +10,7 @@ export default defineConfig({
   history: {
     type: 'browser',
   },
+  mfsu: false,
   favicon: '/public/favicon.ico',
   publicPath: '/public/',
   // public

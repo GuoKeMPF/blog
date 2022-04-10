@@ -7,7 +7,7 @@ import styles from './MenuItem.less';
 interface MenuItemType {
     title: string | object,
     href: string,
-    icon?: string,
+    icon: string,
     className?: string
 }
 

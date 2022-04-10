@@ -18,10 +18,6 @@ const TextItem: FC<PageProps> = ({ text }) => {
     <Link to={`/text/${id}`} className={styles.text}>
       <p className={styles.title}>{title}</p>
       <p className={styles.description}>{description}</p>
-      <section
-        className={styles.content}
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
     </Link>
   );
 };
