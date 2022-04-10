@@ -3,8 +3,8 @@
  */
 
  let target = '';
- // target = `http://localhost:8000`;
- target = `https://mapanfeng.com`;
+ target = `http://localhost:8000`;
+//  target = `https://mapanfeng.com`;
 
 /**
  * proxy config
