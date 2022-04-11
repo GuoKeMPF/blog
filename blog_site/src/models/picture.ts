@@ -1,6 +1,5 @@
 import { queryPictures, queryPictureByID } from '@/services/picture';
 
-
 export namespace PictureStateType {
   export type PictureType = {
     id: string;
@@ -14,11 +13,13 @@ export namespace PictureStateType {
 export interface PictureStateType {
   pictures: PictureStateType.PictureTypes;
   picture: PictureStateType.PictureType | undefined;
+  total: number | undefined;
 }
 
 const initState: PictureStateType = {
   pictures: [],
   picture: undefined,
+  total: null,
 };
 
 const Picture = {
@@ -26,16 +27,24 @@ const Picture = {
   state: initState,
   effects: {
     *queryPictures(_action: any, { put, call }: any) {
-      const response: { data: PictureStateType.PictureTypes } = yield call(queryPictures);
+      const response: { data: PictureStateType.PictureTypes; count: number } =
+        yield call(queryPictures);
       if (response) {
         yield put({
           type: 'update',
-          payload: { pictures: response.data },
+          payload: { pictures: response.data, total: response.count },
         });
+        return response.data;
       }
     },
-    *queryPictureByID({payload}:{payload:{id:string}}, { put, call }: any) {
-      const response: { data: PictureStateType.PictureTypes } = yield call(queryPictureByID, payload);
+    *queryPictureByID(
+      { payload }: { payload: { id: string } },
+      { put, call }: any,
+    ) {
+      const response: { data: PictureStateType.PictureTypes } = yield call(
+        queryPictureByID,
+        payload,
+      );
       if (response) {
         yield put({
           type: 'update',
