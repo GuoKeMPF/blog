@@ -11,7 +11,7 @@ import styles from './index.less';
 
 const ContainerContext = createContext({
   height: 0,
-  updateHeight: (d: any, v: number) => {},
+  updateHeight: (d: any, v: number) => { },
 });
 
 type ContainerCellProps = {
@@ -67,19 +67,23 @@ const PreloadCell: FC<PreloadCellProps> = ({
 };
 
 type VirtualScrollProps = {
+  initList?: any[],
   loadDate: () => Promise<any[] | undefined>;
   end: Boolean;
   onRenderCell: (data: any) => JSX.Element;
   preSetCellHeight?: number;
+  getCellHeight?: (row: any) => number;
   cellClassName?: string;
 };
 
 const VirtualScroll: FC<VirtualScrollProps> = ({
   loadDate,
   end,
+  initList = [],
   onRenderCell,
   preSetCellHeight = 50,
   cellClassName = '',
+  getCellHeight
 }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const button = useRef<HTMLDivElement | null>(null);
@@ -89,7 +93,6 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
   const [appends, setAppends] = useState<any[]>([]);
   const [visiableList, setVisiableList] = useState<any[]>([]);
   const [preload, setPreload] = useState<any>(undefined);
-
   const updateHeight = (d: any, h: any) => {
     const l = [...list];
     // 更新当前那一项的高度
@@ -110,8 +113,12 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
     setHeight(height + h - preSetCellHeight);
   };
   useEffect(() => {
-    queryDate();
+    initData();
   }, []);
+
+  const initData = async () => {
+    await queryDate();
+  }
 
   useEffect(() => {
     window.addEventListener('scroll', scrollDown);
@@ -126,8 +133,14 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
   }, [loading]);
 
   useEffect(() => {
-    if (list.length > 0 && appends?.length > 0) {
-      pushItem([...appends]);
+    if (appends?.length > 0) {
+      // 如果有预设的获取高度的方法则直接更新高度
+      // 否则挂载一次子元素更新高度
+      if (getCellHeight) {
+        pushItemWithHeight([...appends])
+      } else {
+        pushItem([...appends]);
+      }
     }
   }, [appends]);
 
@@ -146,6 +159,25 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
     }
   };
 
+  const pushItemWithHeight = (appends: any[]) => {
+    if (getCellHeight) {
+      filterVisiable();
+      if (appends?.length > 0) {
+        const first = appends.shift();
+        const height: number = getCellHeight(first.data);
+        updateHeight(first.data, height);
+        setTimeout(() => {
+          if (appends && appends.length > 0) {
+            setAppends([...appends]);
+          }
+          filterVisiable();
+        }, 20);
+      } else {
+        filterVisiable();
+      }
+    }
+  };
+
   const scrollDown = async () => {
     const position: any = button.current?.getBoundingClientRect();
     // 加载下一页数据
@@ -160,11 +192,11 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
   };
 
   const queryDate = async () => {
-    const data = await loadDate();
-    setLoading(false);
     if (end) {
       return;
     }
+    const data = await loadDate();
+    setLoading(false);
     if (!data) {
       return;
     }
