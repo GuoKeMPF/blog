@@ -45,9 +45,12 @@ const Picture: FC<PageProps> = ({
 
 
   useEffect(() => {
-    console.log(visiable);
-    console.log(select);
-  }, [visiable, select])
+    return () => {
+      dispatch({
+        type: 'picture/reset',
+      });
+    };
+  }, []);
 
 
   const queryDate = async () => {

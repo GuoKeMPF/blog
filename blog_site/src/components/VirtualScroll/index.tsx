@@ -79,7 +79,6 @@ type VirtualScrollProps = {
 const VirtualScroll: FC<VirtualScrollProps> = ({
   loadDate,
   end,
-  initList = [],
   onRenderCell,
   preSetCellHeight = 50,
   cellClassName = '',
@@ -179,17 +178,21 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
   };
 
   const scrollDown = async () => {
-    const position: any = button.current?.getBoundingClientRect();
     // 加载下一页数据
     if (!loading) {
-      // 加载下一页
-      if (position.bottom < window.innerHeight) {
+      const endVisiable = ifEndVisiable()
+      if (endVisiable) {
         setLoading(true);
         return;
       }
       filterVisiable();
     }
   };
+
+  const ifEndVisiable = () => {
+    const position: any = button.current?.getBoundingClientRect();
+    return position.bottom < window.innerHeight
+  }
 
   const queryDate = async () => {
     if (end) {
