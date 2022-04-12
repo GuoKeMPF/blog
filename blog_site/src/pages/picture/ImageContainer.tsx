@@ -1,7 +1,9 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useContext, } from "react";
 import type { FC } from "react";
 
 import { useIntl } from "umi";
+
+import { PictureContext } from "./index";
 
 import styles from "./ImageContainer.less";
 
@@ -15,7 +17,7 @@ type ErrorImageProps = {
 }
 const ErrorImage: FC<ErrorImageProps> = ({ description }) => {
 
-  return <div className={styles.numbers}>
+  return <div className={styles.error}>
     <div className={styles.number}>
       <div className={styles.four}></div>
     </div>
@@ -32,24 +34,34 @@ const ErrorImage: FC<ErrorImageProps> = ({ description }) => {
 
 type ImageProps = {
   src: string;
-  alt: string
+  alt: string;
+  data: Object;
 }
 
-const ImageContainer: FC<ImageProps> = ({ src, alt }) => {
+const ImageContainer: FC<ImageProps> = ({ src, alt, data }) => {
 
   const intl = useIntl();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  const pictureContext = useContext(PictureContext);
+
+  const { setSelect, setVisiable } = pictureContext
+
   useEffect(() => {
     getImage(src);
   }, [src]);
+
+
+  const serPicture = () => {
+    setSelect(data);
+    setVisiable(true);
+  }
 
   const getImage = async (src: string) => {
     setLoading(true);
     const image = new Image();
     image.onload = () => {
-      console.log('onloadeddata');
       setLoading(false);
     }
     image.onerror = () => {
@@ -58,9 +70,6 @@ const ImageContainer: FC<ImageProps> = ({ src, alt }) => {
     }
     image.src = src;
   }
-
-
-
 
   return <Fragment>
     {
@@ -72,7 +81,7 @@ const ImageContainer: FC<ImageProps> = ({ src, alt }) => {
               defaultMessage: '图片加载错误',
             })
           } /> :
-            <img src={src} alt={alt} />
+            <img onClick={serPicture} className={styles.image} src={src} alt={alt} />
         }
       </Fragment>
     }

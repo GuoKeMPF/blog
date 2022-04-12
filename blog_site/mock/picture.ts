@@ -30,15 +30,6 @@ export default {
     size = Number(req?.query?.size) || 10;
     page = Number(req?.query?.page) || 1;
     const data = pictures.slice((page - 1) * size, page * size);
-    data.unshift(
-      {
-        'id': -10,
-        src: '',
-        create_time: '2021-12-10 11:54:29',
-        name: 'mock picture.png',
-        width: mockImgW,
-        height: mockImgH
-      })
     setTimeout(() => {
       res.send({ data, size, page, count: pictures.length });
     }, 500);

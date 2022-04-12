@@ -1,17 +1,28 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, createContext, useState, useEffect } from 'react';
 import type { FC } from 'react';
 import { connect } from 'umi';
 import type { PictureStateType, Dispatch } from 'umi';
 
-
 import Spin from '@/components/Spin';
-
 import VirtualScroll from '@/components/VirtualScroll';
-
 import ImageContainer from "./ImageContainer";
-
-
+import ImageModal from "./ImageModal";
 import styles from './index.less';
+
+
+type PictureContextType = {
+  visiable: boolean,
+  setVisiable: (visiable: boolean) => void,
+  select: any,
+  setSelect: (d: any) => void,
+}
+
+export const PictureContext = createContext<PictureContextType>({
+  visiable: false,
+  setVisiable: (visiable: boolean) => { },
+  select: undefined,
+  setSelect: (d: any) => { },
+});
 
 interface PageProps {
   dispatch: Dispatch;
@@ -27,6 +38,17 @@ const Picture: FC<PageProps> = ({
   loadingPictures,
 }) => {
   const [page, setPage] = useState<number>(1);
+
+
+  const [visiable, setVisiable] = useState<boolean>(false);
+  const [select, setSelect] = useState<any>(undefined);
+
+
+  useEffect(() => {
+    console.log(visiable);
+    console.log(select);
+  }, [visiable, select])
+
 
   const queryDate = async () => {
     const p = page;
@@ -45,18 +67,21 @@ const Picture: FC<PageProps> = ({
 
   return (
     <Spin loading={loadingPictures}>
-      <VirtualScroll
-        loadDate={queryDate}
-        end={total === pictures.length}
-        preSetCellHeight={60}
-        getCellHeight={(row) => row.height}
-        cellClassName={styles.row}
-        onRenderCell={(data: any) => (
-          <Fragment>
-            <ImageContainer src={data.src} alt={data?.name}/>
-          </Fragment>
-        )}
-      />
+      <PictureContext.Provider value={{ visiable, setVisiable, select, setSelect }}>
+        <VirtualScroll
+          loadDate={queryDate}
+          end={total === pictures.length}
+          preSetCellHeight={60}
+          getCellHeight={(row) => row.height}
+          cellClassName={styles.row}
+          onRenderCell={(data: any) => (
+            <Fragment>
+              <ImageContainer src={data.src} alt={data?.name} data={data} />
+            </Fragment>
+          )}
+        />
+        <ImageModal />
+      </PictureContext.Provider>
     </Spin>
   );
 };
