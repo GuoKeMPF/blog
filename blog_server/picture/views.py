@@ -4,7 +4,8 @@ from .models import Picture
 from .serializers import PictureSerializer
 from rest_framework.viewsets import ModelViewSet
 import os
-
+import time
+from utils.file.saveImage import saveImage
 # Create your views here.
 
 
@@ -16,6 +17,18 @@ class PictureViewSet(ModelViewSet):
     def get(self, request, *args, **kwargs):
         pictures = PictureSerializer(Picture.objects.all(), many=True)
         return JsonResponse(pictures.data, status=200, safe=False)
+
+    def create(self, request, *args, **kwargs):
+        f = request.FILES.get('file')
+        imageInfo = saveImage(f)
+        picture = Picture(
+            src=imageInfo['src'],
+            width=imageInfo['width'],
+            height=imageInfo['height'],
+            name=imageInfo['name']
+        )
+        picture.save()
+        return JsonResponse({"data": imageInfo})
 
     def destroy(self, request, *args, **kwargs):
         id = kwargs.get('id')

@@ -45,7 +45,10 @@ urlpatterns = [
 
 
     path("api/picture/",
-         PictureViewSet.as_view({"get": "list", "post": "create"}), name="picture"),
+         PictureViewSet.as_view({
+             "get": "list",
+             "post": "create"
+         }), name="picture"),
     path("api/picture/<int:id>/",
          PictureViewSet.as_view({"delete": "destroy"}), name="picture"),
 
