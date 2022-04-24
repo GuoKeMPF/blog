@@ -24,18 +24,15 @@ const ImageForm = ({
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
-    console.log(values);
     const payload = new FormData();
     const { description, file } = values;
     payload.append('description', description);
     const { fileList } = file;
-    console.log(fileList);
-
     fileList.forEach((f: any) => {
       payload.append('file', f.originFileObj);
     });
     dispatch({
-      type: 'picture/addPicture',
+      type: 'picture/addPictures',
       payload,
     });
   };
@@ -74,7 +71,11 @@ const ImageForm = ({
           name="file"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Dragger multiple={true}>
+          <Dragger
+            action="/"
+            name='file'
+            beforeUpload={() => false}
+            multiple={true}>
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>

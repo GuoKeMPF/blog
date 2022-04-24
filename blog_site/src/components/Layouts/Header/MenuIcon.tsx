@@ -20,6 +20,13 @@ const navConfig = [
     href: '/texts',
     icon: 'pen',
   },
+  {
+    title: () =>
+      formatMessage({ id: 'header_nav_picture' }, { defaultMessage: '相册' }) ||
+      '相册',
+    href: '/picture',
+    icon: 'xiangce1',
+  },
 ];
 
 export const MenuIcon = () => {
@@ -62,9 +69,6 @@ export const MenuIcon = () => {
             {navConfig.map((item, index) => (
               <MenuItem className={styles.item} key={index} {...item} />
             ))}
-            <div className={styles.item}>
-              <Border></Border>
-            </div>
             <div className={styles.item}>
               <Border></Border>
             </div>

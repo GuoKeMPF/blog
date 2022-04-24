@@ -60,10 +60,13 @@ const Index: FC<PageProps> = ({ dispatch, loadingTexts, texts, total }) => {
     </Spin>
   );
 };
-export default connect(
+
+const ConnectIndex = connect(
   ({ loading, texts }: { loading: any; texts: InitTextStateType }) => ({
     loadingTexts: !!loading.effects['texts/queryTexts'],
     texts: texts.texts,
     total: texts.total,
   }),
 )(Index);
+
+export default ConnectIndex

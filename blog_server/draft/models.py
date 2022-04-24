@@ -18,7 +18,7 @@ class Draft(models.Model):
     class Meta:
         verbose_name = 'draft'
         verbose_name_plural = verbose_name
-        ordering = ['title']
+        ordering = ['update_time']
 
     def __str__(self):
-        return self.name
+        return self.title

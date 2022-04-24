@@ -6,7 +6,6 @@ import time
 
 
 def upload_view(request):
-    print(request)
     f = request.FILES.get('file')
     baseDir = os.path.dirname(os.path.abspath(__name__))
     if not os.path.isdir(os.path.join(baseDir, 'server_static', 'upload')):
@@ -26,7 +25,6 @@ def upload_view(request):
 
 
 def uploads_view(request):
-    print(request)
     files = request.FILES.getlist('file')
     description = request.POST.get('description', '')
     baseDir = os.path.dirname(os.path.abspath(__name__))

@@ -1,7 +1,6 @@
 
 import json
 from django.http import JsonResponse
-from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
 from django.utils.decorators import method_decorator
@@ -45,7 +44,6 @@ class LoginView(View):
 class LogoutView(View):
     def post(self, request):
         res = logout(request)
-        print(res)
         if res:
             return JsonResponse({"code": 1, "message": "logout success"})
         else:

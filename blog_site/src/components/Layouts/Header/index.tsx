@@ -36,6 +36,16 @@ export const Header = () => {
               defaultMessage: '日志',
             })}
           </NavLink>
+          <NavLink
+            to="/picture"
+            className={styles.navlink}
+            activeClassName={styles.active}
+          >
+            {intl.formatMessage({
+              id: 'header_nav_picture',
+              defaultMessage: '相册',
+            })}
+          </NavLink>
         </nav>
       </Context>
     </header>

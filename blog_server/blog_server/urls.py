@@ -10,22 +10,23 @@ from draft.views import DraftViewSet
 from text.views import TextViewSet
 from picture.views import PictureViewSet
 from user.views import LoginView, LogoutView
-from upload.views import upload_view, uploads_view
+# from upload.views import upload_view, uploads_view
 
-router = DefaultRouter()
-router.register(prefix="viewsets", viewset=DraftViewSet)
-router.register(prefix="viewsets", viewset=TextViewSet)
+# router = DefaultRouter()
+# router.register(prefix="viewsets", viewset=DraftViewSet)
+# router.register(prefix="viewsets", viewset=TextViewSet)
 
 
 urlpatterns = [
 
+    # 登陆等处
     path("api/login/", LoginView.as_view(), name="login"),
     path("api/logout/", LogoutView.as_view(), name="logout"),
-    path("api/upload/", upload_view, name="upload"),
-    path("api/uploads/", uploads_view, name="uploads"),
+    # path("api/upload/", upload_view, name="upload"),
+    # path("api/uploads/", uploads_view, name="uploads"),
 
 
-
+    # 草稿
     path("api/draft/", DraftViewSet.as_view(
         {"get": "list", "post": "create"}
     ), name="draft"),
@@ -34,18 +35,26 @@ urlpatterns = [
             "patch": "partial_update", "delete": "destroy"}
     ), name="draft"),
 
+    # 文章
     path("api/text/", TextViewSet.as_view(
         {"get": "list", "post": "create"}
     ), name="text"),
     path("api/text/<int:pk>", TextViewSet.as_view(
         {"get": "retrieve", "put": "update",
             "patch": "partial_update", "delete": "destroy"}
-    ), name="draft"),
+    ), name="text"),
 
 
-
+    # 图片
     path("api/picture/",
-         PictureViewSet.as_view({"get": "list", "post": "create"}), name="picture"),
+         PictureViewSet.as_view({
+             "get": "list",
+             "post": "create"
+         }), name="picture"),
+    path("api/pictures/",
+         PictureViewSet.as_view({
+             "post": "uploads"
+         }), name="picture"),
     path("api/picture/<int:id>/",
          PictureViewSet.as_view({"delete": "destroy"}), name="picture"),
 

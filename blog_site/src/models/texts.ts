@@ -45,10 +45,10 @@ const Text: ModelType = {
   namespace: 'texts',
   state: initState,
   effects: {
-    *queryTexts({ payload }: any, { put, call, select }: any) {
+    *queryTexts({ payload }, { put, call, select }) {
       const response = yield call(queryTexts, payload);
-      const pretexts = yield select((store: any) => store.texts.texts);
       if (response) {
+        const pretexts = yield select((store: any) => store.texts.texts);
         yield put({
           type: 'update',
           payload: {
@@ -60,7 +60,7 @@ const Text: ModelType = {
       }
     },
 
-    *queryText({ payload }: any, { put, call }: any) {
+    *queryText({ payload }, { put, call }) {
       const { id } = payload;
       const response = yield call(queryText, { id });
       if (response) {

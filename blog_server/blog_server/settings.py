@@ -1,21 +1,34 @@
 
 import os
 from pathlib import Path
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+g&0^^17ce(79gp_#6vty4x6##_$$*6h=k5#(%c^1isvz_v5n0'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = ["*"]
+env = environ.Env()
 
-SESSION_COOKIE_SECURE = True
+"""
+通过指定环境遍历加载不同env文件
+PROJECT_ENV=production python manage.py crontab add
+默认场景下可不指定，则加载local文件
+"""
+env_name = env.str('PROJECT_ENV', 'develop')
+# reading .env file
+env.read_env('./envs/.env.%s' % env_name)
+
+
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG')
+SESSION_COOKIE_SECURE = env('SESSION_COOKIE_SECURE')
+ALLOWED_HOSTS = env('ALLOWED_HOSTS')
+DOMAIN = env('DOMAIN')
+IMAGE_PATH = env('IMAGE_PATH')
+
 # Application definition
 
 INSTALLED_APPS = [

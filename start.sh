@@ -5,10 +5,12 @@
 
 echo "start project"
 
-usage="./start.sh [-b|--build]"
+usage="./start.sh [-b|--build] [-l|--local]"
 
-
-source ./build_static.sh
+run_cmd="docker-compose "
+compose_file="docker-compose.yml"
+compose_file_local="docker-compose-local.yml"
+cmd=""
 
 if [[ $# -gt 0 ]]; then
     args=("$@")
@@ -16,6 +18,10 @@ if [[ $# -gt 0 ]]; then
         case "${args[$i]}" in
         -b | --build)
             build=true
+            ;;
+
+        -l | --local)
+            local=true
             ;;
         *)
             echo "$usage"
@@ -25,11 +31,14 @@ if [[ $# -gt 0 ]]; then
     done
 fi
 
-run_cmd="docker-compose "
-compose_file="docker-compose.yml"
-cmd=""
+if [[ "$local" == true ]]; then
+    compose_file="${compose_file_local}"
+else
+    compose_file="${compose_file}"
+fi
 
 if [[ "$build" == true ]]; then
+    source ./build_static.sh
     cmd="${run_cmd} -f ${compose_file} up --build"
 else
     cmd="${run_cmd} -f ${compose_file} up"
