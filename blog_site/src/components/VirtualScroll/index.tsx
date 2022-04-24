@@ -72,7 +72,7 @@ type VirtualScrollProps = {
   end: Boolean;
   onRenderCell: (data: any) => JSX.Element;
   preSetCellHeight?: number;
-  getCellHeight?: (row: any) => number;
+  getCellHeight?: (row: any, width?: number) => number;
   cellClassName?: string;
 };
 
@@ -161,9 +161,11 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
   const pushItemWithHeight = (appends: any[]) => {
     if (getCellHeight) {
       filterVisiable();
-      if (appends?.length > 0) {
+      if (appends?.length > 0 && container.current) {
         const first = appends.shift();
-        const height: number = getCellHeight(first.data);
+        console.dir(container)
+        const containerW = container.current.clientWidth
+        const height: number = getCellHeight(first.data, containerW);
         updateHeight(first.data, height);
         setTimeout(() => {
           if (appends && appends.length > 0) {

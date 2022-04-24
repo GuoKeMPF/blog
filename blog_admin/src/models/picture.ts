@@ -1,4 +1,4 @@
-import { queryPictures, addPicture, deletePicture } from '@/services/picture';
+import { queryPictures, addPicture, addPictures, deletePicture } from '@/services/picture';
 import { message } from 'antd';
 
 
@@ -56,13 +56,20 @@ const Picture = {
         return;
       }
       if (response && response?.code) {
-        const texts: { data: PictureStateType.PictureTypes } = yield call(queryPictures);
-        if (texts) {
-          yield put({
-            type: 'update',
-            payload: { pictures: texts.data },
-          });
-        }
+        yield put({
+          type: 'queryPictures',
+          payload,
+        });
+      }
+    },
+
+    *addPictures({ payload }: any, { put, call }: any) {
+      const response: ResponseDateType = yield call(addPictures, payload);
+      if (response && response?.code) {
+        yield put({
+          type: 'queryPictures',
+          payload,
+        });
       }
     },
 

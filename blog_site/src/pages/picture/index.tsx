@@ -75,7 +75,14 @@ const Picture: FC<PageProps> = ({
           loadDate={queryDate}
           end={total === pictures.length}
           preSetCellHeight={60}
-          getCellHeight={(row) => row.height}
+          getCellHeight={(row, containerW = 0) => {
+            const imgaeW = row.width || 0;
+            if (imgaeW > containerW) {
+              return row.height * containerW / imgaeW + 20
+            } else {
+              return row.height
+            }
+          }}
           cellClassName={styles.row}
           onRenderCell={(data: any) => (
             <Fragment>
