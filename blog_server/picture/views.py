@@ -4,16 +4,12 @@ from .models import Picture
 from .serializers import PictureSerializer
 from rest_framework.viewsets import ModelViewSet
 from utils.file.manageImage import saveImage, deleteImage
-
+from utils.pagination import Pagination
 
 class PictureViewSet(ModelViewSet):
-    queryset = Picture.objects.all()
     serializer_class = PictureSerializer
-    # 单查群查
-
-    def list(self, request, *args, **kwargs):
-        pictures = PictureSerializer(Picture.objects.all(), many=True)
-        return JsonResponse(pictures.data, status=200, safe=False)
+    pagination_class = Pagination
+    queryset = Picture.objects.all()
 
     def create(self, request, *args, **kwargs):
         f = request.FILES.get('file')

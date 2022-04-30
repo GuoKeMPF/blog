@@ -1,8 +1,8 @@
-from rest_framework import pagination
+from rest_framework.pagination import PageNumberPagination
 from django.http import JsonResponse
 
 
-class Pagination(pagination.PageNumberPagination):
+class Pagination(PageNumberPagination):
 
     def __init__(self) -> None:
         super(Pagination, self).__init__()
