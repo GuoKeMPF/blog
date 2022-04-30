@@ -2,14 +2,17 @@ from rest_framework.viewsets import ModelViewSet
 from django.http import JsonResponse
 from .models import Draft
 from .serializers import DraftsSerializer, DraftSerializer
+from utils.pagination import Pagination
+
 
 class DraftViewSet(ModelViewSet):
     queryset = Draft.objects.all()
     serializer_class = DraftSerializer
+    pagination_class = Pagination
     ordering = ['create_time']
     filterset_fields = ['title', 'content', 'author']
 
     def list(self, request, *args, **kwargs):
-        d = Draft.objects.defer('content')
-        drafts = DraftsSerializer(d,many=True)
-        return JsonResponse(drafts.data, status=200, safe=False)
+        page = self.paginate_queryset(self.queryset)
+        serializer = DraftsSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
