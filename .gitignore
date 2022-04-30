@@ -5,3 +5,4 @@
 **/blog_static/**
 **/db.sqlite3
 **/server_static/**
+blog_server/db.sqlite3
