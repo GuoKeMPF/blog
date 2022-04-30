@@ -11,6 +11,11 @@ class PictureViewSet(ModelViewSet):
     pagination_class = Pagination
     queryset = Picture.objects.all()
 
+    def list(self, request, *args, **kwargs):
+        page = self.paginate_queryset(self.queryset)
+        serializer = self.serializer_class(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
     def create(self, request, *args, **kwargs):
         f = request.FILES.get('file')
         description = request.POST.get('description', '')
@@ -32,11 +37,11 @@ class PictureViewSet(ModelViewSet):
         if picture is None:
             return JsonResponse({"code": 0, "message": "file dose't exist"}, status=200, safe=False)
         else:
+            res = picture.delete()
             try:
                 deleteImage(picture.unique_name)
             except(FileNotFoundError):
-                return JsonResponse({"code": 0, "message": "delete file failed"}, status=200, safe=False)
-            res = picture.delete()
+                return JsonResponse({"code": 2, "message": "can't find file"}, status=200, safe=False)
             return JsonResponse({"data": res}, status=200, safe=False)
 
     def uploads(self, request, *args, **kwargs):
