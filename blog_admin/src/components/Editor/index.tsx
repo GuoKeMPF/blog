@@ -38,7 +38,7 @@ const Editors = (props: { onChange?: (value: string) => void; value?: string }) 
           // 插件
           // 部分功能是付费服务。没有key不会启用，工具栏功能会依赖这些插件
           plugins: `print preview paste importcss searchreplace autolink
-            autosave save directionality code visualblocks visualchars fullscreen
+            autosave save directionality code html visualblocks visualchars fullscreen
             image link media template codesample table charmap hr pagebreak
             nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools
             textpattern noneditable help charmap quickbars emoticons`,
@@ -53,7 +53,7 @@ const Editors = (props: { onChange?: (value: string) => void; value?: string }) 
             pagebreak |
             charmap emoticons |
              preview save print |
-            insertfile image media template link anchor codesample
+            insertfile image media template link anchor html codesample
             | ltr rtl`,
           toolbar_sticky: true,
           toolbar_mode: 'wrap',
