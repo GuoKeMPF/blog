@@ -11,7 +11,7 @@ class Pagination(PageNumberPagination):
     def get_paginated_response(self, data):
         return JsonResponse({
             'count': self.page.paginator.count,
-            'size': self.page_size,
+            'size': self.page.paginator.num_pages,
             'page': self.page.number,
             'data': data
         })
