@@ -1,4 +1,4 @@
 **/__pycache__/**
 
 /server_static/**
-db.sqlite3
+**/db.sqlite3
