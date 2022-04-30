@@ -56,7 +56,7 @@ urlpatterns = [
              "post": "uploads"
          }), name="picture"),
     path("api/picture/<int:id>/",
-         PictureViewSet.as_view({"delete": "destroy"}), name="picture"),
+         PictureViewSet.as_view({"get": "retrieve", "delete": "destroy"}), name="picture"),
 
 
     path('admin/', admin.site.urls),

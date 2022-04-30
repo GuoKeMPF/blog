@@ -1,17 +1,17 @@
 import { Fragment, useEffect } from 'react';
-import { Skeleton, Card, Button, Image, Popconfirm, List } from 'antd';
-import { DeleteOutlined, DownloadOutlined } from '@ant-design/icons';
+import { Skeleton, Card, Button, Image, Popconfirm, List, Typography } from 'antd';
+import { DeleteOutlined, DownloadOutlined, SendOutlined } from '@ant-design/icons';
 import { connect } from 'umi';
 import { formColums } from '@/utils/layoutFrom';
 import ImageForm from './ImageForm';
 
 import styles from './index.less';
 import errorImg from '@/assets/images/errorImg.png';
-import { prefix } from '@/utils/prefix';
 
 import type { ReactElement } from 'react';
 import type { PictureStateType, Dispatch, Loading } from 'umi';
 
+const { Paragraph } = Typography;
 const { Meta } = Card;
 
 const Picture = ({
@@ -46,8 +46,8 @@ const Picture = ({
 
 
   const onChange = (p: number, s: number) => {
-    console.log(p,s);
-    
+    console.log(p, s);
+
     dispatch({
       type: 'picture/queryPictures',
       payload: {
@@ -93,21 +93,31 @@ const Picture = ({
                     hoverable
                     cover={
                       <Image
+                        height={150}
                         fallback={errorImg}
                         className={styles.picture}
-                        src={`${prefix}${p.src}`}
+                        src={`${p.src}`}
                       />
                     }
                     actions={[
                       <a
-                        href={`${prefix}${p.src}`}
+                        href={`${p.src}`}
                         target="_blank"
                         key="download"
                         download={p.name}
                         rel="noreferrer"
                       >
                         <DownloadOutlined />
+                      </a>, <a
+                        href={`${p.src}`}
+                        target="_blank"
+                        key="open"
+                        rel="noreferrer"
+                      >
+                        <SendOutlined />
                       </a>,
+                      <Paragraph key="copy"
+                        copyable={{ text: p.src }} />,
                       <Popconfirm
                         key="delete"
                         title="是否确认删除当前图片？"
