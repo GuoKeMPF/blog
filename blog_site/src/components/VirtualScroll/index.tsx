@@ -163,7 +163,6 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
       filterVisiable();
       if (appends?.length > 0 && container.current) {
         const first = appends.shift();
-        console.dir(container)
         const containerW = container.current.clientWidth
         const height: number = getCellHeight(first.data, containerW);
         updateHeight(first.data, height);

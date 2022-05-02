@@ -17,17 +17,20 @@ type ErrorImageProps = {
 }
 const ErrorImage: FC<ErrorImageProps> = ({ description }) => {
 
-  return <div className={styles.error}>
-    <div className={styles.number}>
-      <div className={styles.four}></div>
+  return <div className={styles.container}>
+
+    <div className={styles.error}>
+      <div className={styles.number}>
+        <div className={styles.four}></div>
+      </div>
+      <div className={styles.number}>
+        <div className={styles.zero}><span></span></div>
+      </div>
+      <div className={styles.number}>
+        <div className={`${styles.four} ${styles.last}`}></div>
+      </div>
+      {description && <p className={styles.description}>{description}</p>}
     </div>
-    <div className={styles.number}>
-      <div className={styles.zero}><span></span></div>
-    </div>
-    <div className={styles.number}>
-      <div className={`${styles.four} ${styles.last}`}></div>
-    </div>
-    {description && <p className={styles.description}>{description}</p>}
   </div>
 }
 
