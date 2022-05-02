@@ -19,6 +19,10 @@ export const routes = [
         path: '/picture',
         component: '@/pages/picture/index',
       },
+      {
+        path: '/audio',
+        component: '@/pages/audio/index',
+      },
     ],
   },
 ];

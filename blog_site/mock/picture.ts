@@ -3,17 +3,17 @@ import path from "path";
 
 const images = [
   {
-    src: path.join('./static/images/img1.png'),
+    src: path.join('./mock_static/images/img1.png'),
     width: 1200,
     height: 784,
   },
   {
-    src: path.join('./static/images/img2.png'),
+    src: path.join('./mock_static/images/img2.png'),
     width: 1004,
     height: 986,
   },
   {
-    src: path.join('./static/images/img3.png'),
+    src: path.join('./mock_static/images/img3.png'),
     width: 1000,
     height: 800,
   },
@@ -44,7 +44,7 @@ export default {
     }, 500);
   },
 
-  'GET /static/images/*': (req: Request, res: Response) => {
+  'GET /mock_static/images/*': (req: Request, res: Response) => {
     const { url } = req
     setTimeout(() => {
       res.sendFile(path.join(__dirname, url));

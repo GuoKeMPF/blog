@@ -3,11 +3,11 @@ import path from "path";
 
 const mp3s: any[] = [
   {
-    src: path.join('./static/audios/daybreak.mp3'),
+    src: path.join('./mock_static/audios/daybreak.mp3'),
     name: 'daybreak.mp3',
   },
   {
-    src: path.join('./static/audios/error.mp3'),
+    src: path.join('./mock_static/audios/error.mp3'),
     name: 'error.mp3',
   },
 ]
@@ -36,7 +36,7 @@ export default {
     }, 500);
   },
 
-  'GET /static/audios/*': (req: Request, res: Response) => {
+  'GET /mock_static/audios/*': (req: Request, res: Response) => {
     const { url } = req
     setTimeout(() => {
       res.sendFile(path.join(__dirname, url));
