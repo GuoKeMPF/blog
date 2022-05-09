@@ -2,11 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 
 import styles from './index.less';
 import textConfig from '@/utils/textConfig';
-
 import { getLocale } from 'umi';
 
-const requestAnimFrame = window?.requestAnimationFrame;
-const cancelAnimationFrame = window?.cancelAnimationFrame;
 
 const canvasW = 600,
   density = 10,
@@ -28,6 +25,7 @@ let imageW: number = 0,
   mouseY: number = 0;
 
 const Background = () => {
+
   const [particles, setParticles] = useState<any[]>([]);
   const [animFrameID, setAnimFrameID] = useState<number>(0);
 
@@ -92,6 +90,7 @@ const Background = () => {
 
   const destroy = () => {
     window.removeEventListener('mousemove', mousemove);
+    const cancelAnimationFrame = window?.cancelAnimationFrame;
     cancelAnimationFrame(animFrameID);
   };
 
@@ -155,6 +154,7 @@ const Background = () => {
       draw_bg();
       draw_roundy();
       draw_line();
+      const requestAnimFrame = window?.requestAnimationFrame;
       const id = requestAnimFrame(animFrame);
       setAnimFrameID(id);
     }
