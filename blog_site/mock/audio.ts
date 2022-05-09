@@ -7,6 +7,10 @@ const mp3s: any[] = [
     name: 'daybreak.mp3',
   },
   {
+    src: path.join('./mock_static/audios/M18.mp3'),
+    name: 'M18.mp3',
+  },
+  {
     src: path.join('./mock_static/audios/error.mp3'),
     name: 'error.mp3',
   },

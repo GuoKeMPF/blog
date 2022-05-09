@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import type { FC } from "react";
 import styles from './Visualization.less';
 
@@ -12,42 +12,180 @@ type VisualizationProps = {
 }
 const Visualization: FC<VisualizationProps> = ({ config }) => {
 
-  const { src, name } = config
+  const { src, name } = config;
+  const fftSize = 1024
 
   const [isPlay, setIsPlay] = useState<boolean>(false);
-  const [audio, setAudio] = useState<HTMLAudioElement>(new Audio());
+  const [source, setSource] = useState<AudioBufferSourceNode | null>(null);
+
+  const audioCtx = useMemo((): AudioContext => (new AudioContext()), [])
+  const [rAnimation, setRAnimation] = useState<number>(0);
+  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
+  const [audioInfo, setAudioInfo] = useState<{ list: Uint8Array, duration: number, currentTime: number } | null>(null)
+  const [firstPlay, setFirstPlay] = useState(true);
+  const [buffer, setBuffer] = useState<AudioBuffer | null>(null)
+
+
+
   const container = useRef<HTMLDivElement | null>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>();
-  const [rAnimation, setRAnimation] = useState<number>(0)
   const [centerPointer, setCenterPointer] = useState<{ x: number, y: number, w: number, h: number }>({
     x: 0, y: 0, w: 0, h: 0
   })
 
 
+  useEffect(() => {
+    if (audioInfo) {
+      drawCanvas(audioInfo);
+    }
+  }, [audioInfo])
+
 
 
   useEffect(() => {
-    initCanvas();
+    initCanvas()
     window.addEventListener('resize', initCanvas);
     return () => {
       window.removeEventListener('resize', initCanvas);
       window.cancelAnimationFrame(rAnimation);
     }
   }, []);
+
   useEffect(() => {
-    if (isPlay) {
-      audio.pause();
-    } else {
-      audio.play();
+
+    audioCtx.suspend().then(function () {
+      console.log('Resume context');
+    });
+    setAudioInfo(null);
+    setBuffer(null)
+    loadAudio()
+  }, [config]);
+
+
+
+
+  useEffect(() => {
+    if (source) {
+      if (isPlay) {
+        setFirstPlay(false);
+        try {
+          source.start(0)
+        } catch (error) {
+
+        }
+        audioCtx.resume().then(function () {
+          console.log('Suspend context');
+        });
+        if (analyser) {
+          visualizer(analyser)
+        }
+      } else {
+        audioCtx.suspend().then(function () {
+          console.log('Resume context');
+        });
+        window.cancelAnimationFrame(rAnimation)
+      }
     }
   }, [isPlay])
 
   useEffect(() => {
-    if (context) {
-      playMusic(audio)
+    if (buffer) {
+      connectAudio();
     }
-  }, [context])
+  }, [buffer])
+
+
+  const decode = async (arraybuffer: ArrayBuffer) => {
+    try {
+      const res: AudioBuffer = await audioCtx.decodeAudioData(arraybuffer);
+      return res
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const loadAudio = async () => {
+
+    const xhr = new XMLHttpRequest();
+    xhr.abort();
+    xhr.open("GET", src);
+    xhr.responseType = "arraybuffer";
+
+    xhr.onload = async () => {
+      const audioData = xhr.response;
+      const b = await decode(audioData);
+      if (b) {
+        setBuffer(b)
+      }
+    }
+    xhr.send();
+  }
+
+  const connectAudio = async () => {
+    if (source) {
+      try {
+        source.stop();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    const analys = audioCtx.createAnalyser();
+    const distortion = audioCtx.createWaveShaper();
+    const gainNode = audioCtx.createGain();
+    const biquadFilter = audioCtx.createBiquadFilter();
+    const audioSpurce = audioCtx.createBufferSource();
+    audioSpurce.buffer = buffer;
+    audioSpurce.connect(audioCtx.destination);
+    audioSpurce.loop = true;
+    analys.fftSize = fftSize;
+    analys.connect(audioCtx.destination);
+
+    audioSpurce.connect(analys);
+    analys.connect(distortion);
+    distortion.connect(biquadFilter);
+    biquadFilter.connect(gainNode);
+    gainNode.connect(audioCtx.destination)
+
+
+    if (!firstPlay) {
+      audioCtx.resume().then(function () {
+        console.log('Suspend context');
+      });
+      audioSpurce.start(0);
+      visualizer(analys)
+    }
+    setSource(audioSpurce);
+    setAnalyser(analys);
+  }
+
+
+
+  // 音频序列化
+  const visualizer = (analyser: AnalyserNode) => {
+    const requestAnimationFrame = window.requestAnimationFrame
+    const v = () => {
+      const arrayLength = analyser.frequencyBinCount;
+      const array = new Uint8Array(arrayLength);
+      analyser.getByteFrequencyData(array);
+      const duration = buffer?.duration || 0;
+      console.log(buffer);
+      console.log(analyser);
+
+
+
+      const audio_info = {
+        list: array,
+        duration,
+        currentTime: analyser.context.currentTime || 0
+      };
+      setAudioInfo(audio_info)
+      const r = requestAnimationFrame(v);
+      setRAnimation(r);
+    };
+
+    requestAnimationFrame(v);
+  };
 
 
   const changeAudioStatus = () => {
@@ -55,23 +193,8 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
   };
 
 
-  useEffect(() => {
-    initAudio();
-  }, [src])
 
-  // 初始化音频信息
-  const initAudio = () => {
-    // 初始化音频
-    const { src } = config;
-    audio.src = src;
-    audio.preload = 'auto';
-    audio.autoplay = false;
-    const AudioContext = window.AudioContext;
-    setAudio(audio);
-    if (!AudioContext) {
-      console.error('您的浏览器不支持audio API，请更换浏览器（chrome、firefox）再尝试');
-    }
-  };
+
 
   // 初始化画布
   const initCanvas = () => {
@@ -91,86 +214,21 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
     }
   };
 
-
-  // 设置音频相关配置
-  const playMusic = (arg: HTMLAudioElement) => {
-    let source;
-    let audioSource;
-    let bufferSource: AudioBufferSourceNode;
-    // 如果arg是audio的dom对象，则转为相应的源
-    const AC = new AudioContext();
-    // analyser为analysernode，具有频率的数据，用于创建数据可视化
-    const analyser = AC.createAnalyser();
-    analyser.fftSize = 1024;
-    // gain为gainNode，音频的声音处理模块
-    const gainnode = AC.createGain();
-    gainnode.gain.value = 1;
-    if (arg.nodeType) {
-      audioSource = audioSource || AC.createMediaElementSource(arg);
-      source = audioSource;
-    } else {
-      bufferSource = AC.createBufferSource();
-      bufferSource.buffer = arg;
-      // 播放音频
-      setTimeout(() => {
-        bufferSource.start();
-      }, 0);
-      source = bufferSource;
-    }
-    visualizer(analyser);
-    // 连接analyserNode
-    source.connect(analyser);
-    // 再连接到gainNode
-    analyser.connect(gainnode);
-    // 最终输出到音频播放器
-    gainnode.connect(AC.destination);
-  };
-
-
-  // 音频序列化
-  const visualizer = (analyser: AnalyserNode) => {
-    // 0 ~ 255 之间的值
-    const arrayLength = analyser.frequencyBinCount;
-    const array = new Uint8Array(arrayLength);
-    //  -1 ~ 1 之间的值
-    // const waveform = new Float32Array(arrayLength)
-    const requestAnimationFrame = window.requestAnimationFrame
-    const v = () => {
-      analyser.getByteFrequencyData(array);
-      // analyser.getFloatTimeDomainData(waveform);
-      const audioInfo = {
-        list: array,
-        allTime: audio.duration || 0,
-        currentTime: audio.currentTime || 0,
-      };
-      drawCanvas(audioInfo);
-      const r = requestAnimationFrame(v);
-      setRAnimation(r);
-    };
-
-    const r = requestAnimationFrame(v);
-    setRAnimation(r);
-
-
-  };
-
-  const drawCanvas = (data: { currentTime: number; allTime: number; list: Uint8Array; }) => {
-
+  const drawCanvas = (data: { currentTime: number; duration: number; list: Uint8Array; }) => {
     if (context) {
       const { w, h } = centerPointer;
-      const rate = data.currentTime / data.allTime;
       // 颜色参数
-      const r = (1 - rate) * 255;
-      const g = 0;
-      const b = rate * 255;
-      const a = 0.7;
+      const r = 255;
+      const g = 255;
+      const b = 255;
+      const a = 255;
       context.clearRect(0, 0, w, h);
       context.save();
       context.beginPath();
       context.lineWidth = 3;
       context.strokeStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
       context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
-      for (let i = 0; i < 512; i += 1) {
+      for (let i = 0; i < fftSize/2; i += 1) {
         drawOuter(data.list, i);
         drawInner(data.list, i);
       }
@@ -186,9 +244,9 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
   /**
    * 绘制进度progress
    */
-  const drawProgress = (data: { currentTime: number; allTime: number; }) => {
+  const drawProgress = (data: { currentTime: number; duration: number; }) => {
     if (context) {
-      const rate = data.currentTime / data.allTime;
+      const rate = data.currentTime / data.duration;
       context.arc(
         centerPointer.x,
         centerPointer.y,
@@ -292,9 +350,9 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
         <p className={styles.audioName}>{name}</p>
         <div className={styles.progress}>
         </div>
-        <p onClick={changeAudioStatus}>
+        <button onClick={changeAudioStatus}>
           {isPlay ? '暂停' : '播放'}
-        </p>
+        </button>
       </div>
     </div>
   </div>

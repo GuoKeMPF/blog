@@ -113,6 +113,9 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
   };
   useEffect(() => {
     initData();
+    return () => {
+      window.removeEventListener('scroll', scrollDown);
+    }
   }, []);
 
   const initData = async () => {

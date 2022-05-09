@@ -1,5 +1,5 @@
 import { defineConfig } from 'umi';
-
+import { resolve } from "path";
 import { routes } from './routes';
 
 export default defineConfig({
@@ -50,5 +50,6 @@ export default defineConfig({
       .test(/\.(mp3|4)$/)
       .use('file-loader')
       .loader(require.resolve('file-loader'));
+    config.resolve.alias.set("~@", resolve(__dirname, "./src"))
   },
 });
