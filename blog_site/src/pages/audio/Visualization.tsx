@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import type { FC } from "react";
+import { isBrowser } from "umi";
 import styles from './Visualization.less';
 
 
@@ -18,7 +19,12 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
   const [isPlay, setIsPlay] = useState<boolean>(false);
   const [source, setSource] = useState<AudioBufferSourceNode | null>(null);
 
-  const audioCtx = useMemo((): AudioContext => (new AudioContext()), [])
+  const audioCtx = useMemo((): AudioContext | undefined => {
+    if (isBrowser()) {
+      return new AudioContext()
+    }
+    return
+  }, [])
   const [rAnimation, setRAnimation] = useState<number>(0);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const [audioInfo, setAudioInfo] = useState<{ list: Uint8Array, duration: number, currentTime: number } | null>(null)
@@ -44,7 +50,7 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
 
 
   useEffect(() => {
-    initCanvas()
+    initCanvas();
     window.addEventListener('resize', initCanvas);
     return () => {
       window.removeEventListener('resize', initCanvas);
@@ -53,8 +59,7 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
   }, []);
 
   useEffect(() => {
-
-    audioCtx.suspend().then(function () {
+    audioCtx?.suspend().then(function () {
       console.log('Resume context');
     });
     setAudioInfo(null);
@@ -74,14 +79,14 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
         } catch (error) {
 
         }
-        audioCtx.resume().then(function () {
+        audioCtx?.resume().then(function () {
           console.log('Suspend context');
         });
         if (analyser) {
           visualizer(analyser)
         }
       } else {
-        audioCtx.suspend().then(function () {
+        audioCtx?.suspend().then(function () {
           console.log('Resume context');
         });
         window.cancelAnimationFrame(rAnimation)
@@ -98,7 +103,7 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
 
   const decode = async (arraybuffer: ArrayBuffer) => {
     try {
-      const res: AudioBuffer = await audioCtx.decodeAudioData(arraybuffer);
+      const res: AudioBuffer | undefined = await audioCtx?.decodeAudioData(arraybuffer);
       return res
     } catch (error) {
       console.log(error);
@@ -130,33 +135,33 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
         console.log(error);
       }
     }
-    const analys = audioCtx.createAnalyser();
-    const distortion = audioCtx.createWaveShaper();
-    const gainNode = audioCtx.createGain();
-    const biquadFilter = audioCtx.createBiquadFilter();
-    const audioSpurce = audioCtx.createBufferSource();
-    audioSpurce.buffer = buffer;
-    audioSpurce.connect(audioCtx.destination);
-    audioSpurce.loop = true;
-    analys.fftSize = fftSize;
-    analys.connect(audioCtx.destination);
+    if (audioCtx) {
+      const analys = audioCtx.createAnalyser();
+      const distortion = audioCtx.createWaveShaper();
+      const gainNode = audioCtx.createGain();
+      const biquadFilter = audioCtx.createBiquadFilter();
+      const audioSpurce = audioCtx.createBufferSource();
+      audioSpurce.buffer = buffer;
+      audioSpurce.connect(audioCtx.destination);
+      audioSpurce.loop = true;
+      analys.fftSize = fftSize;
+      analys.connect(audioCtx.destination);
 
-    audioSpurce.connect(analys);
-    analys.connect(distortion);
-    distortion.connect(biquadFilter);
-    biquadFilter.connect(gainNode);
-    gainNode.connect(audioCtx.destination)
-
-
-    if (!firstPlay) {
-      audioCtx.resume().then(function () {
-        console.log('Suspend context');
-      });
-      audioSpurce.start(0);
-      visualizer(analys)
+      audioSpurce.connect(analys);
+      analys.connect(distortion);
+      distortion.connect(biquadFilter);
+      biquadFilter.connect(gainNode);
+      gainNode.connect(audioCtx.destination)
+      if (!firstPlay) {
+        audioCtx.resume().then(function () {
+          console.log('Suspend context');
+        });
+        audioSpurce.start(0);
+        visualizer(analys)
+      }
+      setSource(audioSpurce);
+      setAnalyser(analys);
     }
-    setSource(audioSpurce);
-    setAnalyser(analys);
   }
 
 
@@ -228,7 +233,7 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
       context.lineWidth = 3;
       context.strokeStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
       context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
-      for (let i = 0; i < fftSize/2; i += 1) {
+      for (let i = 0; i < fftSize / 2; i += 1) {
         drawOuter(data.list, i);
         drawInner(data.list, i);
       }
