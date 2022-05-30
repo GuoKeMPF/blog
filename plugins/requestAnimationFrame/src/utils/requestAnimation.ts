@@ -2,30 +2,19 @@ type RequestAnimationProps = {
   callback: Function;
 };
 
-class RequestAnimation {
+export default class RequestAnimation {
   callback: Function;
   requestID: number | undefined;
-  requestAnimationFrame =
-    window?.requestAnimationFrame ||
-    window?.mozRequestAnimationFrame ||
-    window?.webkitRequestAnimationFrame ||
-    window?.msRequestAnimationFrame;
-  cancelAnimationFrame =
-    window.cancelAnimationFrame || window?.mozCancelAnimationFrame;
-
   constructor(props: RequestAnimationProps) {
     this.callback = props.callback;
   }
   start = () => {
-    const animation = () => {
-      this.callback();
-      this.requestID = this.requestAnimationFrame(animation);
-    };
-    this.requestID = this.requestAnimationFrame(animation);
+    this.callback();
+    this.requestID = requestAnimationFrame(this.start);
   };
   stop = () => {
     if (this.requestID) {
-      this.cancelAnimationFrame(this.requestID);
+      cancelAnimationFrame(this.requestID);
     }
   };
 }
