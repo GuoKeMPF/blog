@@ -11,10 +11,10 @@ export default function IndexPage() {
   const [reatio, setReatio] = useState<number>(0);
 
   const animate = useCallback(() => {
-    console.log('reatio', reatio);
-    let r = reatio >= 360 ? 1 : reatio + 1;
-    console.log('useCallback', r);
-    setReatio(r)
+    setReatio((reatio)=>{
+      let r = reatio >= 360 ? 1 : reatio + 1;
+      return r
+    })
   }, [reatio, requestAnimation]);
 
   useEffect(() => {
