@@ -18,7 +18,6 @@ export default function IndexPage() {
   }, [reatio, requestAnimation]);
 
   useEffect(() => {
-    console.log('useEffect');
     if (animate) {
       const r = new RequestAnimation({
         callback: animate
