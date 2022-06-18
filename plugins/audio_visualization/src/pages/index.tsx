@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
-import type { FC } from "react";
+import { Link } from "umi";
+
 
 import Visualization from "@/components/Visualization";
 
@@ -34,6 +35,7 @@ const IndexPage = () => {
   return (
     <div>
       <button onClick={onClick}>切换</button>
+      <Link to={'/about'}>about</Link>
       <Visualization config={audio} />
     </div>
   );

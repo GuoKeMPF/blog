@@ -3,6 +3,7 @@ import type { FC } from "react";
 import { isBrowser } from "umi";
 import styles from './Visualization.less';
 
+import RequestAnimation from "@/utils/requestAnimation";
 
 
 type VisualizationProps = {
@@ -18,6 +19,7 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
 
   const [isPlay, setIsPlay] = useState<boolean>(false);
   const [source, setSource] = useState<AudioBufferSourceNode | null>(null);
+  const [requestAnimation, setRequestAnimation] = useState<RequestAnimation | undefined>();
 
   const audioCtx = useMemo((): AudioContext | undefined => {
     if (isBrowser()) {
@@ -25,7 +27,6 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
     }
     return
   }, [])
-  const [rAnimation, setRAnimation] = useState<number>(0);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const [audioInfo, setAudioInfo] = useState<{ list: Uint8Array, duration: number, currentTime: number } | null>(null)
   const [firstPlay, setFirstPlay] = useState(true);
@@ -49,14 +50,6 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
 
 
 
-  useEffect(() => {
-    initCanvas();
-    window.addEventListener('resize', initCanvas);
-    return () => {
-      window.removeEventListener('resize', initCanvas);
-      window.cancelAnimationFrame(rAnimation);
-    }
-  }, []);
 
   useEffect(() => {
     audioCtx?.suspend().then(function () {
@@ -66,8 +59,6 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
     setBuffer(null)
     loadAudio()
   }, [config]);
-
-
 
 
   useEffect(() => {
@@ -89,7 +80,6 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
         audioCtx?.suspend().then(function () {
           console.log('Resume context');
         });
-        window.cancelAnimationFrame(rAnimation)
       }
     }
   }, [isPlay])
@@ -99,6 +89,15 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
       connectAudio();
     }
   }, [buffer])
+
+
+  useEffect(() => {
+    initCanvas();
+    window.addEventListener('resize', initCanvas);
+    return () => {
+      window.removeEventListener('resize', initCanvas);
+    }
+  }, []);
 
 
   const decode = async (arraybuffer: ArrayBuffer) => {
@@ -111,12 +110,10 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
   }
 
   const loadAudio = async () => {
-
     const xhr = new XMLHttpRequest();
     xhr.abort();
     xhr.open("GET", src);
     xhr.responseType = "arraybuffer";
-
     xhr.onload = async () => {
       const audioData = xhr.response;
       const b = await decode(audioData);
@@ -168,28 +165,24 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
 
   // 音频序列化
   const visualizer = (analyser: AnalyserNode) => {
-    const requestAnimationFrame = window.requestAnimationFrame
     const v = () => {
+      console.log('vvvv');
       const arrayLength = analyser.frequencyBinCount;
       const array = new Uint8Array(arrayLength);
       analyser.getByteFrequencyData(array);
       const duration = buffer?.duration || 0;
-      console.log(buffer);
-      console.log(analyser);
-
-
-
       const audio_info = {
         list: array,
         duration,
         currentTime: analyser.context.currentTime || 0
       };
       setAudioInfo(audio_info)
-      const r = requestAnimationFrame(v);
-      setRAnimation(r);
     };
-
-    requestAnimationFrame(v);
+    const r = new RequestAnimation({
+      callback: v
+    });
+    r.start();
+    setRequestAnimation(r);
   };
 
 

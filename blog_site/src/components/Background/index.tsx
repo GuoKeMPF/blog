@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import styles from './index.less';
 import textConfig from '@/utils/textConfig';
 import { getLocale } from 'umi';
+import RequestAnimation from "@/utils/requestAnimation";
 
 
 const canvasW = 600,
@@ -26,8 +27,8 @@ let imageW: number = 0,
 
 const Background = () => {
 
-  const [particles, setParticles] = useState<any[]>([]);
-  const [animFrameID, setAnimFrameID] = useState<number>(0);
+  const [particles, setParticles] = useState<any[]>([])
+  const [requestAnimation, setRequestAnimation] = useState<RequestAnimation | undefined>()
 
   const [image, setImage] = useState<HTMLCanvasElement | null>();
   const locale = getLocale();
@@ -55,8 +56,15 @@ const Background = () => {
   }, [image, locale]);
 
   useEffect(() => {
-    if (particles && particles.length > 0) {
-      animFrame();
+    if (particles && particles.length > 0 && animFrame) {
+      const r = new RequestAnimation({
+        callback: animFrame
+      });
+      setRequestAnimation(r);
+      r.start();
+      return () => {
+        r.stop()
+      }
     }
   }, [particles]);
 
@@ -90,8 +98,6 @@ const Background = () => {
 
   const destroy = () => {
     window.removeEventListener('mousemove', mousemove);
-    const cancelAnimationFrame = window?.cancelAnimationFrame;
-    cancelAnimationFrame(animFrameID);
   };
 
   const loadImage = () => {
@@ -154,9 +160,6 @@ const Background = () => {
       draw_bg();
       draw_roundy();
       draw_line();
-      const requestAnimFrame = window?.requestAnimationFrame;
-      const id = requestAnimFrame(animFrame);
-      setAnimFrameID(id);
     }
   };
 
