@@ -3,8 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import styles from './index.less';
 import textConfig from '@/utils/textConfig';
 import { getLocale } from 'umi';
-import RequestAnimation from "@/utils/requestAnimation";
-
+import RequestAnimation from '@/utils/requestAnimation';
 
 const canvasW = 600,
   density = 10,
@@ -26,9 +25,10 @@ let imageW: number = 0,
   mouseY: number = 0;
 
 const Background = () => {
-
-  const [particles, setParticles] = useState<any[]>([])
-  const [requestAnimation, setRequestAnimation] = useState<RequestAnimation | undefined>()
+  const [particles, setParticles] = useState<any[]>([]);
+  const [requestAnimation, setRequestAnimation] = useState<
+    RequestAnimation | undefined
+  >();
 
   const [image, setImage] = useState<HTMLCanvasElement | null>();
   const locale = getLocale();
@@ -58,13 +58,13 @@ const Background = () => {
   useEffect(() => {
     if (particles && particles.length > 0 && animFrame) {
       const r = new RequestAnimation({
-        callback: animFrame
+        callback: animFrame,
       });
       setRequestAnimation(r);
       r.start();
       return () => {
-        r.stop()
-      }
+        r.stop();
+      };
     }
   }, [particles]);
 
@@ -98,6 +98,7 @@ const Background = () => {
 
   const destroy = () => {
     window.removeEventListener('mousemove', mousemove);
+    requestAnimation?.stop();
   };
 
   const loadImage = () => {
