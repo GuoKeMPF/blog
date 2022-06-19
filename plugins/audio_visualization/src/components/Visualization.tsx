@@ -21,9 +21,7 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
     null,
   );
 
-  const animFrame = () => {
-    console.log(audioAnalyser?.getFrequencyData());
-  };
+  const animFrame = () => {};
 
   const requestAnimation = useMemo<RequestAnimation | undefined>(() => {
     if (requestAnimation) {
@@ -37,44 +35,48 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
 
   useEffect(() => {
     const { src, name } = config;
+    console.log(src, name);
     setLoading(true);
-    setAudioAnalyser(new AudioAnalyser({ src, onLoad: onLoad }));
+    stop();
+    setAudioAnalyser(() => new AudioAnalyser({ src, onLoad: onLoad }));
     return () => {
-      audioAnalyser?.suspend();
-      requestAnimation?.stop();
+      setAudioAnalyser(null);
+      stop();
     };
   }, [config]);
 
   useEffect(() => {
-    if (isPlay) {
-      audioAnalyser?.start();
-      requestAnimation?.start();
-    } else {
-      audioAnalyser?.suspend();
-      requestAnimation?.stop();
-    }
-  }, [isPlay, requestAnimation]);
-
-  useEffect(() => {
     return () => {
       console.log('unmount');
-      console.log(audioAnalyser, requestAnimation);
-      audioAnalyser?.suspend();
-      requestAnimation?.stop();
+      stop();
     };
-  }, [audioAnalyser, requestAnimation]);
+  }, []);
 
   const onLoad = () => {
     setLoading(false);
     if (isPlay) {
-      audioAnalyser?.start();
-      requestAnimation?.start();
+      start();
     }
   };
   const changeAudioStatus = () => {
+    console.log(!isPlay);
+    if (!isPlay) {
+      start();
+    } else {
+      stop();
+    }
     setIsPlay(!isPlay);
   };
 
+  const start = () => {
+    audioAnalyser?.start();
+    requestAnimation?.start();
+  };
+
+  const stop = () => {
+    audioAnalyser?.suspend();
+    requestAnimation?.stop();
+  };
   return (
     <div>
       <div className={styles.container} ref={container}>
