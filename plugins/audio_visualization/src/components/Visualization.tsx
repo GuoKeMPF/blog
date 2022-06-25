@@ -13,37 +13,66 @@ type VisualizationProps = {
     name: string;
   };
 };
+
+/**
+ * 
+    audioAnalyser = useRef<AudioAnalyser | null>(
+      new AudioAnalyser({ src: config.src, onLoad: onLoad }),
+    );
+    requestAnimation = useRef<RequestAnimation | undefined>(
+      new RequestAnimation({
+        callback: animFrame,
+      }),
+    );
+ */
+let audioAnalyser: AudioAnalyser | undefined;
+let requestAnimation: RequestAnimation | undefined;
 const Visualization: FC<VisualizationProps> = ({ config }) => {
   const [isPlay, setIsPlay] = useState<boolean>(false);
   const container = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [audioAnalyser, setAudioAnalyser] = useState<AudioAnalyser | null>(
-    null,
-  );
 
   const animFrame = () => {};
 
-  const requestAnimation = useMemo<RequestAnimation | undefined>(() => {
-    if (requestAnimation) {
-      requestAnimation.stop();
+  const start = () => {
+    audioAnalyser?.start();
+    requestAnimation?.start();
+  };
+
+  const onLoad = () => {
+    setLoading(false);
+    if (isPlay) {
+      start();
     }
-    const r = new RequestAnimation({
-      callback: animFrame,
-    });
-    return r;
-  }, [audioAnalyser]);
+  };
+
 
   useEffect(() => {
     const { src, name } = config;
     console.log(src, name);
     setLoading(true);
     stop();
-    setAudioAnalyser(() => new AudioAnalyser({ src, onLoad: onLoad }));
-    return () => {
-      setAudioAnalyser(null);
-      stop();
-    };
+    audioAnalyser = new AudioAnalyser({ src, onLoad: onLoad });
+    requestAnimation = new RequestAnimation({
+      callback: animFrame,
+    });
+  }, []);
+
+  useEffect(() => {
+    stop();
+    const { src, name } = config;
+    console.log(src, name);
+    setLoading(true);
+    audioAnalyser = new AudioAnalyser({ src, onLoad: onLoad });
+    requestAnimation = new RequestAnimation({
+      callback: animFrame,
+    });
   }, [config]);
+
+  function stop() {
+    audioAnalyser?.suspend();
+    requestAnimation?.stop();
+  }
 
   useEffect(() => {
     return () => {
@@ -52,12 +81,6 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
     };
   }, []);
 
-  const onLoad = () => {
-    setLoading(false);
-    if (isPlay) {
-      start();
-    }
-  };
   const changeAudioStatus = () => {
     console.log(!isPlay);
     if (!isPlay) {
@@ -68,15 +91,6 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
     setIsPlay(!isPlay);
   };
 
-  const start = () => {
-    audioAnalyser?.start();
-    requestAnimation?.start();
-  };
-
-  const stop = () => {
-    audioAnalyser?.suspend();
-    requestAnimation?.stop();
-  };
   return (
     <div>
       <div className={styles.container} ref={container}>
