@@ -1,198 +1,159 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import type { FC } from "react";
-import { isBrowser } from "umi";
+import React, { useState, useEffect, useRef, Fragment } from 'react';
+import type { FC } from 'react';
 import styles from './Visualization.less';
+import { Loading, useIntl } from 'umi';
+import RequestAnimation from '@/utils/requestAnimation';
+import AudioAnalyser from '@/utils/audioAnalyser';
 
-import RequestAnimation from "@/utils/requestAnimation";
+type PlayStatusProps = {
+  loading: boolean;
+  isPlay: boolean;
+};
 
+const PlayStatus: FC<PlayStatusProps> = ({ loading, isPlay }) => {
+  const intl = useIntl();
+  if (loading) {
+    return (
+      <Fragment>
+        {intl.formatMessage({
+          id: 'audio_loading',
+          defaultMessage: '加载中',
+        })}
+      </Fragment>
+    );
+  } else {
+    if (isPlay) {
+      return (
+        <Fragment>
+          {intl.formatMessage({
+            id: 'audio_pause',
+            defaultMessage: '暂停',
+          })}
+        </Fragment>
+      );
+    } else {
+      return (
+        <Fragment>
+          {intl.formatMessage({
+            id: 'audio_play',
+            defaultMessage: '播放',
+          })}
+        </Fragment>
+      );
+    }
+  }
+};
 
 type VisualizationProps = {
   config: {
-    src: string,
-    name: string,
-  }
-}
+    src: string;
+    name: string;
+  };
+};
+
+let audioAnalyser: AudioAnalyser | undefined;
+let requestAnimation: RequestAnimation | undefined;
+const fftSize = 1024;
+
 const Visualization: FC<VisualizationProps> = ({ config }) => {
-
-  const { src, name } = config;
-  const fftSize = 1024
-
+  const { name } = config;
+  const intl = useIntl();
   const [isPlay, setIsPlay] = useState<boolean>(false);
-  const [source, setSource] = useState<AudioBufferSourceNode | null>(null);
-  const [requestAnimation, setRequestAnimation] = useState<RequestAnimation | undefined>();
-
-  const audioCtx = useMemo((): AudioContext | undefined => {
-    if (isBrowser()) {
-      return new AudioContext()
-    }
-    return
-  }, [])
-  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
-  const [audioInfo, setAudioInfo] = useState<{ list: Uint8Array, duration: number, currentTime: number } | null>(null)
-  const [firstPlay, setFirstPlay] = useState(true);
-  const [buffer, setBuffer] = useState<AudioBuffer | null>(null)
-
-
+  const [loading, setLoading] = useState<boolean>(false);
+  const [audioInfo, setAudioInfo] = useState<{
+    list: Uint8Array;
+    duration: number;
+    currentTime: number;
+  } | null>(null);
+  const animFrame = () => {
+    const list: Uint8Array =
+      audioAnalyser?.getFrequencyData() || new Uint8Array();
+    const audio_info = audioAnalyser?.getAudioInfo() || {
+      duration: 0,
+      currentTime: 0,
+    };
+    setAudioInfo({ list, ...audio_info });
+  };
 
   const container = useRef<HTMLDivElement | null>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>();
-  const [centerPointer, setCenterPointer] = useState<{ x: number, y: number, w: number, h: number }>({
-    x: 0, y: 0, w: 0, h: 0
-  })
-
+  const [centerPointer, setCenterPointer] = useState<{
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  }>({
+    x: 0,
+    y: 0,
+    w: 0,
+    h: 0,
+  });
 
   useEffect(() => {
     if (audioInfo) {
       drawCanvas(audioInfo);
     }
-  }, [audioInfo])
+  }, [audioInfo]);
 
+  const start = () => {
+    audioAnalyser?.start();
+    requestAnimation?.start();
+  };
 
-
+  const onLoad = () => {
+    setLoading(false);
+    if (isPlay) {
+      start();
+    }
+  };
 
   useEffect(() => {
-    audioCtx?.suspend().then(function () {
-      console.log('Resume context');
+    const { src, name } = config;
+    console.log(src, name);
+    setLoading(true);
+    stop();
+    audioAnalyser = new AudioAnalyser({ src, onLoad: onLoad });
+    requestAnimation = new RequestAnimation({
+      callback: animFrame,
     });
-    setAudioInfo(null);
-    setBuffer(null)
-    loadAudio()
+  }, []);
+
+  useEffect(() => {
+    stop();
+    const { src, name } = config;
+    console.log(src, name);
+    setLoading(true);
+    audioAnalyser = new AudioAnalyser({ src, onLoad: onLoad });
+    requestAnimation = new RequestAnimation({
+      callback: animFrame,
+    });
   }, [config]);
 
-
-  useEffect(() => {
-    if (source) {
-      if (isPlay) {
-        setFirstPlay(false);
-        try {
-          source.start(0)
-        } catch (error) {
-
-        }
-        audioCtx?.resume().then(function () {
-          console.log('Suspend context');
-        });
-        if (analyser) {
-          visualizer(analyser)
-        }
-      } else {
-        audioCtx?.suspend().then(function () {
-          console.log('Resume context');
-        });
-      }
-    }
-  }, [isPlay])
-
-  useEffect(() => {
-    if (buffer) {
-      connectAudio();
-    }
-  }, [buffer])
-
+  function stop() {
+    audioAnalyser?.suspend();
+    requestAnimation?.stop();
+  }
 
   useEffect(() => {
     initCanvas();
     window.addEventListener('resize', initCanvas);
     return () => {
       window.removeEventListener('resize', initCanvas);
-    }
+      console.log('unmount');
+      stop();
+    };
   }, []);
 
-
-  const decode = async (arraybuffer: ArrayBuffer) => {
-    try {
-      const res: AudioBuffer | undefined = await audioCtx?.decodeAudioData(arraybuffer);
-      return res
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const loadAudio = async () => {
-    const xhr = new XMLHttpRequest();
-    xhr.abort();
-    xhr.open("GET", src);
-    xhr.responseType = "arraybuffer";
-    xhr.onload = async () => {
-      const audioData = xhr.response;
-      const b = await decode(audioData);
-      if (b) {
-        setBuffer(b)
-      }
-    }
-    xhr.send();
-  }
-
-  const connectAudio = async () => {
-    if (source) {
-      try {
-        source.stop();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    if (audioCtx) {
-      const analys = audioCtx.createAnalyser();
-      const distortion = audioCtx.createWaveShaper();
-      const gainNode = audioCtx.createGain();
-      const biquadFilter = audioCtx.createBiquadFilter();
-      const audioSpurce = audioCtx.createBufferSource();
-      audioSpurce.buffer = buffer;
-      audioSpurce.connect(audioCtx.destination);
-      audioSpurce.loop = true;
-      analys.fftSize = fftSize;
-      analys.connect(audioCtx.destination);
-
-      audioSpurce.connect(analys);
-      analys.connect(distortion);
-      distortion.connect(biquadFilter);
-      biquadFilter.connect(gainNode);
-      gainNode.connect(audioCtx.destination)
-      if (!firstPlay) {
-        audioCtx.resume().then(function () {
-          console.log('Suspend context');
-        });
-        audioSpurce.start(0);
-        visualizer(analys)
-      }
-      setSource(audioSpurce);
-      setAnalyser(analys);
-    }
-  }
-
-
-
-  // 音频序列化
-  const visualizer = (analyser: AnalyserNode) => {
-    const v = () => {
-      console.log('vvvv');
-      const arrayLength = analyser.frequencyBinCount;
-      const array = new Uint8Array(arrayLength);
-      analyser.getByteFrequencyData(array);
-      const duration = buffer?.duration || 0;
-      const audio_info = {
-        list: array,
-        duration,
-        currentTime: analyser.context.currentTime || 0
-      };
-      setAudioInfo(audio_info)
-    };
-    const r = new RequestAnimation({
-      callback: v
-    });
-    r.start();
-    setRequestAnimation(r);
-  };
-
-
   const changeAudioStatus = () => {
-    setIsPlay(!isPlay)
+    console.log(!isPlay);
+    if (!isPlay) {
+      start();
+    } else {
+      stop();
+    }
+    setIsPlay(!isPlay);
   };
-
-
-
-
 
   // 初始化画布
   const initCanvas = () => {
@@ -212,7 +173,11 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
     }
   };
 
-  const drawCanvas = (data: { currentTime: number; duration: number; list: Uint8Array; }) => {
+  const drawCanvas = (data: {
+    currentTime: number;
+    duration: number;
+    list: Uint8Array;
+  }) => {
     if (context) {
       const { w, h } = centerPointer;
       // 颜色参数
@@ -242,7 +207,7 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
   /**
    * 绘制进度progress
    */
-  const drawProgress = (data: { currentTime: number; duration: number; }) => {
+  const drawProgress = (data: { currentTime: number; duration: number }) => {
     if (context) {
       const rate = data.currentTime / data.duration;
       context.arc(
@@ -261,7 +226,6 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
    */
   const drawInner = (array: Uint8Array, i: number) => {
     if (context) {
-
       let point;
       let value = 0;
       const { x, y } = centerPointer;
@@ -331,29 +295,41 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
       }
     }
   };
-
-
-
-
-  return <div>
-    <div
-      className={styles.container}
-      ref={container}
-    >
-      <canvas
-        className={styles.canvas}
-        ref={canvas}
-      ></canvas>
-      <div className={styles.controlBtn}>
-        <p className={styles.audioName}>{name}</p>
-        <div className={styles.progress}>
+  return (
+    <div>
+      <div className={styles.container} ref={container}>
+        <canvas className={styles.canvas} ref={canvas}></canvas>
+        <div className={styles.controlBtn}>
+          <p className={styles.audioName}>{name}</p>
+          <div className={styles.buttonGroups}>
+            <button className={styles.backward}>
+              <Fragment>
+                {intl.formatMessage({
+                  id: 'audio_forward',
+                  defaultMessage: '上一首',
+                })}
+              </Fragment>
+            </button>
+            <button
+              className={styles.play}
+              onClick={changeAudioStatus}
+              disabled={loading}
+            >
+              <PlayStatus loading={loading} isPlay={isPlay} />
+            </button>
+            <button className={styles.forward}>
+              <Fragment>
+                {intl.formatMessage({
+                  id: 'audio_backward',
+                  defaultMessage: '下一首',
+                })}
+              </Fragment>
+            </button>
+          </div>
         </div>
-        <button onClick={changeAudioStatus}>
-          {isPlay ? '暂停' : '播放'}
-        </button>
       </div>
     </div>
-  </div>
-}
+  );
+};
 
-export default Visualization
+export default Visualization;

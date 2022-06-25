@@ -16,7 +16,7 @@ export default defineConfig({
   // public
   ssr: {
     mode: 'stream',
-    devServerRender: true,
+    // devServerRender: true,
   },
   // dva
   dva: {

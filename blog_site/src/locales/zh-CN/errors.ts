@@ -1,3 +1,3 @@
 export default {
-  error_image: "Can't load this image",
+  error_image: '图片加载错误',
 };

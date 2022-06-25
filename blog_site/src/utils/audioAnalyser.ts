@@ -45,16 +45,17 @@ export default class AudioAnalyser {
       console.log('no source');
       return;
     }
+    console.log(this.status);
     if (this.status === AudioAnalyserStatus.init) {
       this.source.start(0);
     }
     this.status = AudioAnalyserStatus.started;
-    this.audioCtx?.resume();
+    const res = await this.audioCtx?.resume();
   };
 
   suspend = async () => {
     this.status = AudioAnalyserStatus.stoped;
-    await this.audioCtx?.suspend();
+    const res = await this.audioCtx?.suspend();
   };
   decode = async (arraybuffer: ArrayBuffer) => {
     try {
@@ -107,10 +108,14 @@ export default class AudioAnalyser {
   };
 
   getFrequencyData = () => {
+    console.log(this.analyser);
+
     if (this.analyser) {
       const arrayLength = this.analyser.frequencyBinCount;
       const array = new Uint8Array(arrayLength);
-      this.analyser.getByteFrequencyData(array);
+      const a = this.analyser.getByteFrequencyData(array);
+      console.log(a);
+
       return array;
     }
   };
