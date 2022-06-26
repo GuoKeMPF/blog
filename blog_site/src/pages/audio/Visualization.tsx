@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import type { FC } from 'react';
 import styles from './Visualization.less';
-import { Loading, useIntl } from 'umi';
+import { useIntl } from 'umi';
+
+import type { AudioStateType } from 'umi';
 import RequestAnimation from '@/utils/requestAnimation';
 import AudioAnalyser from '@/utils/audioAnalyser';
 
@@ -45,17 +47,15 @@ const PlayStatus: FC<PlayStatusProps> = ({ loading, isPlay }) => {
 };
 
 type VisualizationProps = {
-  config: {
-    src: string;
-    name: string;
-  };
+  config: AudioStateType.AudioType;
+  swithcAudio: (step: number) => void;
 };
 
 let audioAnalyser: AudioAnalyser | undefined;
 let requestAnimation: RequestAnimation | undefined;
 const fftSize = 1024;
 
-const Visualization: FC<VisualizationProps> = ({ config }) => {
+const Visualization: FC<VisualizationProps> = ({ config, swithcAudio }) => {
   const { name } = config;
   const intl = useIntl();
   const [isPlay, setIsPlay] = useState<boolean>(false);
@@ -110,19 +110,13 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
 
   useEffect(() => {
     const { src, name } = config;
-    console.log(src, name);
     setLoading(true);
     stop();
-    audioAnalyser = new AudioAnalyser({ src, onLoad: onLoad });
-    requestAnimation = new RequestAnimation({
-      callback: animFrame,
-    });
   }, []);
 
   useEffect(() => {
     stop();
     const { src, name } = config;
-    console.log(src, name);
     setLoading(true);
     audioAnalyser = new AudioAnalyser({ src, onLoad: onLoad });
     requestAnimation = new RequestAnimation({
@@ -140,19 +134,21 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
     window.addEventListener('resize', initCanvas);
     return () => {
       window.removeEventListener('resize', initCanvas);
-      console.log('unmount');
       stop();
     };
   }, []);
 
   const changeAudioStatus = () => {
-    console.log(!isPlay);
     if (!isPlay) {
       start();
     } else {
       stop();
     }
     setIsPlay(!isPlay);
+  };
+
+  const onSwitchAudio = (step: number) => {
+    swithcAudio(step);
   };
 
   // 初始化画布
@@ -302,7 +298,10 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
         <div className={styles.controlBtn}>
           <p className={styles.audioName}>{name}</p>
           <div className={styles.buttonGroups}>
-            <button className={styles.backward}>
+            <button
+              className={styles.backward}
+              onClick={() => onSwitchAudio(-1)}
+            >
               <Fragment>
                 {intl.formatMessage({
                   id: 'audio_forward',
@@ -317,7 +316,7 @@ const Visualization: FC<VisualizationProps> = ({ config }) => {
             >
               <PlayStatus loading={loading} isPlay={isPlay} />
             </button>
-            <button className={styles.forward}>
+            <button className={styles.forward} onClick={() => onSwitchAudio(1)}>
               <Fragment>
                 {intl.formatMessage({
                   id: 'audio_backward',

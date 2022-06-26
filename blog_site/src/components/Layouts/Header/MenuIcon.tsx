@@ -27,6 +27,12 @@ const navConfig = [
     href: '/picture',
     icon: 'xiangce1',
   },
+  {
+    title: () =>
+      formatMessage({ id: 'audio' }, { defaultMessage: '音乐' }) || '音乐',
+    href: '/audio',
+    icon: 'yinyue',
+  },
 ];
 
 export const MenuIcon = () => {
@@ -45,10 +51,10 @@ export const MenuIcon = () => {
       <div className={styles.container}>
         <div
           onClick={close}
-          className={`${styles.mask}${expand ? ' ' + styles.expand : ''}`}
+          className={`${styles.mask} ${expand ? ' ' + styles.expand : ''}`}
         ></div>
         <div
-          className={`${styles.MenuIcon}${expand ? ' ' + styles.expand : ''}`}
+          className={`${styles.MenuIcon} ${expand ? ' ' + styles.expand : ''}`}
           onClick={open}
         >
           <div className={styles.icon}></div>
@@ -69,9 +75,6 @@ export const MenuIcon = () => {
             {navConfig.map((item, index) => (
               <MenuItem className={styles.item} key={index} {...item} />
             ))}
-            <div className={styles.item}>
-              <Border></Border>
-            </div>
             <div className={styles.item}>
               <Border></Border>
             </div>

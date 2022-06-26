@@ -45,7 +45,6 @@ export default class AudioAnalyser {
       console.log('no source');
       return;
     }
-    console.log(this.status);
     if (this.status === AudioAnalyserStatus.init) {
       this.source.start(0);
     }
@@ -108,14 +107,10 @@ export default class AudioAnalyser {
   };
 
   getFrequencyData = () => {
-    console.log(this.analyser);
-
     if (this.analyser) {
       const arrayLength = this.analyser.frequencyBinCount;
       const array = new Uint8Array(arrayLength);
-      const a = this.analyser.getByteFrequencyData(array);
-      console.log(a);
-
+      this.analyser.getByteFrequencyData(array);
       return array;
     }
   };
