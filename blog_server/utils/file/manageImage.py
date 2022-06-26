@@ -16,7 +16,7 @@ def saveImage(f):
     unique_name = time.strftime('%Y%m%d%H%M%S') + f.name
     path = os.path.join(image_path, unique_name)
     jpgdir = os.path.join(baseDir, path)
-    loaction = os.path.join(domain, image_path, unique_name)
+    loaction = domain + '/' + image_path + '/' + unique_name
     fobj = open(jpgdir, 'wb')
     for chrunk in f.chunks():
         fobj.write(chrunk)
@@ -27,7 +27,7 @@ def saveImage(f):
         'width': image.width,
         'height': image.height,
         'name': f.name,
-        'unique_name':unique_name
+        'unique_name': unique_name
     }
 
 
