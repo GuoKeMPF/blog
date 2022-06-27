@@ -9,5 +9,5 @@ export const text = '/api/text';
 
 export const picture = '/api/picture';
 export const pictures = '/api/pictures';
-export const audio = '/api/audio/';
-export const audios = '/api/audios/';
+export const audio = '/api/audio';
+export const audios = '/api/audios';

@@ -1,5 +1,6 @@
-import { queryAudios, queryAudioByID } from '@/services/audio';
+import { queryAudios, queryAudioByID, addAudio, addAudios, deleteAudio } from '@/services/audio';
 import { Effect, Reducer } from 'umi';
+import { message } from 'antd';
 export namespace AudioStateType {
   export type AudioType = {
     id: string;
@@ -14,6 +15,7 @@ export namespace AudioStateType {
 
 export interface AudioStateType {
   audios: AudioStateType.AudiosType;
+  visiable: boolean;
 }
 
 export interface ModelType {
@@ -22,14 +24,18 @@ export interface ModelType {
   effects: {
     queryAudios: Effect;
     queryAudioByID: Effect;
+    addAudio: Effect;
+    addAudios: Effect;
   };
   reducers: {
     update: Reducer<AudioStateType>;
     reset: Reducer<AudioStateType>;
+    setVisiable: Reducer<AudioStateType>;
   };
 }
 const initState: AudioStateType = {
   audios: [],
+  visiable: false,
 };
 
 const Audio: ModelType = {
@@ -53,6 +59,33 @@ const Audio: ModelType = {
         return response.data;
       }
     },
+    *addAudio({ payload }: any, { put, call }: any) {
+      const response: ResponseDateType = yield call(addAudio, payload);
+      if (!response.code) {
+        message.error(response.message);
+        return;
+      }
+      if (response && response?.code) {
+        yield put({
+          type: 'queryAudios',
+          payload,
+        });
+      }
+    },
+    *addAudios({ payload }: any, { put, call }: any) {
+      const response: ResponseDateType = yield call(addAudios, payload);
+      if (!response.code) {
+        message.error(response.message);
+        return;
+      }
+      if (response && response?.code) {
+        yield put({
+          type: 'queryAudios',
+          payload,
+        });
+      }
+    },
+
     *queryAudioByID({ payload }, { call }) {
       const response: { data: AudioStateType.AudiosType } = yield call(queryAudioByID, payload);
       if (response) {
@@ -69,6 +102,12 @@ const Audio: ModelType = {
     },
     reset() {
       return initState;
+    },
+    setVisiable(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+      };
     },
   },
 };

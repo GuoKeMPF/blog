@@ -3,7 +3,8 @@ import FormFooter from '@/components/Footer/FormFooter';
 import { InboxOutlined } from '@ant-design/icons';
 import { connect } from 'umi';
 import type { ReactElement } from 'react';
-import type { PictureStateType, Dispatch, Loading } from 'umi';
+import type { AudioStateType, Dispatch, Loading } from 'umi';
+
 const { TextArea } = Input;
 const { Dragger } = Upload;
 
@@ -32,14 +33,14 @@ const AudioForm = ({
       payload.append('file', f.originFileObj);
     });
     dispatch({
-      type: 'picture/addPictures',
+      type: 'audio/addAudios',
       payload,
     });
   };
 
   const onConcel = () => {
     dispatch({
-      type: 'picture/setVisiable',
+      type: 'audio/setVisiable',
       payload: {
         visiable: false,
       },
@@ -53,13 +54,13 @@ const AudioForm = ({
   return (
     <Modal
       afterClose={afterClose}
-      title="上传图片"
+      title="上传音频"
       onCancel={onConcel}
       footer={null}
       visible={visiable}
     >
       <Form
-        name="upload_image"
+        name="upload_audio"
         initialValues={{ file: [] }}
         onFinish={onFinish}
         autoComplete="off"
@@ -71,7 +72,13 @@ const AudioForm = ({
           name="file"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Dragger action="/" name="file" beforeUpload={() => false} multiple={true}>
+          <Dragger
+            accept="audio/*"
+            action="/"
+            name="file"
+            beforeUpload={() => false}
+            multiple={true}
+          >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>
@@ -98,8 +105,7 @@ const AudioForm = ({
     </Modal>
   );
 };
-
-export default connect(({ picture, loading }: { picture: PictureStateType; loading: Loading }) => ({
+export default connect(({ audio, loading }: { audio: AudioStateType; loading: Loading }) => ({
   loading: !!loading.effects['draft/addPicture'],
-  visiable: picture.visiable,
+  visiable: audio.visiable,
 }))(AudioForm);

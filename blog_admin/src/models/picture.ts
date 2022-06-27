@@ -1,7 +1,6 @@
 import { queryPictures, addPicture, addPictures, deletePicture } from '@/services/picture';
 import { message } from 'antd';
 
-
 export namespace PictureStateType {
   export type PictureType = {
     id: string;
@@ -14,9 +13,9 @@ export namespace PictureStateType {
 
 export interface PicturesResponseType {
   data: PictureStateType.PictureType[];
-  count: number,
-  size: number,
-  page: number,
+  count: number;
+  size: number;
+  page: number;
 }
 export interface PictureStateType {
   pictures: PictureStateType.PictureTypes;

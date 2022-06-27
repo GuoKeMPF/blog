@@ -49,6 +49,24 @@ export default {
       res.send({ data, size, page, count: audios.length });
     }, 500);
   },
+  'POST /api/audio': (req: Request, res: Response) => {
+    const audio = {
+      ...req.body,
+      ...mockAudio(),
+      id: audios.length + Math.random().toString(36).substring(2),
+    };
+    audios.unshift(audio);
+    res.status(200).send(audio);
+  },
+  'POST /api/audios': (req: Request, res: Response) => {
+    const audio = {
+      ...req.body,
+      ...mockAudio(),
+      id: audios.length + Math.random().toString(36).substring(2),
+    };
+    audios.unshift(audio);
+    res.status(200).send(audio);
+  },
 
   'GET /mock_static/audios/*': (req: Request, res: Response) => {
     const { url } = req;

@@ -29,7 +29,7 @@ const Audio = ({
 
   const onUpload = () => {
     dispatch({
-      type: 'picture/setVisiable',
+      type: 'audio/setVisiable',
       payload: {
         visiable: true,
       },
@@ -37,8 +37,6 @@ const Audio = ({
   };
 
   const onChange = (p: number, s: number) => {
-    console.log(p, s);
-
     dispatch({
       type: 'picture/queryPictures',
       payload: {
@@ -110,6 +108,7 @@ const Audio = ({
       <AudioForm />
       <Card title="音频" className={styles.audios} extra={<Button onClick={onUpload}>新建</Button>}>
         <Table
+          rowKey={r => r.id}
           columns={columns}
           loading={loading}
           dataSource={audios}
