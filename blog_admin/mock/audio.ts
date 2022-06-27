@@ -76,4 +76,15 @@ export default {
       res.sendFile(path.join(__dirname, prepath));
     }, 500);
   },
+
+  'DELETE /api/audio/:id': (req: Request, res: Response) => {
+    const { id } = req.params;
+    const index = audios.findIndex((item) => item.id + '' === id + '');
+    if (index >= 0) {
+      audios.splice(index, 1);
+      res.status(200).send(audios);
+    } else {
+      res.status(404).send('Sorry, cant find that');
+    }
+  },
 };

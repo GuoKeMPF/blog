@@ -1,5 +1,4 @@
 import { queryPictures, addPicture, addPictures, deletePicture } from '@/services/picture';
-import { message } from 'antd';
 
 export namespace PictureStateType {
   export type PictureType = {
@@ -50,11 +49,7 @@ const Picture = {
 
     *addPicture({ payload }: any, { put, call }: any) {
       const response: ResponseDateType = yield call(addPicture, payload);
-      if (!response.code) {
-        message.error(response.message);
-        return;
-      }
-      if (response && response?.code) {
+      if (response) {
         yield put({
           type: 'queryPictures',
           payload,
@@ -64,7 +59,7 @@ const Picture = {
 
     *addPictures({ payload }: any, { put, call }: any) {
       const response: ResponseDateType = yield call(addPictures, payload);
-      if (response && response?.code) {
+      if (response) {
         yield put({
           type: 'queryPictures',
           payload,
@@ -74,8 +69,7 @@ const Picture = {
 
     *deletePicture({ payload }: any, { put, call }: any) {
       const response: ResponseDateType = yield call(deletePicture, payload);
-      if (!response.code) {
-        message.error(response.message);
+      if (!response) {
         return;
       }
       const pictures: { data: PictureStateType.PictureTypes } = yield call(queryPictures);

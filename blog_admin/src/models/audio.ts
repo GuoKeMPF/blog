@@ -1,6 +1,5 @@
 import { queryAudios, queryAudioByID, addAudio, addAudios, deleteAudio } from '@/services/audio';
 import { Effect, Reducer } from 'umi';
-import { message } from 'antd';
 export namespace AudioStateType {
   export type AudioType = {
     id: string;
@@ -26,6 +25,7 @@ export interface ModelType {
     queryAudioByID: Effect;
     addAudio: Effect;
     addAudios: Effect;
+    deleteAudio: Effect;
   };
   reducers: {
     update: Reducer<AudioStateType>;
@@ -61,11 +61,7 @@ const Audio: ModelType = {
     },
     *addAudio({ payload }: any, { put, call }: any) {
       const response: ResponseDateType = yield call(addAudio, payload);
-      if (!response.code) {
-        message.error(response.message);
-        return;
-      }
-      if (response && response?.code) {
+      if (response) {
         yield put({
           type: 'queryAudios',
           payload,
@@ -74,11 +70,7 @@ const Audio: ModelType = {
     },
     *addAudios({ payload }: any, { put, call }: any) {
       const response: ResponseDateType = yield call(addAudios, payload);
-      if (!response.code) {
-        message.error(response.message);
-        return;
-      }
-      if (response && response?.code) {
+      if (response) {
         yield put({
           type: 'queryAudios',
           payload,
@@ -90,6 +82,18 @@ const Audio: ModelType = {
       const response: { data: AudioStateType.AudiosType } = yield call(queryAudioByID, payload);
       if (response) {
         return response.data;
+      }
+    },
+    *deleteAudio({ payload }: any, { put, call }: any) {
+      const response: ResponseDateType = yield call(deleteAudio, payload);
+      if (!response) {
+        return;
+      }
+      if (response) {
+        yield put({
+          type: 'queryAudios',
+          payload,
+        });
       }
     },
   },

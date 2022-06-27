@@ -25,10 +25,12 @@ const errorHandler = (error: any) => {
   };
 
   const message = codeMaps[response.status];
+  console.log('response', response);
+  const description = response.message;
   if (message) {
     notification.error({
-      message: response.status,
-      description: message,
+      message,
+      description,
     });
   }
   return response;

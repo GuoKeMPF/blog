@@ -6,6 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from utils.file.manageAudio import saveAudio, deleteAudio
 from utils.pagination import Pagination
 
+
 class AudioViewSet(ModelViewSet):
     serializer_class = AudioSerializer
     pagination_class = Pagination
@@ -27,27 +28,27 @@ class AudioViewSet(ModelViewSet):
             description=description
         )
         audio.save()
-        return JsonResponse({"data": imageInfo, "code": 1})
+        return JsonResponse(imageInfo)
 
     def destroy(self, request, *args, **kwargs):
         id = kwargs.get('id')
         audio = Audio.objects.get(id=id)
         if audio is None:
-            return JsonResponse({"code": 0, "message": "file dose't exist"}, status=200, safe=False)
+            return JsonResponse({"message": "file dose't exist"}, status=500, safe=False)
         else:
             res = audio.delete()
             try:
                 deleteAudio(audio.unique_name)
             except(FileNotFoundError):
-                return JsonResponse({"code": 2, "message": "can't find file"}, status=200, safe=False)
-            return JsonResponse({"data": res}, status=200, safe=False)
+                return JsonResponse({"message": "can't find file"}, status=500, safe=False)
+            return JsonResponse(res, status=200, safe=False)
 
     def uploads(self, request, *args, **kwargs):
         files = request.FILES.getlist('file')
         description = request.POST.get('description', '')
         loactions = []
         for f in files:
-            imageInfo = saveImage(f)
+            imageInfo = saveAudio(f)
             picture = Audio(
                 src=imageInfo['src'],
                 name=imageInfo['name'],
@@ -56,4 +57,4 @@ class AudioViewSet(ModelViewSet):
             )
             picture.save()
             loactions.append(imageInfo)
-        return JsonResponse({"data": loactions, "code": 1})
+        return JsonResponse(loactions, status=200)

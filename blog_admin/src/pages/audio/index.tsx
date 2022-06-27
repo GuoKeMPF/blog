@@ -2,10 +2,13 @@ import { Fragment, useEffect, useMemo } from 'react';
 import { Card, Button, Popconfirm, Space, Table, Typography } from 'antd';
 import { TableColumnsType } from 'antd';
 
-import { DeleteOutlined, DownloadOutlined, SendOutlined } from '@ant-design/icons';
+import { DeleteOutlined, DownloadOutlined, CaretRightOutlined } from '@ant-design/icons';
 import { connect } from 'umi';
 import AudioForm from './AudioForm';
 import styles from './index.less';
+
+import Player from './Player';
+import Operation from './Operation';
 
 import type { ReactElement } from 'react';
 import type { AudioStateType, Dispatch, Loading } from 'umi';
@@ -38,7 +41,7 @@ const Audio = ({
 
   const onChange = (p: number, s: number) => {
     dispatch({
-      type: 'picture/queryPictures',
+      type: 'audio/queryAudios',
       payload: {
         page: p,
         size: s,
@@ -46,11 +49,11 @@ const Audio = ({
     });
   };
 
-  const onDelete = (picture: AudioStateType.AudioType) => {
+  const onDelete = (audio: AudioStateType.AudioType) => {
     dispatch({
-      type: 'picture/deletePicture',
+      type: 'audio/deleteAudio',
       payload: {
-        id: picture.id,
+        id: audio.id,
       },
     });
   };
@@ -61,7 +64,7 @@ const Audio = ({
         key: 'index',
         dataIndex: 'index',
         render(t, r, i) {
-          return i;
+          return i + 1;
         },
       },
       {
@@ -78,10 +81,22 @@ const Audio = ({
         title: '操作',
         key: 'opreation',
         dataIndex: 'opreation',
-        render(t, r) {
+        render(t, r: any) {
           return (
             <Space>
-              <Button type="link" danger>
+              <a
+                href={`${r.src}`}
+                target="_blank"
+                key="download"
+                download={r.name}
+                rel="noreferrer"
+              >
+                <DownloadOutlined />
+              </a>
+              <Button type="link">
+                <CaretRightOutlined />
+              </Button>
+              <Button type="link">
                 <Paragraph key="copy" copyable={{ text: r.src }} />
               </Button>
               <Popconfirm
@@ -108,8 +123,10 @@ const Audio = ({
       <AudioForm />
       <Card title="音频" className={styles.audios} extra={<Button onClick={onUpload}>新建</Button>}>
         <Table
-          rowKey={r => r.id}
+          size="small"
+          rowKey={(r: any) => r.id}
           columns={columns}
+          scroll={{ y: 500 }}
           loading={loading}
           dataSource={audios}
           pagination={{
@@ -117,6 +134,8 @@ const Audio = ({
             showSizeChanger: true,
             onChange: onChange,
           }}
+          title={() => <Operation />}
+          footer={() => <Player src={''} name={''} />}
         />
       </Card>
     </Fragment>

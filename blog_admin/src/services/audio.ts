@@ -12,11 +12,9 @@ export async function queryAudioByID({ id }: { id: string }) {
 }
 
 export async function addAudio(data: FormData) {
-  return Post(`${audios}/`, data);
+  return Post(`${audio}/`, data);
 }
 export async function addAudios(data: FormData) {
-  console.log('addAudios', data);
-
   return Post(`${audios}/`, data);
 }
 
