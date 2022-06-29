@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { Card, Button, Popconfirm, Space, Table, Typography } from 'antd';
 import { TableColumnsType } from 'antd';
 
@@ -24,6 +24,8 @@ const Audio = ({
   dispatch: Dispatch;
   loading: boolean;
 }): ReactElement => {
+  const [audio, setAudio] = useState<AudioStateType.AudioType>();
+
   useEffect(() => {
     dispatch({
       type: 'audio/queryAudios',
@@ -49,7 +51,11 @@ const Audio = ({
     });
   };
 
-  const onDelete = (audio: AudioStateType.AudioType) => {
+  const onClickRow = (recoder: AudioStateType.AudioType) => {
+    setAudio(recoder);
+  };
+
+  const onDelete = (audio: AudioStateType.AudioType) => () => {
     dispatch({
       type: 'audio/deleteAudio',
       payload: {
@@ -91,7 +97,9 @@ const Audio = ({
                 download={r.name}
                 rel="noreferrer"
               >
-                <DownloadOutlined />
+                <Button type="link">
+                  <DownloadOutlined />
+                </Button>
               </a>
               <Button type="link">
                 <CaretRightOutlined />
@@ -116,7 +124,7 @@ const Audio = ({
       },
     ];
     return column;
-  }, [onUpload]);
+  }, [onDelete]);
 
   return (
     <Fragment>
@@ -134,8 +142,13 @@ const Audio = ({
             showSizeChanger: true,
             onChange: onChange,
           }}
+          onRow={(record: any) => ({
+            onClick: () => {
+              onClickRow(record);
+            },
+          })}
           title={() => <Operation />}
-          footer={() => <Player src={''} name={''} />}
+          footer={() => <Player src={audio?.src} name={audio?.name} />}
         />
       </Card>
     </Fragment>
