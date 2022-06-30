@@ -3,28 +3,28 @@ import path from 'path';
 
 const mp3s: any[] = [
   {
-    src: path.join('./mock_static/audios/daybreak.mp3'),
+    src: '/mock_static/audios/daybreak.mp3',
     name: 'daybreak.mp3',
     create_time: '2022-04-24 13:46:26',
     description: 'daybreak.mp3',
     unique_name: 'daybreak.mp3 2022-04-24 13:46:26',
   },
   {
-    src: path.join('./mock_static/audios/M18.mp3'),
+    src: '/mock_static/audios/M18.mp3',
     name: 'M18.mp3',
     create_time: '2022-04-24 13:46:26',
     description: 'M18.mp3',
     unique_name: 'M18.mp3 2022-04-24 13:46:26',
   },
   {
-    src: path.join('./mock_static/audios/My Sunset.mp3'),
+    src: '/mock_static/audios/My Sunset.mp3',
     name: 'My Sunset.mp3',
     create_time: '2022-04-24 13:46:26',
     description: 'My Sunset.mp3',
     unique_name: 'My Sunset.mp3 2022-04-24 13:46:26',
   },
   {
-    src: path.join('./mock_static/audios/Vagrant.mp3'),
+    src: '/mock_static/audios/Vagrant.mp3',
     name: 'Vagrant.mp3',
     create_time: '2022-04-24 13:46:26',
     description: 'Vagrant.mp3',

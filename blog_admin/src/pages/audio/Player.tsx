@@ -17,9 +17,11 @@ const { Group } = Button;
 type PlayerProps = {
   src: string | undefined;
   name: string | undefined;
+  onReset: () => void;
+  onSwitch: (step: 1 | -1) => void;
 };
 
-const Player: FC<PlayerProps> = ({ src, name }) => {
+const Player: FC<PlayerProps> = ({ src, name, onReset, onSwitch }) => {
   const audio = useRef<HTMLAudioElement>(null);
   const [play, setPlay] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,8 +29,10 @@ const Player: FC<PlayerProps> = ({ src, name }) => {
   const [progress, setProgress] = useState<number>(0);
 
   const onLoad = () => {
+    console.log('onLoad');
     setLoading(false);
     setLoadingError(false);
+    audio.current?.play();
   };
 
   const onError = () => {
@@ -36,12 +40,19 @@ const Player: FC<PlayerProps> = ({ src, name }) => {
     setLoading(false);
   };
 
+  const onProgress = (e: any) => {
+    const precent = (e.target.currentTime / e.target.duration) * 100;
+    setProgress(precent);
+  };
+
   useEffect(() => {
     if (audio.current && src) {
       audio.current.src = src;
       setLoading(true);
-      audio.current.onload = onLoad;
+      audio.current.preload = 'auto';
+      audio.current.oncanplay = onLoad;
       audio.current.onerror = onError;
+      audio.current.ontimeupdate = onProgress;
     }
   }, [src, name]);
 
@@ -49,40 +60,52 @@ const Player: FC<PlayerProps> = ({ src, name }) => {
     audio.current?.play();
   };
 
-  const onStop = () => {};
+  const onStop = () => {
+    audio.current?.pause();
+    onReset();
+    setProgress(0);
+  };
 
-  const onPause = () => {};
+  const onPause = () => {
+    audio.current?.pause();
+  };
 
-  const onBackward = () => {};
+  const onBackward = () => {
+    onSwitch(-1);
+  };
 
-  const onForward = () => {};
+  const onForward = () => {
+    onSwitch(1);
+  };
 
   return (
     <Fragment>
       <Group>
-        <Button>
+        <Button onClick={onBackward}>
           <BackwardOutlined />
         </Button>
         <Button onClick={onPlay}>
           <CaretRightOutlined />
         </Button>
-        <Button>
+        <Button onClick={onPause}>
           <PauseOutlined />
         </Button>
-        <Button>
+        <Button onClick={onStop}>
           <BorderOutlined />
         </Button>
-        <Button>
+        <Button onClick={onForward}>
           <ForwardOutlined />
         </Button>
       </Group>
-      <div className={styles.audioContainer}>
-        <p className={styles.name}>{name || '--'}</p>
-        <Slider defaultValue={progress} />
-        <div className={styles.audio}>
-          <audio src={src} ref={audio} />
+      {src && (
+        <div className={styles.audioContainer}>
+          <p className={styles.name}>{name || '--'}</p>
+          <Slider value={progress} />
+          <div className={styles.audio}>
+            <audio src={src} ref={audio} />
+          </div>
         </div>
-      </div>
+      )}
     </Fragment>
   );
 };

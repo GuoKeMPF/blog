@@ -63,6 +63,24 @@ const Audio = ({
       },
     });
   };
+
+  const onReset = () => {
+    setAudio(undefined);
+  };
+
+  const onSwitch = (step: 1 | -1) => {
+    const index = audios.findIndex((a) => audio?.id === a.id);
+    let nextIndex = index + step;
+    if (nextIndex >= audios.length) {
+      nextIndex = audios.length - 1;
+    }
+    if (nextIndex <= 0) {
+      nextIndex = 0;
+    }
+    const nextAudio = audios[nextIndex];
+    setAudio(nextAudio);
+  };
+
   const columns = useMemo<TableColumnsType<object>>(() => {
     const column: TableColumnsType<object> = [
       {
@@ -148,7 +166,9 @@ const Audio = ({
             },
           })}
           title={() => <Operation />}
-          footer={() => <Player src={audio?.src} name={audio?.name} />}
+          footer={() => (
+            <Player onReset={onReset} onSwitch={onSwitch} src={audio?.src} name={audio?.name} />
+          )}
         />
       </Card>
     </Fragment>
