@@ -46,7 +46,7 @@ export default [
   {
     path: '/audio',
     name: '音频',
-    icon: 'FileImageOutlined',
+    icon: 'SoundOutlined',
     component: './audio/index',
   },
   { component: './404' },

@@ -10,4 +10,44 @@
       margin: 16px 0;
     }
   }
+
+  .active {
+    background-color: #e6f7ff;
+    :global {
+      .ant-table-cell {
+        background-color: #e6f7ff;
+      }
+      .ant-table-cell,
+      .ant-table-cell-row-hover {
+        background-color: #e6f7ff;
+      }
+    }
+  }
+  .active:hover {
+    background-color: #e6f7ff;
+    :global {
+      .ant-table-cell {
+        background-color: #e6f7ff;
+      }
+      .ant-table-cell,
+      .ant-table-cell-row-hover {
+        background-color: #e6f7ff;
+      }
+    }
+  }
+  .active:focus {
+    background-color: #e6f7ff;
+    :global {
+      .ant-table-cell {
+        background-color: #e6f7ff;
+      }
+      .ant-table-cell,
+      .ant-table-cell-row-hover {
+        background-color: #e6f7ff;
+      }
+    }
+  }
+  .deactive {
+    background-color: inherit;
+  }
 }

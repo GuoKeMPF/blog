@@ -72,13 +72,19 @@ const Audio = ({
     const index = audios.findIndex((a) => audio?.id === a.id);
     let nextIndex = index + step;
     if (nextIndex >= audios.length) {
-      nextIndex = audios.length - 1;
-    }
-    if (nextIndex <= 0) {
       nextIndex = 0;
+    }
+    if (nextIndex < 0) {
+      nextIndex = audios.length - 1;
     }
     const nextAudio = audios[nextIndex];
     setAudio(nextAudio);
+  };
+
+  const onPlayAll = () => {
+    if (audios.length) {
+      setAudio(audios[0]);
+    }
   };
 
   const columns = useMemo<TableColumnsType<object>>(() => {
@@ -152,7 +158,7 @@ const Audio = ({
           size="small"
           rowKey={(r: any) => r.id}
           columns={columns}
-          scroll={{ y: 500 }}
+          scroll={{ y: 500, x: 'max-content' }}
           loading={loading}
           dataSource={audios}
           pagination={{
@@ -160,12 +166,15 @@ const Audio = ({
             showSizeChanger: true,
             onChange: onChange,
           }}
+          rowClassName={(record: any) =>
+            record.id === audio?.id ? styles.active : styles.deactive
+          }
           onRow={(record: any) => ({
             onClick: () => {
               onClickRow(record);
             },
           })}
-          title={() => <Operation />}
+          title={() => <Operation disabled={!audios.length} onPlayAll={onPlayAll} />}
           footer={() => (
             <Player onReset={onReset} onSwitch={onSwitch} src={audio?.src} name={audio?.name} />
           )}
