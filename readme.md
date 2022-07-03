@@ -14,4 +14,5 @@
 
 ## blog_nginx
 
-由 nginx 的代理配置
+由
+nginx 的代理配置
