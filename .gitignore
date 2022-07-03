@@ -5,4 +5,7 @@
 **/blog_static/**
 **/db.sqlite3
 **/server_static/**
+**/node_modules/**
+**/.umi/**
+**/dist/**
 blog_server/db.sqlite3
