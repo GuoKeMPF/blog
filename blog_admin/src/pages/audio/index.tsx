@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState, useCallback } from 'react';
 import { Card, Button, Popconfirm, Space, Table, Typography } from 'antd';
 import { TableColumnsType } from 'antd';
 
@@ -51,18 +51,18 @@ const Audio = ({
     });
   };
 
-  const onClickRow = (recoder: AudioStateType.AudioType) => {
+  const onPlay = (recoder: AudioStateType.AudioType) => {
     setAudio(recoder);
   };
 
-  const onDelete = (audio: AudioStateType.AudioType) => () => {
+  const onDelete = useCallback((a: AudioStateType.AudioType) => {
     dispatch({
       type: 'audio/deleteAudio',
       payload: {
-        id: audio.id,
+        id: a.id,
       },
     });
-  };
+  }, []);
 
   const onReset = () => {
     setAudio(undefined);
@@ -125,7 +125,7 @@ const Audio = ({
                   <DownloadOutlined />
                 </Button>
               </a>
-              <Button type="link">
+              <Button type="link" onClick={() => onPlay(r)}>
                 <CaretRightOutlined />
               </Button>
               <Button type="link">
@@ -169,11 +169,6 @@ const Audio = ({
           rowClassName={(record: any) =>
             record.id === audio?.id ? styles.active : styles.deactive
           }
-          onRow={(record: any) => ({
-            onClick: () => {
-              onClickRow(record);
-            },
-          })}
           title={() => <Operation disabled={!audios.length} onPlayAll={onPlayAll} />}
           footer={() => (
             <Player onReset={onReset} onSwitch={onSwitch} src={audio?.src} name={audio?.name} />

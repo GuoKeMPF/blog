@@ -85,6 +85,8 @@ const Audio: ModelType = {
       }
     },
     *deleteAudio({ payload }: any, { put, call }: any) {
+      console.log('deleteAudio');
+
       const response: ResponseDateType = yield call(deleteAudio, payload);
       if (!response) {
         return;
