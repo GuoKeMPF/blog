@@ -26,15 +26,14 @@ class LoginView(View):
                 login(request, user)
                 return JsonResponse(
                     {
-                        "code": 1,
                         "data": user.get_username(),
                         "message": "login success"
                     })
             else:
                 return JsonResponse(
-                    {"code": 0, "message": "Error username or password"})
+                    {"message": "Error username or password"}, status=500)
         else:
-            return JsonResponse({"code": 0, "message": "Error username or password"})
+            return JsonResponse({"message": "Error username or password"}, status=200)
 
     def dispatch(self, request, *args, **kwargs):
         return super(LoginView, self).dispatch(request, *args, **kwargs)
@@ -45,9 +44,9 @@ class LogoutView(View):
     def post(self, request):
         res = logout(request)
         if res:
-            return JsonResponse({"code": 1, "message": "logout success"})
+            return JsonResponse({"message": "logout success"}, status=500)
         else:
-            return JsonResponse({"code": 0, "message": "logout failed"})
+            return JsonResponse({"message": "logout failed"}, status=500)
 
     def dispatch(self, *args, **kwargs):
         return super(LogoutView, self).dispatch(*args, **kwargs)

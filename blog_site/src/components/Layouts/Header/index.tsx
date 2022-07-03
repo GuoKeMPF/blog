@@ -46,6 +46,16 @@ export const Header = () => {
               defaultMessage: '相册',
             })}
           </NavLink>
+          <NavLink
+            to="/audio"
+            className={styles.navlink}
+            activeClassName={styles.active}
+          >
+            {intl.formatMessage({
+              id: 'audio',
+              defaultMessage: '音乐',
+            })}
+          </NavLink>
         </nav>
       </Context>
     </header>

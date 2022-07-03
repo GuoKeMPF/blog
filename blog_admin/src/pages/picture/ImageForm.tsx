@@ -74,8 +74,10 @@ const ImageForm = ({
           <Dragger
             action="/"
             name='file'
+            accept="image/*"
             beforeUpload={() => false}
-            multiple={true}>
+            multiple={true}
+          >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>

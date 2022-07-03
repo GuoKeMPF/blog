@@ -1,27 +1,36 @@
 import { Request, Response } from 'express';
+import path from "path";
 
-import mockjs, { Random } from 'mockjs';
+const images = [
+  {
+    src: path.join('./mock_static/images/img1.png'),
+    width: 1200,
+    height: 784,
+  },
+  {
+    src: path.join('./mock_static/images/img2.png'),
+    width: 1004,
+    height: 986,
+  },
+  {
+    src: path.join('./mock_static/images/img3.png'),
+    width: 1000,
+    height: 800,
+  },
+]
 
+const mockImg = () => {
+  return images[Math.floor(Math.random() * 3)];
+};
 
-
-const mockImgW = 300 + Math.random() * 100;
-const mockImgH = 300 + Math.random() * 100;
-const mockColor = () => Random.color()
-const mockImg = () => Random.image(`${mockImgW}x${mockImgH}'`, mockColor())
-const pictures: any[] = mockjs.mock({
-  'picture|30': [
-    {
-      'id|+1': 0,
-      src: function () {
-        return mockImg()
-      },
-      create_time: '2021-12-10 11:54:29',
-      name: 'mock picture.png',
-      width: mockImgW,
-      height: mockImgH
-    },
-  ],
-}).picture;
+const pictures: any[] = Array(10).fill({
+  create_time: '2021-12-10 11:54:29',
+  name: 'mock picture.png',
+}).map((p: any, index: number) => ({
+  ...p,
+  id: index,
+  ...mockImg(),
+}))
 
 
 export default {
@@ -35,27 +44,10 @@ export default {
     }, 500);
   },
 
-  'POST /api/picture': (req: Request, res: Response) => {
-    const picture = { ...req.body, id: pictures.length };
-    pictures.push({
-      id: pictures.length,
-      src: mockImg(),
-      create_time: '2021-12-10 11:54:29',
-      name: 'mock picture.png',
-      width: mockImgW,
-      height: mockImgH
-    });
-    res.status(200).send(picture);
-  },
-
-  'DELETE /api/picture/:id': (req: Request, res: Response) => {
-    const { id } = req.params;
-    const index = pictures.findIndex((item) => item.id + '' === id + '');
-    if (index >= 0) {
-      pictures.splice(index, 1);
-      res.status(200).send(pictures);
-    } else {
-      res.status(404).send('Sorry, cant find that');
-    }
+  'GET /mock_static/images/*': (req: Request, res: Response) => {
+    const { url } = req
+    setTimeout(() => {
+      res.sendFile(path.join(__dirname, url));
+    }, 500);
   },
 };

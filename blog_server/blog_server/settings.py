@@ -28,6 +28,7 @@ SESSION_COOKIE_SECURE = env('SESSION_COOKIE_SECURE')
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 DOMAIN = env('DOMAIN')
 IMAGE_PATH = env('IMAGE_PATH')
+AUDIO_PATH = env('AUDIO_PATH')
 
 # Application definition
 
@@ -44,8 +45,8 @@ INSTALLED_APPS = [
     "draft.apps.DraftConfig",
     "text.apps.TextConfig",
     "user.apps.UserConfig",
-    "upload.apps.UploadConfig",
-    "picture.apps.PictureConfig"
+    "picture.apps.PictureConfig",
+    "audio.apps.AudioConfig"
 ]
 
 MIDDLEWARE = [

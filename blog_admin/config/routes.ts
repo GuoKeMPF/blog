@@ -19,7 +19,7 @@ export default [
   },
 
   {
-    name: '说说管理',
+    name: '说说',
     icon: 'FileTextOutlined',
     path: '/texts',
     routes: [
@@ -39,9 +39,15 @@ export default [
   },
   {
     path: '/picture',
-    name: '图片管理',
+    name: '图片',
     icon: 'FileImageOutlined',
     component: './picture/index',
+  },
+  {
+    path: '/audio',
+    name: '音频',
+    icon: 'SoundOutlined',
+    component: './audio/index',
   },
   { component: './404' },
 ];

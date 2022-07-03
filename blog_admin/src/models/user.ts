@@ -36,7 +36,7 @@ const UserModel: UserModelType = {
       if (!res) {
         return;
       }
-      if (res.code === 1) {
+      if (res) {
         yield put({
           type: 'update',
           payload: {
