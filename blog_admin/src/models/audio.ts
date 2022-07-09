@@ -43,7 +43,6 @@ const Audio: ModelType = {
   state: initState,
   effects: {
     *queryAudios({ payload }, { put, call }) {
-      console.log('effect');
       const response: { data: AudioStateType.AudiosType; count: number } = yield call(
         queryAudios,
         payload,
