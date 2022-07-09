@@ -28,7 +28,7 @@ class AudioViewSet(ModelViewSet):
             description=description
         )
         audio.save()
-        return JsonResponse(imageInfo)
+        return JsonResponse(imageInfo, safe=False, status=200)
 
     def destroy(self, request, *args, **kwargs):
         id = kwargs.get('id')
@@ -57,4 +57,4 @@ class AudioViewSet(ModelViewSet):
             )
             picture.save()
             loactions.append(imageInfo)
-        return JsonResponse(loactions, status=200)
+        return JsonResponse(loactions, safe=False, status=200)

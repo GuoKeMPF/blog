@@ -20,7 +20,7 @@
   width: 100%;
   height: 100%;
   margin: 0 auto;
-  color: #91d5ff;
+  color: @themeFontColor;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -40,5 +40,10 @@
   .play,
   .forward {
     margin: 0 @px4;
+    background: none;
+    color: @themeFontColor;
+    border: none;
+    outline: none;
+    font-size: @fontSize_32;
   }
 }

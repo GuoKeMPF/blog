@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import type { FC } from 'react';
 import styles from './Visualization.less';
-import { useIntl } from 'umi';
+
+import IconFont from '@/components/IconFont';
+
 
 import type { AudioStateType } from 'umi';
 import RequestAnimation from '@/utils/requestAnimation';
@@ -12,34 +14,24 @@ type PlayStatusProps = {
   isPlay: boolean;
 };
 
-const PlayStatus: FC<PlayStatusProps> = ({ loading, isPlay }) => {
-  const intl = useIntl();
+const PlayStatus: FC<PlayStatusProps> = ({ loading, isPlay }) => {;
   if (loading) {
     return (
       <Fragment>
-        {intl.formatMessage({
-          id: 'audio_loading',
-          defaultMessage: '加载中',
-        })}
+        <IconFont type="loading"  spin />
       </Fragment>
     );
   } else {
     if (isPlay) {
       return (
         <Fragment>
-          {intl.formatMessage({
-            id: 'audio_pause',
-            defaultMessage: '暂停',
-          })}
+          <IconFont type="pause" />
         </Fragment>
       );
     } else {
       return (
         <Fragment>
-          {intl.formatMessage({
-            id: 'audio_play',
-            defaultMessage: '播放',
-          })}
+          <IconFont type="play" />
         </Fragment>
       );
     }
@@ -57,7 +49,6 @@ const fftSize = 1024;
 
 const Visualization: FC<VisualizationProps> = ({ config, swithcAudio }) => {
   const { name } = config;
-  const intl = useIntl();
   const [isPlay, setIsPlay] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [audioInfo, setAudioInfo] = useState<{
@@ -303,10 +294,7 @@ const Visualization: FC<VisualizationProps> = ({ config, swithcAudio }) => {
               onClick={() => onSwitchAudio(-1)}
             >
               <Fragment>
-                {intl.formatMessage({
-                  id: 'audio_forward',
-                  defaultMessage: '上一首',
-                })}
+                <IconFont type="backward" />
               </Fragment>
             </button>
             <button
@@ -318,10 +306,7 @@ const Visualization: FC<VisualizationProps> = ({ config, swithcAudio }) => {
             </button>
             <button className={styles.forward} onClick={() => onSwitchAudio(1)}>
               <Fragment>
-                {intl.formatMessage({
-                  id: 'audio_backward',
-                  defaultMessage: '下一首',
-                })}
+                <IconFont type="forward" />
               </Fragment>
             </button>
           </div>
