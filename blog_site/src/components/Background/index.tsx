@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 
 import styles from './index.less';
 import textConfig from '@/utils/textConfig';
-import { getLocale } from 'umi';
+import { getLocale, useIntl } from 'umi';
 import RequestAnimation from '@/utils/requestAnimation';
 
 const canvasW = 600,
@@ -31,7 +31,15 @@ const Background = () => {
   >();
 
   const [image, setImage] = useState<HTMLCanvasElement | null>();
-  const locale = getLocale();
+
+  const intl = useIntl();
+  const locale = intl.formatMessage(
+    {
+      id: 'language',
+      defaultMessage: '中文'
+    },
+  );
+
 
   const canvas = useRef<HTMLCanvasElement>(null);
   const bg = useRef<HTMLCanvasElement>(null);

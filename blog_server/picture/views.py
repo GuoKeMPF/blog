@@ -30,7 +30,7 @@ class PictureViewSet(ModelViewSet):
             description=description
         )
         picture.save()
-        return JsonResponse(imageInfo, status=200)
+        return JsonResponse(imageInfo, safe=False, status=200)
 
     def destroy(self, request, *args, **kwargs):
         id = kwargs.get('id')
@@ -61,4 +61,4 @@ class PictureViewSet(ModelViewSet):
             )
             picture.save()
             loactions.append(imageInfo)
-        return JsonResponse(loactions)
+        return JsonResponse(loactions, safe=False)
