@@ -1,5 +1,5 @@
-import { history } from 'umi';
-import type { RunTimeLayoutConfig } from 'umi';
+import { history, Link } from '@umijs/max';
+import type { RunTimeLayoutConfig, } from 'umi';
 import logo from '@/assets/images/logo.png';
 import RightContent from '@/components/Header/RightContent';
 import Footer from '@/components/Footer';
@@ -28,14 +28,30 @@ export const layout: RunTimeLayoutConfig = () => {
   };
 };
 
-export function render(oldRender: () => void) {
+
+export async function getInitialState(): Promise<{}> {
   const loginPath = '/user/login';
-  const { location } = history;
-  // 如果没有登录，重定向到 login
-  if (!get('username') && location.pathname !== loginPath) {
-    history.push(loginPath);
-    oldRender();
-  } else {
-    oldRender();
+  // 如果不是登录页面，执行
+  if (history.location.pathname !== loginPath) {
+    if (!get('username')) {
+      history.push(loginPath);
+    }
   }
+  return {};
 }
+
+
+
+// export function render(oldRender: () => void) {
+//   const loginPath = '/admin/user/login';
+//   console.log(location);
+//   console.log(history);
+
+//   // 如果没有登录，重定向到 login
+//   if (!get('username') && location.pathname !== loginPath) {
+//     location.pathname = '/admin/user/login';
+//     oldRender();
+//   } else {
+//     oldRender();
+//   }
+// }
