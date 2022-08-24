@@ -9,13 +9,13 @@ export default defineConfig({
   dva: {},
   request: {},
   initialState: {},
+  model: {},
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout
     locale: true,
     siderWidth: 208,
     ...defaultSettings,
   },
-  publicPath: '/admin/',
   targets: {
     ie: 11,
   },
@@ -32,6 +32,5 @@ export default defineConfig({
   },
   // Fast Refresh 热更新
   fastRefresh: true,
-  define: {
-  }
+  define: {},
 });

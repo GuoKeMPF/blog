@@ -1,13 +1,14 @@
-import { history, Link } from '@umijs/max';
-import type { RunTimeLayoutConfig, } from 'umi';
 import logo from '@/assets/images/logo.png';
-import RightContent from '@/components/Header/RightContent';
 import Footer from '@/components/Footer';
-import { Fragment } from 'react';
+import RightContent from '@/components/Header/RightContent';
 import { get } from '@/utils/sessionStorage';
+import { SettingDrawer } from '@ant-design/pro-components';
+import { history } from '@umijs/max';
+import { Fragment } from 'react';
+import type { RunTimeLayoutConfig } from 'umi';
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
-export const layout: RunTimeLayoutConfig = () => {
+export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: true,
@@ -22,14 +23,50 @@ export const layout: RunTimeLayoutConfig = () => {
     },
     footerRender: () => <Footer />,
     menuHeaderRender: undefined,
-    childrenRender: (children: any) => {
-      return <Fragment>{children}</Fragment>;
+    layoutBgImgList: [
+      {
+        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/D2LWSqNny4sAAAAAAAAAAAAAFl94AQBr',
+        left: 85,
+        bottom: 100,
+        height: '303px',
+      },
+      {
+        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/C2TWRpJpiC0AAAAAAAAAAAAAFl94AQBr',
+        bottom: -68,
+        right: -45,
+        height: '303px',
+      },
+      {
+        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/F6vSTbj8KpYAAAAAAAAAAAAAFl94AQBr',
+        bottom: 0,
+        left: 0,
+        width: '331px',
+      },
+    ],
+    childrenRender: (children: any, props) => {
+      return (
+        <Fragment>
+          {children}
+          {!props.location?.pathname?.includes('/login') && (
+            <SettingDrawer
+              disableUrlParams
+              enableDarkTheme
+              settings={initialState?.settings}
+              onSettingChange={(settings) => {
+                setInitialState((preInitialState) => ({
+                  ...preInitialState,
+                  settings,
+                }));
+              }}
+            />
+          )}
+        </Fragment>
+      );
     },
   };
 };
 
-
-export async function getInitialState(): Promise<{}> {
+export async function getInitialState(): Promise<any> {
   const loginPath = '/user/login';
   // 如果不是登录页面，执行
   if (history.location.pathname !== loginPath) {
@@ -39,8 +76,6 @@ export async function getInitialState(): Promise<{}> {
   }
   return {};
 }
-
-
 
 // export function render(oldRender: () => void) {
 //   const loginPath = '/admin/user/login';

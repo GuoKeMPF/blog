@@ -1,15 +1,15 @@
-import { Fragment, useEffect, useMemo, useState, useCallback } from 'react';
-import { Card, Button, Popconfirm, Space, Table, Typography } from 'antd';
-import { TableColumnsType } from 'antd';
+import { Button, Card, Popconfirm, Space, Table, TableColumnsType, Typography } from 'antd';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { DeleteOutlined, DownloadOutlined, CaretRightOutlined } from '@ant-design/icons';
+import { CaretRightOutlined, DeleteOutlined, DownloadOutlined } from '@ant-design/icons';
 import { connect } from 'umi';
 import AudioForm from './AudioForm';
 import styles from './index.less';
 
-import Player from './Player';
 import Operation from './Operation';
+import Player from './Player';
 
+import { PageContainer } from '@ant-design/pro-layout';
 import type { ReactElement } from 'react';
 import type { AudioStateType, Dispatch, Loading } from 'umi';
 
@@ -151,7 +151,7 @@ const Audio = ({
   }, [onDelete]);
 
   return (
-    <Fragment>
+    <PageContainer>
       <AudioForm />
       <Card title="音频" className={styles.audios} extra={<Button onClick={onUpload}>新建</Button>}>
         <Table
@@ -175,7 +175,7 @@ const Audio = ({
           )}
         />
       </Card>
-    </Fragment>
+    </PageContainer>
   );
 };
 export default connect(({ audio, loading }: { audio: AudioStateType; loading: Loading }) => ({
