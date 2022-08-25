@@ -6,7 +6,7 @@ import { SettingDrawer } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
 import { Fragment } from 'react';
 import type { RunTimeLayoutConfig } from 'umi';
-
+import defaultSettings from '../config/defaultSettings';
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
@@ -23,26 +23,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     },
     footerRender: () => <Footer />,
     menuHeaderRender: undefined,
-    layoutBgImgList: [
-      {
-        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/D2LWSqNny4sAAAAAAAAAAAAAFl94AQBr',
-        left: 85,
-        bottom: 100,
-        height: '303px',
-      },
-      {
-        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/C2TWRpJpiC0AAAAAAAAAAAAAFl94AQBr',
-        bottom: -68,
-        right: -45,
-        height: '303px',
-      },
-      {
-        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/F6vSTbj8KpYAAAAAAAAAAAAAFl94AQBr',
-        bottom: 0,
-        left: 0,
-        width: '331px',
-      },
-    ],
     childrenRender: (children: any, props) => {
       return (
         <Fragment>
@@ -53,7 +33,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
               enableDarkTheme
               settings={initialState?.settings}
               onSettingChange={(settings) => {
-                setInitialState((preInitialState) => ({
+                setInitialState((preInitialState: any) => ({
                   ...preInitialState,
                   settings,
                 }));
@@ -63,6 +43,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         </Fragment>
       );
     },
+    ...defaultSettings,
   };
 };
 

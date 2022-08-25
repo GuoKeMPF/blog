@@ -3,7 +3,7 @@ import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
 export default defineConfig({
-  base: 'admin',
+  base: '/admin',
   hash: true,
   antd: {},
   dva: {},
