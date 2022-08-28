@@ -9,7 +9,6 @@ class DraftViewSet(ModelViewSet):
     queryset = Draft.objects.all()
     serializer_class = DraftSerializer
     pagination_class = Pagination
-    ordering = ['create_time']
     filterset_fields = ['title', 'content', 'author']
 
     def list(self, request, *args, **kwargs):
