@@ -17,6 +17,7 @@ export default defineConfig({
     ...defaultSettings,
   },
   targets: {},
+  publicPath: '/admin/',
   // umi routes: https://umijs.org/docs/routing
   routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
