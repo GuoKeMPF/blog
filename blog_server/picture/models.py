@@ -11,10 +11,12 @@ class Picture(models.Model):
     unique_name = models.CharField(max_length=255, help_text='unique name')
     create_time = models.DateTimeField(
         auto_now_add=True, verbose_name='create time')
+    update_time = models.DateTimeField(auto_now=True, verbose_name='update at')
 
     class Meta:
         verbose_name = 'picture'
         verbose_name_plural = verbose_name
+        ordering = ['-create_time']
 
     def __str__(self):
         return self.name

@@ -3,22 +3,19 @@ import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
 export default defineConfig({
-  base: 'admin',
+  base: '/admin',
   hash: true,
   antd: {},
-  dva: {
-    hmr: true,
-  },
+  dva: {},
+  request: {},
+  initialState: {},
+  model: {},
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout
     locale: true,
     siderWidth: 208,
     ...defaultSettings,
   },
-  dynamicImport: {
-    loading: '@ant-design/pro-layout/es/PageLoading',
-  },
-  publicPath: '/admin/',
   targets: {
     ie: 11,
   },
@@ -28,22 +25,12 @@ export default defineConfig({
   theme: {
     'root-entry-name': 'variable',
   },
-  // esbuild is father build tools
-  // https://umijs.org/plugins/plugin-esbuild
-  esbuild: {},
-  title: false,
   ignoreMomentLocale: true,
+  presets: ['umi-presets-pro'],
   manifest: {
     basePath: '/',
   },
   // Fast Refresh 热更新
-  fastRefresh: {},
-  nodeModulesTransform: {
-    type: 'none',
-  },
-  webpack5: {},
-  exportStatic: {},
-  define:{
-    serverPort: ''
-  }
+  fastRefresh: true,
+  define: {},
 });

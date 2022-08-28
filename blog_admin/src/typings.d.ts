@@ -29,5 +29,4 @@ type StorageMock = {
 
 declare interface Window {
   cookieStore: StorageMock;
-  serverPort: string;
 }

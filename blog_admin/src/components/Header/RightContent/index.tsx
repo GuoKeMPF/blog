@@ -1,8 +1,7 @@
-import React from 'react';
-import { Space, Avatar, Dropdown, Menu, Button } from 'antd';
-import { connect } from 'umi';
-import type { UserModelState, Dispatch } from 'umi';
+import { Avatar, Button, Dropdown, Menu, Space } from 'antd';
 import type { FC } from 'react';
+import type { Dispatch, UserModelState } from 'umi';
+import { connect } from 'umi';
 interface PageProps {
   username: string;
   dispatch: Dispatch;
@@ -14,13 +13,18 @@ const Header: FC<PageProps> = ({ username, dispatch }) => {
     });
   };
   const menu = (
-    <Menu>
-      <Menu.Item key="logout">
-        <Button type="text" onClick={logout}>
-          登出
-        </Button>
-      </Menu.Item>
-    </Menu>
+    <Menu
+      items={[
+        {
+          key: 'logout',
+          label: (
+            <Button type="text" onClick={logout}>
+              登出
+            </Button>
+          ),
+        },
+      ]}
+    />
   );
   return (
     <Space>

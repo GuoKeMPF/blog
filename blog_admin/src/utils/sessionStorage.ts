@@ -6,8 +6,12 @@ export const set = (key: string, value: string): void => {
 
 export const get = (key: string): string | undefined => {
   const value = storage.getItem(key);
-  if (value) {
-    return JSON.parse(value);
+  try {
+    if (value) {
+      return JSON.parse(value);
+    }
+  } catch (error) {
+    console.error(error);
   }
   return;
 };

@@ -1,15 +1,16 @@
-import { Fragment, useEffect } from 'react';
-import { Skeleton, Card, Button, Image, Popconfirm, List, Typography } from 'antd';
-import { DeleteOutlined, DownloadOutlined, SendOutlined } from '@ant-design/icons';
-import { connect } from 'umi';
 import { formColums } from '@/utils/layoutFrom';
+import { DeleteOutlined, DownloadOutlined, SendOutlined } from '@ant-design/icons';
+import { Button, Card, Image, List, Popconfirm, Skeleton, Typography } from 'antd';
+import { useEffect } from 'react';
+import { connect } from 'umi';
 import ImageForm from './ImageForm';
 
-import styles from './index.less';
 import errorImg from '@/assets/images/errorImg.png';
+import { PageContainer } from '@ant-design/pro-layout';
+import styles from './index.less';
 
 import type { ReactElement } from 'react';
-import type { PictureStateType, Dispatch, Loading } from 'umi';
+import type { Dispatch, Loading, PictureStateType } from 'umi';
 
 const { Paragraph } = Typography;
 const { Meta } = Card;
@@ -44,17 +45,17 @@ const Picture = ({
     });
   };
 
-
   const onChange = (p: number, s: number) => {
     console.log(p, s);
 
     dispatch({
       type: 'picture/queryPictures',
       payload: {
-        page: p, size: s
-      }
+        page: p,
+        size: s,
+      },
     });
-  }
+  };
 
   const onDelete = (picture: PictureStateType.PictureType) => {
     dispatch({
@@ -66,13 +67,13 @@ const Picture = ({
   };
 
   return (
-    <Fragment>
-      <ImageForm />
+    <PageContainer>
       <Card
         title="图片"
         className={styles.pictures}
         extra={<Button onClick={onUpload}>新建</Button>}
       >
+        <ImageForm />
         <Skeleton loading={loading} active>
           <Image.PreviewGroup>
             <List
@@ -85,7 +86,7 @@ const Picture = ({
                 total,
                 pageSize: size,
                 current: page,
-                onChange: onChange
+                onChange: onChange,
               }}
               renderItem={(p: PictureStateType.PictureType) => (
                 <List.Item>
@@ -108,16 +109,11 @@ const Picture = ({
                         rel="noreferrer"
                       >
                         <DownloadOutlined />
-                      </a>, <a
-                        href={`${p.src}`}
-                        target="_blank"
-                        key="open"
-                        rel="noreferrer"
-                      >
+                      </a>,
+                      <a href={`${p.src}`} target="_blank" key="open" rel="noreferrer">
                         <SendOutlined />
                       </a>,
-                      <Paragraph key="copy"
-                        copyable={{ text: p.src }} />,
+                      <Paragraph key="copy" copyable={{ text: p.src }} />,
                       <Popconfirm
                         key="delete"
                         title="是否确认删除当前图片？"
@@ -139,7 +135,7 @@ const Picture = ({
           </Image.PreviewGroup>
         </Skeleton>
       </Card>
-    </Fragment>
+    </PageContainer>
   );
 };
 export default connect(({ picture, loading }: { picture: PictureStateType; loading: Loading }) => ({
