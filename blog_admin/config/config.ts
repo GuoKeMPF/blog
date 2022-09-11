@@ -3,7 +3,7 @@ import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
 export default defineConfig({
-  base: '/admin',
+  base: '/',
   hash: true,
   antd: {},
   dva: {},
@@ -17,7 +17,7 @@ export default defineConfig({
     ...defaultSettings,
   },
   targets: {},
-  publicPath: '/admin/',
+  publicPath: '/',
   // umi routes: https://umijs.org/docs/routing
   routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
