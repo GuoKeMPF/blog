@@ -1,8 +1,32 @@
-source ./blog_admin/build.sh
+# fix nodejs 
+# https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
 
-eval 'mkdir -p  ./blog_nginx/blog_static/admin/'
 
-eval 'cp -r ./blog_admin/dist/* ./blog_nginx/blog_static/admin/'
 
-source ./blog_site/build.sh
-eval 'cp -r ./blog_site/dist/* ./blog_ssr/app/public/'
+echo "config nodejs"
+
+echo "
+   config nodejs for OpenSSL3
+   export NODE_OPTIONS=--openssl-legacy-provider
+   https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
+"
+
+echo "export NODE_OPTIONS=--openssl-legacy-provider"
+
+
+echo "
+   install yarn and tyarn for npm
+   npm install yarn -g tyarn -g
+"
+eval 'npm install yarn -g tyarn -g'
+
+# source ./blog_admin/build.sh
+
+# eval 'mkdir -p ./blog_nginx/blog_static/admin/'
+
+# eval 'cp -r ./blog_admin/dist/* ./blog_nginx/blog_static/admin/'
+
+# source ./blog_site/build.sh
+
+# eval 'mkdir -p ./blog_ssr/app/public/'
+# eval 'cp -r ./blog_site/dist/* ./blog_ssr/app/public/'
