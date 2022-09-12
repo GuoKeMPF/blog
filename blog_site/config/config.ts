@@ -2,6 +2,9 @@ import { resolve } from 'path';
 import { defineConfig } from 'umi';
 import { routes } from './routes';
 
+import { BASE_URL } from "./baseUrl";
+
+
 export default defineConfig({
   // eact-helmet 与 umi 中的 title 配置不能同时使用
   title: false,
@@ -52,4 +55,7 @@ export default defineConfig({
       .loader(require.resolve('file-loader'));
     config.resolve.alias.set('~@', resolve(__dirname, './src'));
   },
+  define:{
+    BASE_URL
+  }
 });

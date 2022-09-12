@@ -1,5 +1,5 @@
-export const text = '/api/text/';
+export const text = '/text/';
 
-export const picture = '/api/picture/';
+export const picture = '/picture/';
 
-export const audio = '/api/audio/';
+export const audio = '/audio/';

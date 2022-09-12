@@ -2,18 +2,17 @@
  * proxy target
  */
 
- let target = '';
- target = `http://localhost:8000`;
-//  target = `https://mapanfeng.com`;
+import { BASE_URL } from '../config/baseUrl';
+let target = '';
+target = `http://localhost:8000`
 
 /**
  * proxy config
  */
 
 export const proxy = {
-  '/api': {
+  [BASE_URL]: {
     target,
     changeOrigin: true,
-    pathRewrite: { '^/api': '/api' },
   },
 };

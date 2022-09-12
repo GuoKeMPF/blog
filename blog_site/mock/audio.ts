@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import path from 'path';
+import { BASE_URL } from '../config/baseUrl';
 
 const mp3s: any[] = [
   {
@@ -42,7 +43,7 @@ const audios: any[] = mp3s.map((p: any, index: number) => ({
 }));
 
 export default {
-  'GET /api/audio': (req: Request, res: Response) => {
+  [`GET ${BASE_URL}/audio`]: (req: Request, res: Response) => {
     let size: number, page: number;
     const data = audios;
     setTimeout(() => {
@@ -50,7 +51,7 @@ export default {
     }, 500);
   },
 
-  'GET /mock_static/audios/*': (req: Request, res: Response) => {
+  [`GET ${BASE_URL}/mock_static/audios/*`]: (req: Request, res: Response) => {
     const { url } = req;
     const prepath = decodeURIComponent(url);
 
