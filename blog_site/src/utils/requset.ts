@@ -25,6 +25,7 @@ const codeMessage: { [key: number | string]: string } = {
 
 request.interceptors.request.use(
   (url: string, options: any) => {
+    console.log('url', url);
     return {
       url: `${url}`,
       options: {

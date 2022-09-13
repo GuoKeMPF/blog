@@ -1,18 +1,15 @@
-/**
- * proxy target
- */
 
-import { BASE_URL } from '../config/baseUrl';
 let target = '';
-target = `http://localhost:8000`
+target = `http://localhost:8000/`
 
 /**
  * proxy config
  */
 
-export const proxy = {
-  [BASE_URL]: {
+ export const proxy = {
+  '/api': {
     target,
     changeOrigin: true,
+    pathRewrite: { '/api': '' },
   },
 };
