@@ -38,9 +38,12 @@ const request = extend({
   // error handler
   errorHandler,
   credentials: 'include', // request with cookie
+  prefix: BASE_URL,
 });
 // request request
 request.interceptors.request.use((url, options) => {
+  console.log('url', url);
+  
   const { headers = {} }: { headers?: any } = options;
   const csrftoken: string | null = getCookie('csrftoken');
   if (csrftoken) {

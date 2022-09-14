@@ -65,6 +65,12 @@ const Audio: ModelType = {
           type: 'queryAudios',
           payload,
         });
+        yield put({
+          type: 'setVisiable',
+          payload: {
+            visiable: false,
+          },
+        });
       }
     },
     *addAudios({ payload }: any, { put, call }: any) {
@@ -73,6 +79,12 @@ const Audio: ModelType = {
         yield put({
           type: 'queryAudios',
           payload,
+        });
+        yield put({
+          type: 'setVisiable',
+          payload: {
+            visiable: false,
+          },
         });
       }
     },

@@ -2,8 +2,9 @@
 import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
+
+import { BASE_URL } from './baseUrl';
 export default defineConfig({
-  base: '/',
   hash: true,
   antd: {},
   dva: {},
@@ -26,10 +27,9 @@ export default defineConfig({
   },
   ignoreMomentLocale: true,
   presets: ['umi-presets-pro'],
-  manifest: {
-    basePath: '/',
-  },
   // Fast Refresh 热更新
   fastRefresh: true,
-  define: {},
+  define: {
+    BASE_URL,
+  },
 });

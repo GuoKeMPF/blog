@@ -14,7 +14,7 @@ const pictures: any[] = mockjs.mock({
 }).picture;
 
 export default {
-  'GET /api/picture': (req: Request, res: Response) => {
+  'GET /api/picture/': (req: Request, res: Response) => {
     let size: number, page: number;
     size = Number(req?.query?.size) || 10;
     page = Number(req?.query?.page) || 1;
@@ -22,7 +22,7 @@ export default {
     res.send({ data, size, page, count: pictures.length });
   },
 
-  'POST /api/picture': (req: Request, res: Response) => {
+  'POST /api/picture/': (req: Request, res: Response) => {
     const picture = { ...req.body, id: pictures.length };
     pictures.unshift({
       id: pictures.length,

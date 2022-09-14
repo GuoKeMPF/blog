@@ -42,14 +42,14 @@ const audios: any[] = mp3s.map((p: any, index: number) => ({
 }));
 
 export default {
-  'GET /api/audio': (req: Request, res: Response) => {
+  'GET /api/audio/': (req: Request, res: Response) => {
     let size: number, page: number;
     const data = audios;
     setTimeout(() => {
       res.send({ data, size, page, count: audios.length });
     }, 500);
   },
-  'POST /api/audio': (req: Request, res: Response) => {
+  'POST /api/audio/': (req: Request, res: Response) => {
     const audio = {
       ...req.body,
       ...mockAudio(),
@@ -58,7 +58,7 @@ export default {
     audios.unshift(audio);
     res.status(200).send(audio);
   },
-  'POST /api/audios': (req: Request, res: Response) => {
+  'POST /api/audios/': (req: Request, res: Response) => {
     const audio = {
       ...req.body,
       ...mockAudio(),

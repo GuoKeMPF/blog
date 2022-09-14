@@ -30,3 +30,5 @@ type StorageMock = {
 declare interface Window {
   cookieStore: StorageMock;
 }
+
+declare const BASE_URL: string;

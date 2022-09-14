@@ -2,13 +2,13 @@ import { Get, Post, Delete } from './requset';
 import { audio, audios } from './api';
 
 export async function queryAudios(params: any) {
-  return Get(audio, {
+  return Get(`${audio}/`, {
     params,
   });
 }
 
 export async function queryAudioByID({ id }: { id: string }) {
-  return Get(`${audio}${id}`);
+  return Get(`${audio}/${id}`);
 }
 
 export async function addAudio(data: FormData) {

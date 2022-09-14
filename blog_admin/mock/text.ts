@@ -17,7 +17,7 @@ const texts: any[] = mockjs.mock({
 }).texts;
 
 export default {
-  'GET /api/text': (req: Request, res: Response) => {
+  'GET /api/text/': (req: Request, res: Response) => {
     let size: number, page: number;
     size = Number(req?.query?.size) || 10;
     page = Number(req?.query?.page) || 1;
@@ -33,7 +33,7 @@ export default {
       res.status(404).send('Sorry, cant find that');
     }
   },
-  'POST /api/text': (req: Request, res: Response) => {
+  'POST /api/text/': (req: Request, res: Response) => {
     texts.unshift({ ...req.body, id: texts.length });
     res.status(200).send(texts);
   },

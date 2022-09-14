@@ -3,7 +3,7 @@ import { text } from './api';
 import type { TextType } from 'umi';
 
 export async function queryTexts(params: any) {
-  return Get(text, { size: 12, page: 1, ...params });
+  return Get(`${text}`, { size: 12, page: 1, ...params });
 }
 
 export async function queryText({ id }: { id: string }) {

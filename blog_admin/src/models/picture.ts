@@ -54,6 +54,12 @@ const Picture = {
           type: 'queryPictures',
           payload,
         });
+        yield put({
+          type: 'setVisiable',
+          payload: {
+            visiable: false,
+          },
+        });
       }
     },
 
@@ -63,6 +69,12 @@ const Picture = {
         yield put({
           type: 'queryPictures',
           payload,
+        });
+        yield put({
+          type: 'setVisiable',
+          payload: {
+            visiable: false,
+          },
         });
       }
     },

@@ -17,7 +17,7 @@ const drafts: any[] = mockjs.mock({
 }).drafts;
 
 export default {
-  'GET /api/draft': (req: Request, res: Response) => {
+  'GET /api/draft/': (req: Request, res: Response) => {
     let size: number, page: number;
     size = Number(req?.query?.size) || 10;
     page = Number(req?.query?.page) || 1;
@@ -33,7 +33,7 @@ export default {
       res.status(404).send('Sorry, cant find that');
     }
   },
-  'POST /api/draft': (req: Request, res: Response) => {
+  'POST /api/draft/': (req: Request, res: Response) => {
     const draft = { ...req.body, id: drafts.length };
     drafts.unshift(draft);
     res.status(200).send(draft);

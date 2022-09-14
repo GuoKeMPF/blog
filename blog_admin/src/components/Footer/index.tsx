@@ -11,13 +11,13 @@ const Footer: React.FC = () => {
         {
           key: '主页',
           title: '主页',
-          href: '/',
+          href: 'https://mapanfeng.com',
           blankTarget: true,
         },
         {
           key: '过客的后台管理',
           title: '过客的后台管理',
-          href: '/admin',
+          href: '/',
           blankTarget: true,
         },
         {
