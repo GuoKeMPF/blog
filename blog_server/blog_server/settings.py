@@ -30,9 +30,13 @@ DOMAIN = env('DOMAIN')
 IMAGE_PATH = env('IMAGE_PATH')
 AUDIO_PATH = env('AUDIO_PATH')
 
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +46,6 @@ INSTALLED_APPS = [
     'rest_framework',
     "rest_framework.authtoken",
     'django_filters',
-    'corsheaders',
     "draft.apps.DraftConfig",
     "text.apps.TextConfig",
     "user.apps.UserConfig",
@@ -61,8 +64,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
-CORS_ALLOWED_ORIGINS = ALLOWED_HOSTS
+CORS_ALLOWED_ORIGIN_REGEXES=[
+    r'^https?:\/\/([a-zA-Z\.]?)+(mapanfeng\.com)'
+]
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'blog_server.urls'
 

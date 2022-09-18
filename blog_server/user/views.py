@@ -27,7 +27,8 @@ class LoginView(View):
                 return JsonResponse(
                     {
                         "data": user.get_username(),
-                        "message": "login success"
+                        "message": "login success",
+                        "token": token
                     })
             else:
                 return JsonResponse(

@@ -3,17 +3,17 @@
 
 
 
-echo "config nodejs"
+# echo "config nodejs"
 
-echo "
-   config nodejs for OpenSSL3
-   export NODE_OPTIONS=--openssl-legacy-provider
-   https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
-"
+# echo "
+#    config nodejs for OpenSSL3
+#    export NODE_OPTIONS=--openssl-legacy-provider
+#    https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
+# "
 
-echo "export NODE_OPTIONS=--openssl-legacy-provider"
+# echo "export NODE_OPTIONS=--openssl-legacy-provider"
 
-eval "export NODE_OPTIONS=--openssl-legacy-provider"
+# eval "export NODE_OPTIONS=--openssl-legacy-provider"
 
 
 echo "
