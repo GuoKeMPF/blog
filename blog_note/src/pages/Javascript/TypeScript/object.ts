@@ -31,4 +31,4 @@ const student_xiaoming: Student & Person = {
 };
 
 
-export default
+export default {}
