@@ -9,3 +9,5 @@ console.log(iterator1.next());
 // { value: [ 2, 'c' ], done: false }
 console.log(iterator1.next());
 // { value: undefined, done: true }
+
+export default {};

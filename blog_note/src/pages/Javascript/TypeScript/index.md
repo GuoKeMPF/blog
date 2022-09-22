@@ -94,3 +94,50 @@ const student_xiaoming: Student & Person = {
   ...class1,
 };
 ```
+
+### 函数声明
+
+普通函数
+
+```ts
+// 无入参 无返回
+const fun1: () => void = () => {
+  console.log('sss');
+};
+
+// 有入参 无返回
+const fun2: (arr: number[]) => void = arr => {
+  console.log(arr.reduce((pre, cur) => pre + cur, 0));
+};
+
+// 有入参 有返回
+const fun3: (arr: number[]) => number = arr => {
+  return arr.reduce((pre, cur) => pre + cur, 0);
+};
+```
+
+promise
+
+```ts
+type ProResType = {
+  token: string;
+  id: 111;
+};
+type PrRejType = {
+  message: string;
+};
+
+const p1 = new Promise<ProResType | PrRejType>(
+  (resolve: (res: ProResType) => void, reject: (rej: PrRejType) => void) => {
+    // to something
+    resolve({
+      id: 111,
+      token: 'sss',
+    });
+    // or
+    // reject({
+    //   message: 'error',
+    // });
+  },
+);
+```
