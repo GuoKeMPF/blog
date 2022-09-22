@@ -34,7 +34,7 @@ class LoginView(View):
                 return JsonResponse(
                     {"message": "Error username or password"}, status=500)
         else:
-            return JsonResponse({"message": "Error username or password"}, status=200)
+            return JsonResponse({"message": "Error username or password"}, status=500)
 
     def dispatch(self, request, *args, **kwargs):
         return super(LoginView, self).dispatch(request, *args, **kwargs)

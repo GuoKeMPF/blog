@@ -8,9 +8,9 @@
     "declarations": true
   },
   "scripts": {
-    "start": "egg-scripts start --ignore-stderr --title=egg-server-egg",
+    "start": "npm run tsc && egg-scripts start --ignore-stderr --title=egg-server-egg --port=8001",
     "stop": "egg-scripts stop --title=egg-server-egg",
-    "dev": "egg-bin dev",
+    "dev": "egg-bin dev --port=8001",
     "debug": "egg-bin debug",
     "test-local": "egg-bin test",
     "test": "npm run lint -- --fix && npm run test-local",
