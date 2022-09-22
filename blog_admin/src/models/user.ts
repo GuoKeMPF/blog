@@ -1,8 +1,8 @@
 import { history } from 'umi';
 
-import type { Effect, Reducer } from 'umi';
 import { login, logout } from '@/services/user';
-import { set, clear, get } from '@/utils/sessionStorage';
+import { setSession, clearSession, getSession, sessionKeys } from '@/utils/sessionStorage';
+import type { Effect, Reducer } from 'umi';
 
 export interface UserModelState {
   username: string;
@@ -28,31 +28,30 @@ export interface UserModelType {
 const UserModel: UserModelType = {
   namespace: 'user',
   state: {
-    username: get('username') || '',
+    username: getSession(sessionKeys.username) || '',
   },
   effects: {
     *login({ payload }, { call, put }) {
       const res = yield call(login, payload);
-      if (!res) {
+      const { data } = res;
+      if (!data) {
         return;
       }
-      console.log(res);
-
-      if (res) {
+      if (data) {
         yield put({
           type: 'update',
           payload: {
-            username: res.data,
+            userInfo: res.data,
+            username: res.data.username,
           },
         });
-        set('username', res.data);
+        setSession(sessionKeys.username, res.data.username);
+        setSession(sessionKeys.token, res.data.token);
         history.push('/dashboard');
       }
       return res;
     },
     *logout(_action, { call, put }) {
-      console.log('*logout');
-
       yield call(logout);
       yield put({
         type: 'update',
@@ -60,7 +59,7 @@ const UserModel: UserModelType = {
           username: '',
         },
       });
-      clear();
+      clearSession();
       history.push('/user/login');
     },
   },

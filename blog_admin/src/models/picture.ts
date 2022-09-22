@@ -37,9 +37,10 @@ const Picture = {
   state: initState,
   effects: {
     *queryPictures({ payload }: any, { put, call }: any) {
-      const response: PicturesResponseType = yield call(queryPictures, payload);
-      const { data = [], count: total = 0, size = 0, page = 1 } = response;
-      if (response) {
+      const response: { data: PicturesResponseType } = yield call(queryPictures, payload);
+
+      if (response.data) {
+        const { data = [], count: total = 0, size = 0, page = 1 } = response.data;
         yield put({
           type: 'update',
           payload: { pictures: data, total, size, page },
@@ -48,8 +49,8 @@ const Picture = {
     },
 
     *addPicture({ payload }: any, { put, call }: any) {
-      const response: ResponseDateType = yield call(addPicture, payload);
-      if (response) {
+      const response: { data: PicturesResponseType } = yield call(addPicture, payload);
+      if (response.data) {
         yield put({
           type: 'queryPictures',
           payload,
@@ -64,8 +65,8 @@ const Picture = {
     },
 
     *addPictures({ payload }: any, { put, call }: any) {
-      const response: ResponseDateType = yield call(addPictures, payload);
-      if (response) {
+      const response: { data: PicturesResponseType } = yield call(addPictures, payload);
+      if (response.data) {
         yield put({
           type: 'queryPictures',
           payload,
@@ -80,15 +81,15 @@ const Picture = {
     },
 
     *deletePicture({ payload }: any, { put, call }: any) {
-      const response: ResponseDateType = yield call(deletePicture, payload);
-      if (!response) {
+      const response: { data: PicturesResponseType } = yield call(deletePicture, payload);
+      if (!response.data) {
         return;
       }
-      const pictures: { data: PictureStateType.PictureTypes } = yield call(queryPictures);
-      if (pictures) {
+      const pictures: { data: { data: PictureStateType.PictureTypes } } = yield call(queryPictures);
+      if (pictures.data) {
         yield put({
           type: 'update',
-          payload: { pictures: pictures.data },
+          payload: { pictures: pictures.data.data },
         });
       }
     },

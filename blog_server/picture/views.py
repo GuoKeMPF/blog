@@ -30,7 +30,7 @@ class PictureViewSet(ModelViewSet):
             description=description
         )
         picture.save()
-        return JsonResponse(imageInfo, safe=False, status=200)
+        return JsonResponse({"data": imageInfo}, safe=False, status=200)
 
     def destroy(self, request, *args, **kwargs):
         id = kwargs.get('id')
@@ -43,7 +43,7 @@ class PictureViewSet(ModelViewSet):
                 deleteImage(picture.unique_name)
             except(FileNotFoundError):
                 return JsonResponse({"message": "can't find file"}, status=500, safe=False)
-            return JsonResponse(res, status=200, safe=False)
+            return JsonResponse({"data": res}, status=200, safe=False)
 
     def uploads(self, request, *args, **kwargs):
         files = request.FILES.getlist('file')
@@ -61,4 +61,4 @@ class PictureViewSet(ModelViewSet):
             )
             picture.save()
             loactions.append(imageInfo)
-        return JsonResponse(loactions, safe=False)
+        return JsonResponse({"data": loactions}, safe=False)

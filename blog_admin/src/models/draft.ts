@@ -25,17 +25,17 @@ export namespace DraftsStateType {
 
 export interface DraftsResponseType {
   data: DraftType[];
-  count: number,
-  size: number,
-  page: number,
+  count: number;
+  size: number;
+  page: number;
 }
 
 export interface DraftStateType {
   drafts: DraftsStateType.Drafts;
   draft: DraftsStateType.Draft;
-  total: number,
-  size: number,
-  page: number,
+  total: number;
+  size: number;
+  page: number;
 }
 
 const initDraft = {
@@ -55,17 +55,15 @@ const initState: DraftStateType = {
   draft: initDraft,
 };
 
-
-
-
 const Draft = {
   namespace: 'draft',
   state: initState,
   effects: {
     *queryDrafts({ payload }: any, { put, call }: any) {
-      const response: DraftsResponseType = yield call(queryDrafts, payload);
-      if (response) {
-        const { data = [], count: total = 0, size = 0, page = 1 } = response
+      const response: { data: DraftsResponseType } = yield call(queryDrafts, payload);
+      const res = response.data;
+      if (res) {
+        const { data = [], count: total = 0, size = 0, page = 1 } = res;
         yield put({
           type: 'update',
           payload: { drafts: data, total, size, page },
@@ -75,11 +73,12 @@ const Draft = {
 
     *queryDraft({ payload }: any, { put, call }: any) {
       const { id, ...other } = payload;
-      const response: DraftType = yield call(queryDraft, { id });
-      if (response) {
+      const response: { data: DraftType } = yield call(queryDraft, { id });
+      const res = response.data;
+      if (res) {
         yield put({
           type: 'update',
-          payload: { draft: response, ...other },
+          payload: { draft: res, ...other },
         });
       }
     },
@@ -93,19 +92,21 @@ const Draft = {
         });
       } else {
         const { id } = payload;
-        const response: DraftType = yield call(queryDraft, { id });
-        if (response) {
+        const response: { data: DraftType } = yield call(queryDraft, { id });
+        const res = response.data;
+        if (res) {
           yield put({
             type: 'update',
-            payload: { draft: { ...response, type, visable: true } },
+            payload: { draft: { ...res, type, visable: true } },
           });
         }
       }
     },
 
     *addDraft({ payload }: any, { put, call }: any) {
-      const response: DraftType = yield call(addDraft, payload);
-      if (response) {
+      const response: { data: DraftType } = yield call(addDraft, payload);
+      const res = response.data;
+      if (res) {
         const drafts: { data: DraftsStateType.Drafts } = yield call(queryDrafts);
         if (drafts) {
           yield put({
@@ -117,8 +118,9 @@ const Draft = {
     },
 
     *updateDraft({ payload }: any, { put, call }: any) {
-      const response: DraftType = yield call(updateDraft, payload);
-      if (response) {
+      const response: { data: DraftType } = yield call(updateDraft, payload);
+      const res = response.data;
+      if (res) {
         const drafts: { data: DraftsStateType.Drafts } = yield call(queryDrafts);
         if (drafts) {
           yield put({
@@ -130,13 +132,19 @@ const Draft = {
     },
 
     *deleteDraft({ payload }: any, { put, call }: any) {
-      yield call(deleteDraft, payload);
-      const drafts: { data: DraftsStateType.Drafts } = yield call(queryDrafts);
-      if (drafts) {
-        yield put({
-          type: 'update',
-          payload: { drafts: drafts.data },
-        });
+      const response: { data: DraftType } = yield call(deleteDraft, payload);
+      if (response.data) {
+        const drafts: {
+          data: { data: DraftsStateType.Drafts; total: number; size: number; page: number };
+        } = yield call(queryDrafts);
+        const res = drafts.data;
+        if (res) {
+          const { data = [], total = 0, size = 0, page = 1 } = res;
+          yield put({
+            type: 'update',
+            payload: { drafts: data, total, size, page },
+          });
+        }
       }
     },
   },

@@ -23,20 +23,19 @@ export namespace TextsStateType {
   export type Texts = TextType[];
 }
 
-
 export interface TextsResponseType {
   data: TextType[];
-  count: number,
-  size: number,
-  page: number,
+  count: number;
+  size: number;
+  page: number;
 }
 
 export interface TextStateType {
   texts: TextsStateType.Texts;
   text: TextsStateType.Text;
-  total: number,
-  size: number,
-  page: number,
+  total: number;
+  size: number;
+  page: number;
 }
 
 const initText = {
@@ -61,9 +60,9 @@ const Text = {
   state: initState,
   effects: {
     *queryTexts({ payload }: any, { put, call }: any) {
-      const response: TextsResponseType = yield call(queryTexts, payload);
-      if (response) {
-        const { data = [], count: total = 0, size = 0, page = 1 } = response;
+      const response: { data: TextsResponseType } = yield call(queryTexts, payload);
+      if (response.data) {
+        const { data = [], count: total = 0, size = 0, page = 1 } = response.data;
         yield put({
           type: 'update',
           payload: { texts: data, total, size, page },
@@ -73,11 +72,11 @@ const Text = {
 
     *queryText({ payload }: any, { put, call }: any) {
       const { id, ...other } = payload;
-      const response: TextType = yield call(queryText, { id });
-      if (response) {
+      const response: { data: TextType } = yield call(queryText, { id });
+      if (response.data) {
         yield put({
           type: 'update',
-          payload: { text: response, ...other },
+          payload: { ...other, text: response.data },
         });
       }
     },
@@ -91,19 +90,19 @@ const Text = {
         });
       } else {
         const { id } = payload;
-        const response: TextType = yield call(queryText, { id });
-        if (response) {
+        const response: { data: TextType } = yield call(queryText, { id });
+        if (response.data) {
           yield put({
             type: 'update',
-            payload: { text: { ...response, type, visable: true } },
+            payload: { text: { ...response.data, type, visable: true } },
           });
         }
       }
     },
 
     *addText({ payload }: any, { put, call }: any) {
-      const response: TextType = yield call(addText, payload);
-      if (response) {
+      const response: { data: TextType } = yield call(addText, payload);
+      if (response.data) {
         const texts: { data: TextsStateType.Texts } = yield call(queryTexts);
         if (texts) {
           yield put({
@@ -115,13 +114,13 @@ const Text = {
     },
 
     *updateText({ payload }: any, { put, call }: any) {
-      const response: TextType = yield call(updateText, payload);
-      if (response) {
-        const texts: { data: TextsStateType.Texts } = yield call(queryTexts);
-        if (texts) {
+      const response: { data: TextType } = yield call(updateText, payload);
+      if (response.data) {
+        const texts: { data: { data: TextsStateType.Texts } } = yield call(queryTexts);
+        if (texts.data) {
           yield put({
             type: 'update',
-            payload: { texts: texts.data, text: initText },
+            payload: { texts: texts.data.data, text: initText },
           });
         }
       }
@@ -129,11 +128,11 @@ const Text = {
 
     *deleteText({ payload }: any, { put, call }: any) {
       yield call(deleteText, payload);
-      const texts: { data: TextsStateType.Texts } = yield call(queryTexts);
-      if (texts) {
+      const texts: { data: { data: TextsStateType.Texts } } = yield call(queryTexts);
+      if (texts.data) {
         yield put({
           type: 'update',
-          payload: { texts: texts.data },
+          payload: { texts: texts.data.data },
         });
       }
     },
