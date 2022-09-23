@@ -28,7 +28,7 @@ class AudioViewSet(ModelViewSet):
             description=description
         )
         audio.save()
-        return JsonResponse({"data": imageInfo}, safe=False, status=200)
+        return JsonResponse(imageInfo, safe=False, status=200)
 
     def destroy(self, request, *args, **kwargs):
         id = kwargs.get('id')
@@ -41,7 +41,7 @@ class AudioViewSet(ModelViewSet):
                 deleteAudio(audio.unique_name)
             except(FileNotFoundError):
                 return JsonResponse({"message": "can't find file"}, status=500, safe=False)
-            return JsonResponse({"data": res}, status=200, safe=False)
+            return JsonResponse(res, status=200, safe=False)
 
     def uploads(self, request, *args, **kwargs):
         files = request.FILES.getlist('file')
@@ -57,4 +57,4 @@ class AudioViewSet(ModelViewSet):
             )
             picture.save()
             loactions.append(imageInfo)
-        return JsonResponse({"data": loactions}, safe=False, status=200)
+        return JsonResponse(loactions, safe=False, status=200)

@@ -43,8 +43,10 @@ const UserModel: UserModelType = {
           payload: {
             userInfo: res.data,
             username: res.data.username,
+            csrftoken: res.data.csrftoken,
           },
         });
+        setSession(sessionKeys.csrftoken, res.data.csrftoken);
         setSession(sessionKeys.username, res.data.username);
         setSession(sessionKeys.token, res.data.token);
         history.push('/dashboard');

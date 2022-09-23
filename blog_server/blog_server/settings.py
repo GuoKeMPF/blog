@@ -1,6 +1,7 @@
 
 import os
 from pathlib import Path
+import datetime
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,8 +32,6 @@ IMAGE_PATH = env('IMAGE_PATH')
 AUDIO_PATH = env('AUDIO_PATH')
 
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -58,13 +57,13 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGIN_REGEXES=[
+CORS_ALLOWED_ORIGIN_REGEXES = [
     r'^https?:\/\/([a-zA-Z\.]?)+(mapanfeng\.com)'
 ]
 CORS_ALLOW_CREDENTIALS = True
@@ -174,4 +173,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ]
+}
+
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_AUTH_HEADER_PREFIX': '',
 }

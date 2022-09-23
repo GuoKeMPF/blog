@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate, login, logout
-
+from django.middleware.csrf import get_token
 from utils.cryptography.decrypt import decrypt
 
 from rest_framework_jwt.settings import api_settings
@@ -27,16 +27,17 @@ class LoginView(View):
         user = authenticate(username=realname, password=realpwd)
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
+        csrftoken = get_token(request)
         if user is not None:
             if user.is_active:
                 login(request, user)
                 print("token", token)
                 return JsonResponse({
-                    "data": {
-                        "username": user.get_username(),
-                        "message": "login success",
-                        "token": 'JWT ' + token
-                    }})
+                    "username": user.get_username(),
+                    "message": "login success",
+                    "token": token,
+                    "csrftoken": csrftoken
+                })
             else:
                 return JsonResponse(
                     {"message": "Error username or password"}, status=500)
@@ -52,7 +53,7 @@ class LogoutView(View):
     def post(self, request):
         res = logout(request)
         if res:
-            return JsonResponse({"data": "logout success"}, status=500)
+            return JsonResponse({"data": "logout success"}, status=200)
         else:
             return JsonResponse({"message": "logout failed"}, status=500)
 

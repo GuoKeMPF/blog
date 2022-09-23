@@ -42,12 +42,14 @@ const request = extend({
 });
 // request request
 request.interceptors.request.use((url, options) => {
-  console.log('url', url);
-
   const { headers = {} }: { headers?: any } = options;
   const token: string | undefined = getSession(sessionKeys.token);
   if (token) {
     headers.Authorization = token;
+  }
+  const csrftoken: string | undefined = getSession(sessionKeys.csrftoken);
+  if (csrftoken) {
+    headers['X-CSRFToken'] = csrftoken;
   }
   options.headers = headers;
   return {
@@ -61,11 +63,10 @@ request.interceptors.response.use(async (response) => {
   if (response.status === 403) {
     history.push('/user/login');
   }
-  // do something when request failed
-  // if (data.error) {
-  //   do something
-  // }
-  return response;
+  const data = await response.clone().json();
+  data.status = response.status;
+  return { ...response, status: response.status, data: data };
+  // return response;
 });
 
 /**

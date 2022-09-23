@@ -3,6 +3,7 @@ const storage = window.sessionStorage;
 export const sessionKeys: Record<string, string> = {
   token: 'token',
   username: 'username',
+  csrftoken: 'csrftoken',
 };
 
 export const setSession = (key: string, value: string): void => {
