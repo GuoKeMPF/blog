@@ -1,4 +1,5 @@
 
+from asyncio.windows_events import NULL
 import os
 from pathlib import Path
 import datetime
@@ -30,6 +31,7 @@ ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 DOMAIN = env('DOMAIN')
 IMAGE_PATH = env('IMAGE_PATH')
 AUDIO_PATH = env('AUDIO_PATH')
+JWT_AUTH_HEADER_PREFIX = env('JWT_AUTH_HEADER_PREFIX')
 
 
 # Application definition
@@ -57,7 +59,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -178,5 +180,5 @@ REST_FRAMEWORK = {
 
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
-    'JWT_AUTH_HEADER_PREFIX': '',
+    'JWT_AUTH_HEADER_PREFIX': JWT_AUTH_HEADER_PREFIX,
 }

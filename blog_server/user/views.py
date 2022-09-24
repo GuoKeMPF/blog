@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
 from utils.cryptography.decrypt import decrypt
 
+from django.conf import settings
 from rest_framework_jwt.settings import api_settings
 # Create your views here.
 
@@ -28,6 +29,8 @@ class LoginView(View):
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
         csrftoken = get_token(request)
+
+        HEADER_AUTH_PREFIX = settings.JWT_AUTH_HEADER_PREFIX
         if user is not None:
             if user.is_active:
                 login(request, user)
@@ -35,7 +38,7 @@ class LoginView(View):
                 return JsonResponse({
                     "username": user.get_username(),
                     "message": "login success",
-                    "token": token,
+                    "token": HEADER_AUTH_PREFIX + ' '+token,
                     "csrftoken": csrftoken
                 })
             else:
