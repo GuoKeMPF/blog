@@ -1,6 +1,7 @@
-import 'egg';
+import "egg";
 
-declare module 'egg' {}
+declare module "egg" {}
+
 declare global {
   namespace NodeJS {
     interface Global {

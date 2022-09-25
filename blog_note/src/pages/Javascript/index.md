@@ -26,3 +26,9 @@ title: JavaScript
 - Object
   - Object
   - [Array](/javascript/array)
+
+
+## TypeScript
+
+- TypeScript
+  [TypeScript](/javascript/typeScript)

@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "dumi dev",
+    "dev": "dumi dev",
     "docs": "dumi build",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist",

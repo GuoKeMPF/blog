@@ -1,7 +1,7 @@
 import { extend } from 'umi-request';
 import { history } from 'umi';
 import { notification } from 'antd';
-import { getCookie } from '@/utils/cookies';
+import { getSession, sessionKeys } from '@/utils/sessionStorage';
 
 // handling error in response interceptor
 const errorHandler = (error: any) => {
@@ -42,10 +42,12 @@ const request = extend({
 });
 // request request
 request.interceptors.request.use((url, options) => {
-  console.log('url', url);
-  
   const { headers = {} }: { headers?: any } = options;
-  const csrftoken: string | null = getCookie('csrftoken');
+  const token: string | undefined = getSession(sessionKeys.token);
+  if (token) {
+    headers.Authorization = token;
+  }
+  const csrftoken: string | undefined = getSession(sessionKeys.csrftoken);
   if (csrftoken) {
     headers['X-CSRFToken'] = csrftoken;
   }
@@ -58,15 +60,13 @@ request.interceptors.request.use((url, options) => {
 
 // response interceptors
 request.interceptors.response.use(async (response) => {
-  // const data = await response.clone().json();
   if (response.status === 403) {
-    history.push('/login');
+    history.push('/user/login');
   }
-  // do something when request failed
-  // if (data.error) {
-  //   do something
-  // }
-  return response;
+  const data = await response.clone().json();
+  data.status = response.status;
+  return { ...response, status: response.status, data: data };
+  // return response;
 });
 
 /**

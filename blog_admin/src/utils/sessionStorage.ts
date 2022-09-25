@@ -1,10 +1,16 @@
 const storage = window.sessionStorage;
 
-export const set = (key: string, value: string): void => {
+export const sessionKeys: Record<string, string> = {
+  token: 'token',
+  username: 'username',
+  csrftoken: 'csrftoken',
+};
+
+export const setSession = (key: string, value: string): void => {
   storage.setItem(key, JSON.stringify(value));
 };
 
-export const get = (key: string): string | undefined => {
+export const getSession = (key: string): string | undefined => {
   const value = storage.getItem(key);
   try {
     if (value) {
@@ -16,4 +22,4 @@ export const get = (key: string): string | undefined => {
   return;
 };
 
-export const clear = (): void => storage.clear();
+export const clearSession = (): void => storage.clear();

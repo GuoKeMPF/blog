@@ -16,11 +16,11 @@
 # eval "export NODE_OPTIONS=--openssl-legacy-provider"
 
 
-echo "
-   install yarn and tyarn for npm
-   npm install yarn -g tyarn -g
-"
-eval 'npm install yarn -g tyarn -g'
+# echo "
+#    install yarn and tyarn for npm
+#    npm install yarn -g tyarn -g
+# "
+# eval 'npm install yarn -g tyarn -g'
 
 source ./blog_admin/build.sh
 

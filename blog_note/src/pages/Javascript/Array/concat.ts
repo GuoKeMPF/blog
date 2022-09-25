@@ -7,3 +7,5 @@ const arrConcat = arr1.concat(arr2, arr3, num1);
 
 console.log('arr1', arr1);
 console.log('arrConcat', arrConcat);
+
+export default {};

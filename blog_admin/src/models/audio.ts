@@ -1,5 +1,5 @@
 import { queryAudios, queryAudioByID, addAudio, addAudios, deleteAudio } from '@/services/audio';
-import { Effect, Reducer } from 'umi';
+import type { Effect, Reducer } from 'umi';
 export namespace AudioStateType {
   export type AudioType = {
     id: string;
@@ -47,20 +47,22 @@ const Audio: ModelType = {
         queryAudios,
         payload,
       );
-      if (response) {
+      const { data } = response;
+      if (data) {
         yield put({
           type: 'update',
           payload: {
-            audios: [...response.data],
-            total: response.count,
+            audios: [...data],
+            total: data.count,
           },
         });
         return response.data;
       }
     },
-    *addAudio({ payload }: any, { put, call }: any) {
+    *addAudio({ payload }, { put, call }) {
       const response: ResponseDateType = yield call(addAudio, payload);
-      if (response) {
+      const { data } = response;
+      if (data) {
         yield put({
           type: 'queryAudios',
           payload,
@@ -73,9 +75,10 @@ const Audio: ModelType = {
         });
       }
     },
-    *addAudios({ payload }: any, { put, call }: any) {
+    *addAudios({ payload }, { put, call }) {
       const response: ResponseDateType = yield call(addAudios, payload);
-      if (response) {
+      const { data } = response;
+      if (data) {
         yield put({
           type: 'queryAudios',
           payload,
@@ -90,19 +93,27 @@ const Audio: ModelType = {
     },
 
     *queryAudioByID({ payload }, { call }) {
-      const response: { data: AudioStateType.AudiosType } = yield call(queryAudioByID, payload);
-      if (response) {
-        return response.data;
+      const response: { data: { data: AudioStateType.AudiosType } } = yield call(
+        queryAudioByID,
+        payload,
+      );
+
+      const { data } = response;
+      if (data) {
+        return data.data;
       }
     },
-    *deleteAudio({ payload }: any, { put, call }: any) {
+    *deleteAudio({ payload }, { put, call }) {
       console.log('deleteAudio');
 
       const response: ResponseDateType = yield call(deleteAudio, payload);
-      if (!response) {
+
+      const { data } = response;
+
+      if (!data) {
         return;
       }
-      if (response) {
+      if (data) {
         yield put({
           type: 'queryAudios',
           payload,

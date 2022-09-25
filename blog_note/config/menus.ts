@@ -21,6 +21,7 @@ const menus = {
         '/pages/Javascript/Number/index.md',
         '/pages/Javascript/Map/index.md',
         '/pages/Javascript/EventLoop/index.md',
+        '/pages/Javascript/TypeScript/index.md',
       ],
     },
   ],

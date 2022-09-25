@@ -17,4 +17,4 @@ echo "
 start ssr with eggjs
 https://www.eggjs.org/
 "
-eval "npm run alive"
+eval "npm run start"

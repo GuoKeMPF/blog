@@ -43,7 +43,7 @@ class PictureViewSet(ModelViewSet):
                 deleteImage(picture.unique_name)
             except(FileNotFoundError):
                 return JsonResponse({"message": "can't find file"}, status=500, safe=False)
-            return JsonResponse(res, status=200, safe=False)
+            return JsonResponse( res, status=200, safe=False)
 
     def uploads(self, request, *args, **kwargs):
         files = request.FILES.getlist('file')

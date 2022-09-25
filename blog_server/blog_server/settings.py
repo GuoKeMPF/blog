@@ -1,6 +1,8 @@
 
+from asyncio.windows_events import NULL
 import os
 from pathlib import Path
+import datetime
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,8 +32,7 @@ CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS')
 DOMAIN = env('DOMAIN')
 IMAGE_PATH = env('IMAGE_PATH')
 AUDIO_PATH = env('AUDIO_PATH')
-
-
+JWT_AUTH_HEADER_PREFIX = env('JWT_AUTH_HEADER_PREFIX')
 
 
 # Application definition
@@ -65,7 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGIN_REGEXES=[
+CORS_ALLOWED_ORIGIN_REGEXES = [
     r'^https?:\/\/([a-zA-Z\.]?)+(mapanfeng\.com)'
 ]
 CORS_ALLOW_CREDENTIALS = True
@@ -168,11 +169,17 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.MultiPartParser",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+        "rest_framework.permissions.IsAuthenticated",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ]
+}
+
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_AUTH_HEADER_PREFIX': JWT_AUTH_HEADER_PREFIX,
 }
