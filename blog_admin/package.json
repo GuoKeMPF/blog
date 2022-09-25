@@ -21,6 +21,7 @@
     "prettier": "prettier -c --write \"src/**/*\"",
     "serve": "umi-serve",
     "start": "cross-env UMI_ENV=start max dev",
+    "start:dev": "cross-env UMI_ENV=dev max dev",
     "preview": "cross-env UMI_ENV=prod max dev",
     "start:test": "cross-env MOCK=none UMI_ENV=dev max dev",
     "test": "max test",
