@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from .models import Draft
 from .serializers import DraftsSerializer, DraftSerializer
 from utils.pagination import Pagination
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 
 class DraftViewSet(ModelViewSet):
@@ -11,6 +13,7 @@ class DraftViewSet(ModelViewSet):
     pagination_class = Pagination
     filterset_fields = ['title', 'content', 'author']
 
+    @method_decorator(csrf_exempt)
     def list(self, request, *args, **kwargs):
         page = self.paginate_queryset(self.queryset)
         serializer = DraftsSerializer(page, many=True)

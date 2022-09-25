@@ -4,6 +4,8 @@ import { login, logout } from '@/services/user';
 import { setSession, clearSession, getSession, sessionKeys } from '@/utils/sessionStorage';
 import type { Effect, Reducer } from 'umi';
 
+import { ifResponseSuccess } from '@/utils/ifResponseSuccess';
+
 export interface UserModelState {
   username: string;
 }
@@ -33,22 +35,23 @@ const UserModel: UserModelType = {
   effects: {
     *login({ payload }, { call, put }) {
       const res = yield call(login, payload);
-      const { data } = res;
-      if (!data) {
+      if (!ifResponseSuccess(res)) {
         return;
       }
-      if (data) {
+      const { body } = res;
+      if (body) {
         yield put({
           type: 'update',
           payload: {
-            userInfo: res.data,
-            username: res.data.username,
-            csrftoken: res.data.csrftoken,
+            userInfo: body,
+            username: body.username,
+            csrftoken: body.csrftoken,
           },
         });
-        setSession(sessionKeys.csrftoken, res.data.csrftoken);
-        setSession(sessionKeys.username, res.data.username);
-        setSession(sessionKeys.token, res.data.token);
+        setSession(sessionKeys.csrftoken, body.csrftoken);
+        setSession(sessionKeys.username, body.username);
+        setSession(sessionKeys.token, body.token);
+        setSession(sessionKeys.userInfo, body);
         history.push('/dashboard');
       }
       return res;

@@ -65,7 +65,7 @@ request.interceptors.response.use(async (response) => {
   }
   const data = await response.clone().json();
   data.status = response.status;
-  return { ...response, status: response.status, data: data };
+  return { ...response, status: response.status, body: data };
   // return response;
 });
 

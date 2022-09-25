@@ -13,3 +13,5 @@ export const permission_type = {
   detail: 'DETAIL',
   remove: 'REMOVE',
 };
+
+export const successSet: Set<number> = new Set([200, 201, 301]);

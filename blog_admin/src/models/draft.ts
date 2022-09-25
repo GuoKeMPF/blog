@@ -107,11 +107,13 @@ const Draft = {
       const response: { data: DraftType } = yield call(addDraft, payload);
       const res = response.data;
       if (res) {
-        const drafts: { data: DraftsStateType.Drafts } = yield call(queryDrafts);
-        if (drafts) {
+        const draftsList: { data: DraftsResponseType } = yield call(queryDrafts, payload);
+        const { data } = draftsList;
+        if (data) {
+          const { data: drafts = [], count: total = 0, size = 0, page = 1 } = data;
           yield put({
             type: 'update',
-            payload: { drafts: drafts.data, draft: initDraft },
+            payload: { drafts: drafts, total, size, page, draft: initDraft },
           });
         }
       }
@@ -121,11 +123,13 @@ const Draft = {
       const response: { data: DraftType } = yield call(updateDraft, payload);
       const res = response.data;
       if (res) {
-        const drafts: { data: DraftsStateType.Drafts } = yield call(queryDrafts);
-        if (drafts) {
+        const draftsList: { data: DraftsResponseType } = yield call(queryDrafts, payload);
+        const { data } = draftsList;
+        if (data) {
+          const { data: drafts = [], count: total = 0, size = 0, page = 1 } = data;
           yield put({
             type: 'update',
-            payload: { drafts: drafts.data, draft: initDraft },
+            payload: { drafts: drafts, total, size, page, draft: initDraft },
           });
         }
       }
