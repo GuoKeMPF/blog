@@ -69,6 +69,8 @@ const menus = {
         '/pages/Others/web_transfer_prtcl/http/index.md',
         '/pages/Others/web_transfer_prtcl/method/index.md',
         '/pages/Others/web_transfer_prtcl/status/index.md',
+        '/pages/Others/git/index.md',
+        '/pages/Others/git/ssh/index.md',
       ],
     },
   ],
