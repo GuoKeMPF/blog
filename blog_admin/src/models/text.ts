@@ -1,6 +1,8 @@
 import { queryTexts, queryText, addText, updateText, deleteText } from '@/services/text';
 
 import { formType } from '@/utils/enum';
+import { ifResponseSuccess } from '@/utils/ifResponseSuccess';
+import type { ResponseType } from '@/utils/ifResponseSuccess';
 
 export interface TextType {
   id: string;
@@ -60,9 +62,13 @@ const Text = {
   state: initState,
   effects: {
     *queryTexts({ payload }: any, { put, call }: any) {
-      const response: { data: TextsResponseType } = yield call(queryTexts, payload);
-      if (response.data) {
-        const { data = [], count: total = 0, size = 0, page = 1 } = response.data;
+      const response: ResponseType = yield call(queryTexts, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const { body } = response;
+      if (body) {
+        const { data = [], count: total = 0, size = 0, page = 1 } = body;
         yield put({
           type: 'update',
           payload: { texts: data, total, size, page },
@@ -72,11 +78,15 @@ const Text = {
 
     *queryText({ payload }: any, { put, call }: any) {
       const { id, ...other } = payload;
-      const response: { data: TextType } = yield call(queryText, { id });
-      if (response.data) {
+      const response: ResponseType = yield call(queryText, { id });
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const { body } = response;
+      if (body) {
         yield put({
           type: 'update',
-          payload: { ...other, text: response.data },
+          payload: { ...other, text: body },
         });
       }
     },
@@ -90,49 +100,64 @@ const Text = {
         });
       } else {
         const { id } = payload;
-        const response: { data: TextType } = yield call(queryText, { id });
-        if (response.data) {
+        const response: ResponseType = yield call(queryText, { id });
+        if (!ifResponseSuccess(response)) {
+          return;
+        }
+        const { body } = response;
+        if (body) {
           yield put({
             type: 'update',
-            payload: { text: { ...response.data, type, visable: true } },
+            payload: { text: { ...body, type, visable: true } },
           });
         }
       }
     },
 
     *addText({ payload }: any, { put, call }: any) {
-      const response: { data: TextType } = yield call(addText, payload);
-      if (response.data) {
-        const texts: { data: TextsStateType.Texts } = yield call(queryTexts);
-        if (texts) {
-          yield put({
-            type: 'update',
-            payload: { texts: texts.data, text: initText },
-          });
-        }
+      const response: ResponseType = yield call(addText, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const texts: ResponseType = yield call(queryTexts);
+      const { body } = texts;
+      if (body) {
+        const { data = [], count: total = 0, size = 0, page = 1 } = body;
+        yield put({
+          type: 'update',
+          payload: { texts: data, total, size, page, text: initText },
+        });
       }
     },
 
     *updateText({ payload }: any, { put, call }: any) {
-      const response: { data: TextType } = yield call(updateText, payload);
-      if (response.data) {
-        const texts: { data: { data: TextsStateType.Texts } } = yield call(queryTexts);
-        if (texts.data) {
-          yield put({
-            type: 'update',
-            payload: { texts: texts.data.data, text: initText },
-          });
-        }
+      const response: ResponseType = yield call(updateText, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const texts: ResponseType = yield call(queryTexts);
+      const { body } = texts;
+      if (body) {
+        const { data = [], count: total = 0, size = 0, page = 1 } = body;
+        yield put({
+          type: 'update',
+          payload: { texts: data, total, size, page, text: initText },
+        });
       }
     },
 
     *deleteText({ payload }: any, { put, call }: any) {
-      yield call(deleteText, payload);
-      const texts: { data: { data: TextsStateType.Texts } } = yield call(queryTexts);
-      if (texts.data) {
+      const response: ResponseType = yield call(deleteText, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const texts: ResponseType = yield call(queryTexts);
+      const { body } = texts;
+      if (body) {
+        const { data = [], count: total = 0, size = 0, page = 1 } = body;
         yield put({
           type: 'update',
-          payload: { texts: texts.data.data },
+          payload: { texts: data, total, size, page },
         });
       }
     },

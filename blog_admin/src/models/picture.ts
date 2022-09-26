@@ -1,5 +1,8 @@
 import { queryPictures, addPicture, addPictures, deletePicture } from '@/services/picture';
 
+import { ifResponseSuccess } from '@/utils/ifResponseSuccess';
+import type { ResponseType } from '@/utils/ifResponseSuccess';
+
 export namespace PictureStateType {
   export type PictureType = {
     id: string;
@@ -37,10 +40,13 @@ const Picture = {
   state: initState,
   effects: {
     *queryPictures({ payload }: any, { put, call }: any) {
-      const response: { data: PicturesResponseType } = yield call(queryPictures, payload);
-
-      if (response.data) {
-        const { data = [], count: total = 0, size = 0, page = 1 } = response.data;
+      const response: ResponseType = yield call(queryPictures, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const { body } = response;
+      if (body) {
+        const { data = [], count: total = 0, size = 0, page = 1 } = body;
         yield put({
           type: 'update',
           payload: { pictures: data, total, size, page },
@@ -49,49 +55,54 @@ const Picture = {
     },
 
     *addPicture({ payload }: any, { put, call }: any) {
-      const response: { data: PicturesResponseType } = yield call(addPicture, payload);
-      if (response.data) {
-        yield put({
-          type: 'queryPictures',
-          payload,
-        });
-        yield put({
-          type: 'setVisiable',
-          payload: {
-            visiable: false,
-          },
-        });
+      const response: ResponseType = yield call(addPicture, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
       }
+      yield put({
+        type: 'queryPictures',
+        payload: {},
+      });
+      yield put({
+        type: 'setVisiable',
+        payload: {
+          visiable: false,
+        },
+      });
     },
 
     *addPictures({ payload }: any, { put, call }: any) {
-      const response: { data: PicturesResponseType } = yield call(addPictures, payload);
-      if (response.data) {
-        yield put({
-          type: 'queryPictures',
-          payload,
-        });
-        yield put({
-          type: 'setVisiable',
-          payload: {
-            visiable: false,
-          },
-        });
+      const response: ResponseType = yield call(addPictures, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
       }
+      yield put({
+        type: 'queryPictures',
+        payload,
+      });
+      yield put({
+        type: 'setVisiable',
+        payload: {
+          visiable: false,
+        },
+      });
     },
 
     *deletePicture({ payload }: any, { put, call }: any) {
-      const response: { data: PicturesResponseType } = yield call(deletePicture, payload);
-      if (!response.data) {
+      const response: ResponseType = yield call(deletePicture, payload);
+      if (!ifResponseSuccess(response)) {
         return;
       }
-      const pictures: { data: { data: PictureStateType.PictureTypes } } = yield call(queryPictures);
-      if (pictures.data) {
-        yield put({
-          type: 'update',
-          payload: { pictures: pictures.data.data },
-        });
+      const pictures: ResponseType = yield call(queryPictures);
+      if (!ifResponseSuccess(response)) {
+        return;
       }
+      const { body } = pictures;
+      const { data = [], count: total = 0, size = 0, page = 1 } = body;
+      yield put({
+        type: 'update',
+        payload: { pictures: data, total, size, page },
+      });
     },
   },
   reducers: {

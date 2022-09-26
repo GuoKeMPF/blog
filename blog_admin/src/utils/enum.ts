@@ -14,4 +14,4 @@ export const permission_type = {
   remove: 'REMOVE',
 };
 
-export const successSet: Set<number> = new Set([200, 201, 301]);
+export const successSet: Set<number> = new Set([200, 201, 204, 301]);

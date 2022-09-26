@@ -63,8 +63,10 @@ request.interceptors.response.use(async (response) => {
   if (response.status === 403) {
     history.push('/user/login');
   }
-  const data = await response.clone().json();
-  data.status = response.status;
+  let data;
+  try {
+    data = await response.clone().json();
+  } catch (error) {}
   return { ...response, status: response.status, body: data };
   // return response;
 });

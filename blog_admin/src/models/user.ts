@@ -6,6 +6,7 @@ import type { Effect, Reducer } from 'umi';
 
 import { ifResponseSuccess } from '@/utils/ifResponseSuccess';
 
+import type { ResponseType } from '@/utils/ifResponseSuccess';
 export interface UserModelState {
   username: string;
 }
@@ -34,7 +35,7 @@ const UserModel: UserModelType = {
   },
   effects: {
     *login({ payload }, { call, put }) {
-      const res = yield call(login, payload);
+      const res: ResponseType = yield call(login, payload);
       if (!ifResponseSuccess(res)) {
         return;
       }

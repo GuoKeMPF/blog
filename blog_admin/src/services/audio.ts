@@ -19,5 +19,5 @@ export async function addAudios(data: FormData) {
 }
 
 export async function deleteAudio({ id }: { id: string }) {
-  return Delete(`${audio}/${id}`);
+  return Delete(`${audio}/${id}/`);
 }

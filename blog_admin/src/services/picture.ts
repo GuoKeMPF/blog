@@ -6,12 +6,12 @@ export async function queryPictures(params: any) {
 }
 
 export async function addPicture(data: FormData) {
-  return Post(`${picture}`, data);
+  return Post(`${picture}/`, data);
 }
 export async function addPictures(data: FormData) {
   return Post(`${pictures}/`, data);
 }
 
 export async function deletePicture({ id }: { id: string }) {
-  return Delete(`${picture}/${id}`);
+  return Delete(`${picture}/${id}/`);
 }

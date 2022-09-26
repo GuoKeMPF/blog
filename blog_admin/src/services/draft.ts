@@ -15,9 +15,9 @@ export async function addDraft(data: DraftType) {
 }
 
 export async function updateDraft(data: { id: string; data: DraftType }) {
-  return Put(`${draft}/${data.id}`, data);
+  return Put(`${draft}/${data.id}/`, data);
 }
 
 export async function deleteDraft({ id }: { id: string }) {
-  return Delete(`${draft}/${id}`);
+  return Delete(`${draft}/${id}/`);
 }
