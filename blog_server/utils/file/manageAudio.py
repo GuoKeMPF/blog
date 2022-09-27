@@ -12,7 +12,7 @@ def saveAudio(f):
     baseDir = os.path.dirname(os.path.abspath(__name__))
     if not os.path.isdir(os.path.join(baseDir, audio_path)):
         os.makedirs(os.path.join(baseDir, audio_path))
-    unique_name = f.name + time.strftime('%Y-%m-%d %H:%M:%S')
+    unique_name = time.strftime('%Y-%m-%d %H:%M:%S') + f.name 
     path = os.path.join(audio_path, unique_name)
     jpgdir = os.path.join(baseDir, path)
     loaction = static_doamin + '/' + audio_path + '/' + unique_name
