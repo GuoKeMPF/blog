@@ -5,6 +5,8 @@
 # /etc/hosts
 
 # 本地环境需要修改的 hosts
+
+0.0.0.0	static.mapanfeng.com
 0.0.0.0	note.mapanfeng.com
 0.0.0.0	api.mapanfeng.com
 0.0.0.0	admin.mapanfeng.com

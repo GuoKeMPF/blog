@@ -83,6 +83,30 @@ export default class AudioAnalyser {
       }
     };
     xhr.send();
+    // try {
+    //   let headers = new Headers()
+    //   headers.append('Content-Type', 'audio/mpeg');
+    //   headers.append('Access-Control-Allow-Credentials', 'true');
+    //   fetch(this.src, {
+    //     mode: 'no-cors',
+    //     referrerPolicy: 'no-referrer',
+    //     headers: headers }).then(
+    //     async (audioData) => {
+    //       console.log(audioData);
+    //       const blob = await audioData.arrayBuffer();
+    //       console.log(blob);
+    //       const b = await this.decode(blob);
+    //       if (b) {
+    //         this.buffer = b;
+    //         this.status = AudioAnalyserStatus.init;
+    //         this.connectAudio();
+    //         this.onload();
+    //       }
+    //     },
+    //   );
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   connectAudio = async () => {

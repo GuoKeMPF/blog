@@ -22,8 +22,6 @@ const Audio: FC<PageProps> = ({ dispatch, loadingAudios, audios }) => {
     const res = await dispatch({
       type: 'audio/queryAudios',
     });
-    console.log(res);
-
     setAudio(res[0]);
   };
 
