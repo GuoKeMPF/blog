@@ -3,7 +3,7 @@ import { draft } from './api';
 import type { DraftType } from 'umi';
 
 export async function queryDrafts(params: any) {
-  return Get(draft, { size: 12, page: 1, ...params });
+  return Get(`${draft}/`, { size: 12, page: 1, ...params });
 }
 
 export async function queryDraft({ id }: { id: string }) {
@@ -15,9 +15,9 @@ export async function addDraft(data: DraftType) {
 }
 
 export async function updateDraft(data: { id: string; data: DraftType }) {
-  return Put(`${draft}/${data.id}`, data);
+  return Put(`${draft}/${data.id}/`, data);
 }
 
 export async function deleteDraft({ id }: { id: string }) {
-  return Delete(`${draft}/${id}`);
+  return Delete(`${draft}/${id}/`);
 }

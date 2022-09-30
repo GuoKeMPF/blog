@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import path from "path";
 
+import { BASE_URL_DEV } from '../config/baseUrl';
 const images = [
   {
     src: path.join('./mock_static/images/img1.png'),
@@ -34,7 +35,7 @@ const pictures: any[] = Array(10).fill({
 
 
 export default {
-  'GET /api/picture': (req: Request, res: Response) => {
+  [`GET ${BASE_URL_DEV}/picture`]: (req: Request, res: Response) => {
     let size: number, page: number;
     size = Number(req?.query?.size) || 10;
     page = Number(req?.query?.page) || 1;
@@ -44,7 +45,7 @@ export default {
     }, 500);
   },
 
-  'GET /mock_static/images/*': (req: Request, res: Response) => {
+  [`GET /mock_static/images/*`]: (req: Request, res: Response) => {
     const { url } = req
     setTimeout(() => {
       res.sendFile(path.join(__dirname, url));

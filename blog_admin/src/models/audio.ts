@@ -1,5 +1,9 @@
 import { queryAudios, queryAudioByID, addAudio, addAudios, deleteAudio } from '@/services/audio';
-import { Effect, Reducer } from 'umi';
+
+import { ifResponseSuccess } from '@/utils/ifResponseSuccess';
+import type { ResponseType } from '@/utils/ifResponseSuccess';
+
+import type { Effect, Reducer } from 'umi';
 export namespace AudioStateType {
   export type AudioType = {
     id: string;
@@ -43,59 +47,72 @@ const Audio: ModelType = {
   state: initState,
   effects: {
     *queryAudios({ payload }, { put, call }) {
-      const response: { data: AudioStateType.AudiosType; count: number } = yield call(
-        queryAudios,
-        payload,
-      );
-      if (response) {
+      const response: ResponseType = yield call(queryAudios, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const { body } = response;
+      if (body) {
         yield put({
           type: 'update',
           payload: {
-            audios: [...response.data],
-            total: response.count,
+            audios: [...body.data],
+            total: body.count,
           },
         });
-        return response.data;
+        return body.data;
       }
     },
-    *addAudio({ payload }: any, { put, call }: any) {
-      const response: ResponseDateType = yield call(addAudio, payload);
-      if (response) {
-        yield put({
-          type: 'queryAudios',
-          payload,
-        });
+    *addAudio({ payload }, { put, call }) {
+      const response: ResponseType = yield call(addAudio, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
       }
+      yield put({
+        type: 'queryAudios',
+        payload,
+      });
+      yield put({
+        type: 'setVisiable',
+        payload: {
+          visiable: false,
+        },
+      });
     },
-    *addAudios({ payload }: any, { put, call }: any) {
-      const response: ResponseDateType = yield call(addAudios, payload);
-      if (response) {
-        yield put({
-          type: 'queryAudios',
-          payload,
-        });
+    *addAudios({ payload }, { put, call }) {
+      const response: ResponseType = yield call(addAudios, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
       }
+      yield put({
+        type: 'queryAudios',
+        payload,
+      });
+      yield put({
+        type: 'setVisiable',
+        payload: {
+          visiable: false,
+        },
+      });
     },
 
     *queryAudioByID({ payload }, { call }) {
-      const response: { data: AudioStateType.AudiosType } = yield call(queryAudioByID, payload);
-      if (response) {
-        return response.data;
-      }
-    },
-    *deleteAudio({ payload }: any, { put, call }: any) {
-      console.log('deleteAudio');
-
-      const response: ResponseDateType = yield call(deleteAudio, payload);
-      if (!response) {
+      const response: ResponseType = yield call(queryAudioByID, payload);
+      if (!ifResponseSuccess(response)) {
         return;
       }
-      if (response) {
-        yield put({
-          type: 'queryAudios',
-          payload,
-        });
+      const { body } = response;
+      return body.data;
+    },
+    *deleteAudio({ payload }, { put, call }) {
+      const response: ResponseType = yield call(deleteAudio, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
       }
+      yield put({
+        type: 'queryAudios',
+        payload,
+      });
     },
   },
   reducers: {

@@ -1,10 +1,8 @@
 
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from rest_framework.routers import DefaultRouter
-
 
 from draft.views import DraftViewSet
 from text.views import TextViewSet
@@ -16,53 +14,53 @@ from user.views import LoginView, LogoutView
 urlpatterns = [
 
     # 登陆等处
-    path("api/login/", LoginView.as_view(), name="login"),
-    path("api/logout/", LogoutView.as_view(), name="logout"),
+    path("login/", LoginView.as_view(), name="login"),
+    path("logout/", LogoutView.as_view(), name="logout"),
 
 
     # 草稿
-    path("api/draft/", DraftViewSet.as_view(
+    path("draft/", DraftViewSet.as_view(
         {"get": "list", "post": "create"}
     ), name="draft"),
-    path("api/draft/<int:pk>", DraftViewSet.as_view(
+    path("draft/<int:pk>", DraftViewSet.as_view(
         {"get": "retrieve", "put": "update",
             "patch": "partial_update", "delete": "destroy"}
     ), name="draft"),
 
     # 文章
-    path("api/text/", TextViewSet.as_view(
+    path("text/", TextViewSet.as_view(
         {"get": "list", "post": "create"}
     ), name="text"),
-    path("api/text/<int:pk>", TextViewSet.as_view(
+    path("text/<int:pk>", TextViewSet.as_view(
         {"get": "retrieve", "put": "update",
             "patch": "partial_update", "delete": "destroy"}
     ), name="text"),
 
 
     # 图片
-    path("api/picture/",
+    path("picture/",
          PictureViewSet.as_view({
              "get": "list",
              "post": "create"
          }), name="picture"),
-    path("api/pictures/",
+    path("pictures/",
          PictureViewSet.as_view({
              "post": "uploads"
          }), name="picture"),
-    path("api/picture/<int:id>/",
+    path("picture/<int:id>/",
          PictureViewSet.as_view({"get": "retrieve", "delete": "destroy"}), name="picture"),
 
     # 音频
-    path("api/audio/",
+    path("audio/",
          AudioViewSet.as_view({
              "get": "list",
              "post": "create"
          }), name="audio"),
-    path("api/audios/",
+    path("audios/",
          AudioViewSet.as_view({
              "post": "uploads"
          }), name="audio"),
-    path("api/audio/<int:id>/",
+    path("audio/<int:id>/",
          AudioViewSet.as_view({"get": "retrieve", "delete": "destroy"}), name="audio"),
 
     path('admin/', admin.site.urls),

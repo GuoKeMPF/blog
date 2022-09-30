@@ -1,4 +1,9 @@
-import request from 'umi-request';
+import { extend } from 'umi-request';
+
+const request = extend({
+  timeout: 1000,
+  prefix: BASE_URL,
+});
 
 const codeMessage: { [key: number | string]: string } = {
   200: '服务器成功返回请求的数据。',

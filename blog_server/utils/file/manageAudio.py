@@ -6,16 +6,16 @@ from django.conf import settings
 
 
 def saveAudio(f):
-    domain = settings.DOMAIN
+    static_doamin = settings.STATIC_DOAMIN
     audio_path = settings.AUDIO_PATH
 
     baseDir = os.path.dirname(os.path.abspath(__name__))
     if not os.path.isdir(os.path.join(baseDir, audio_path)):
         os.makedirs(os.path.join(baseDir, audio_path))
-    unique_name = time.strftime('%Y%m%d%H%M%S') + f.name
+    unique_name = time.strftime('%Y-%m-%d %H:%M:%S') + f.name 
     path = os.path.join(audio_path, unique_name)
     jpgdir = os.path.join(baseDir, path)
-    loaction = domain + '/' + audio_path + '/' + unique_name
+    loaction = static_doamin + '/' + audio_path + '/' + unique_name
     fobj = open(jpgdir, 'wb')
     for chrunk in f.chunks():
         fobj.write(chrunk)

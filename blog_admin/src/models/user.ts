@@ -1,9 +1,12 @@
 import { history } from 'umi';
 
-import type { Effect, Reducer } from 'umi';
 import { login, logout } from '@/services/user';
-import { set, clear, get } from '@/utils/sessionStorage';
+import { setSession, clearSession, getSession, sessionKeys } from '@/utils/sessionStorage';
+import type { Effect, Reducer } from 'umi';
 
+import { ifResponseSuccess } from '@/utils/ifResponseSuccess';
+
+import type { ResponseType } from '@/utils/ifResponseSuccess';
 export interface UserModelState {
   username: string;
 }
@@ -28,31 +31,33 @@ export interface UserModelType {
 const UserModel: UserModelType = {
   namespace: 'user',
   state: {
-    username: get('username') || '',
+    username: getSession(sessionKeys.username) || '',
   },
   effects: {
     *login({ payload }, { call, put }) {
-      const res = yield call(login, payload);
-      if (!res) {
+      const res: ResponseType = yield call(login, payload);
+      if (!ifResponseSuccess(res)) {
         return;
       }
-      console.log(res);
-
-      if (res) {
+      const { body } = res;
+      if (body) {
         yield put({
           type: 'update',
           payload: {
-            username: res.data,
+            userInfo: body,
+            username: body.username,
+            csrftoken: body.csrftoken,
           },
         });
-        set('username', res.data);
+        setSession(sessionKeys.csrftoken, body.csrftoken);
+        setSession(sessionKeys.username, body.username);
+        setSession(sessionKeys.token, body.token);
+        setSession(sessionKeys.userInfo, body);
         history.push('/dashboard');
       }
       return res;
     },
     *logout(_action, { call, put }) {
-      console.log('*logout');
-
       yield call(logout);
       yield put({
         type: 'update',
@@ -60,7 +65,7 @@ const UserModel: UserModelType = {
           username: '',
         },
       });
-      clear();
+      clearSession();
       history.push('/user/login');
     },
   },

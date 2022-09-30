@@ -7,16 +7,16 @@ from django.conf import settings
 
 
 def saveImage(f):
-    domain = settings.DOMAIN
+    static_doamin = settings.STATIC_DOAMIN
     image_path = settings.IMAGE_PATH
 
     baseDir = os.path.dirname(os.path.abspath(__name__))
     if not os.path.isdir(os.path.join(baseDir, image_path)):
         os.makedirs(os.path.join(baseDir, image_path))
-    unique_name = time.strftime('%Y%m%d%H%M%S') + f.name
+    unique_name = time.strftime('%Y-%m-%d %H:%M:%S') + f.name 
     path = os.path.join(image_path, unique_name)
     jpgdir = os.path.join(baseDir, path)
-    loaction = domain + '/' + image_path + '/' + unique_name
+    loaction = static_doamin + '/' + image_path + '/' + unique_name
     fobj = open(jpgdir, 'wb')
     for chrunk in f.chunks():
         fobj.write(chrunk)

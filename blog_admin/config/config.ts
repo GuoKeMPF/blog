@@ -2,8 +2,9 @@
 import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
+
+import { BASE_URL } from './baseUrl';
 export default defineConfig({
-  base: '/admin',
   hash: true,
   antd: {},
   dva: {},
@@ -17,7 +18,7 @@ export default defineConfig({
     ...defaultSettings,
   },
   targets: {},
-  publicPath: '/admin/',
+  publicPath: '/',
   // umi routes: https://umijs.org/docs/routing
   routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
@@ -26,10 +27,9 @@ export default defineConfig({
   },
   ignoreMomentLocale: true,
   presets: ['umi-presets-pro'],
-  manifest: {
-    basePath: '/',
-  },
   // Fast Refresh 热更新
   fastRefresh: true,
-  define: {},
+  define: {
+    BASE_URL,
+  },
 });

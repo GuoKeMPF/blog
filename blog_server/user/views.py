@@ -7,7 +7,13 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
 from utils.cryptography.decrypt import decrypt
+
+from django.conf import settings
+from rest_framework_jwt.settings import api_settings
 # Create your views here.
+
+jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -20,20 +26,26 @@ class LoginView(View):
         realname = decrypt(username)
         realpwd = decrypt(password)
         user = authenticate(username=realname, password=realpwd)
-        token = get_token(request)
+        payload = jwt_payload_handler(user)
+        token = jwt_encode_handler(payload)
+        csrftoken = get_token(request)
+
+        HEADER_AUTH_PREFIX = settings.JWT_AUTH_HEADER_PREFIX
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return JsonResponse(
-                    {
-                        "data": user.get_username(),
-                        "message": "login success"
-                    })
+                print("token", token)
+                return JsonResponse({
+                    "username": user.get_username(),
+                    "message": "login success",
+                    "token": HEADER_AUTH_PREFIX + ' '+token,
+                    "csrftoken": csrftoken
+                })
             else:
                 return JsonResponse(
                     {"message": "Error username or password"}, status=500)
         else:
-            return JsonResponse({"message": "Error username or password"}, status=200)
+            return JsonResponse({"message": "Error username or password"}, status=500)
 
     def dispatch(self, request, *args, **kwargs):
         return super(LoginView, self).dispatch(request, *args, **kwargs)
@@ -44,7 +56,7 @@ class LogoutView(View):
     def post(self, request):
         res = logout(request)
         if res:
-            return JsonResponse({"message": "logout success"}, status=500)
+            return JsonResponse({"data": "logout success"}, status=200)
         else:
             return JsonResponse({"message": "logout failed"}, status=500)
 

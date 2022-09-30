@@ -1,6 +1,6 @@
-
 import os
 from pathlib import Path
+import datetime
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,13 +26,18 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 SESSION_COOKIE_SECURE = env('SESSION_COOKIE_SECURE')
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
+CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS')
 DOMAIN = env('DOMAIN')
+STATIC_DOAMIN = env('STATIC_DOAMIN')
 IMAGE_PATH = env('IMAGE_PATH')
 AUDIO_PATH = env('AUDIO_PATH')
+JWT_AUTH_HEADER_PREFIX = env('JWT_AUTH_HEADER_PREFIX')
+
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,6 +55,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,6 +64,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https?:\/\/([a-zA-Z\.]?)+(mapanfeng\.com)'
+]
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'blog_server.urls'
 
@@ -157,11 +168,21 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.MultiPartParser",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
+        # 'rest_framework.permissions.IsAuthenticated',            # IsAuthenticated 仅通过认证的用户
+        # 'rest_framework.permissions.AllowAny',                   # AllowAny 允许所有用户
+        # 'rest_framework.permissions.IsAdminUser',                # IsAdminUser 仅管理员用户
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',  # IsAuthenticatedOrReadOnly 认证的用户可以完全操作，否则只能get读取
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ]
+}
+
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_AUTH_HEADER_PREFIX': JWT_AUTH_HEADER_PREFIX,
 }

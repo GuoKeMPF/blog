@@ -1,13 +1,13 @@
 export const user = {
-  login: '/api/login/',
-  logout: '/api/logout/',
+  login: '/login/',
+  logout: '/logout/',
 };
 
-export const draft = '/api/draft';
+export const draft = '/draft';
 
-export const text = '/api/text';
+export const text = '/text';
 
-export const picture = '/api/picture';
-export const pictures = '/api/pictures';
-export const audio = '/api/audio';
-export const audios = '/api/audios';
+export const picture = '/picture';
+export const pictures = '/pictures';
+export const audio = '/audio';
+export const audios = '/audios';

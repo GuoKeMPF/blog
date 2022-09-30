@@ -1,6 +1,8 @@
 import { queryDrafts, queryDraft, addDraft, updateDraft, deleteDraft } from '@/services/draft';
 
 import { formType } from '@/utils/enum';
+import { ifResponseSuccess } from '@/utils/ifResponseSuccess';
+import type { ResponseType } from '@/utils/ifResponseSuccess';
 
 export interface DraftType {
   id: string;
@@ -25,17 +27,17 @@ export namespace DraftsStateType {
 
 export interface DraftsResponseType {
   data: DraftType[];
-  count: number,
-  size: number,
-  page: number,
+  count: number;
+  size: number;
+  page: number;
 }
 
 export interface DraftStateType {
   drafts: DraftsStateType.Drafts;
   draft: DraftsStateType.Draft;
-  total: number,
-  size: number,
-  page: number,
+  total: number;
+  size: number;
+  page: number;
 }
 
 const initDraft = {
@@ -55,17 +57,18 @@ const initState: DraftStateType = {
   draft: initDraft,
 };
 
-
-
-
 const Draft = {
   namespace: 'draft',
   state: initState,
   effects: {
-    *queryDrafts({ payload }: any, { put, call }: any) {
-      const response: DraftsResponseType = yield call(queryDrafts, payload);
-      if (response) {
-        const { data = [], count: total = 0, size = 0, page = 1 } = response
+    *queryDrafts({ payload }, { put, call }) {
+      const response: ResponseType = yield call(queryDrafts, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const { body } = response;
+      if (body) {
+        const { data = [], count: total = 0, size = 0, page = 1 } = body;
         yield put({
           type: 'update',
           payload: { drafts: data, total, size, page },
@@ -75,11 +78,15 @@ const Draft = {
 
     *queryDraft({ payload }: any, { put, call }: any) {
       const { id, ...other } = payload;
-      const response: DraftType = yield call(queryDraft, { id });
-      if (response) {
+      const response: ResponseType = yield call(queryDraft, { id });
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const { body } = response;
+      if (body) {
         yield put({
           type: 'update',
-          payload: { draft: response, ...other },
+          payload: { draft: body, ...other },
         });
       }
     },
@@ -93,49 +100,73 @@ const Draft = {
         });
       } else {
         const { id } = payload;
-        const response: DraftType = yield call(queryDraft, { id });
-        if (response) {
+        const response: ResponseType = yield call(queryDraft, { id });
+        if (!ifResponseSuccess(response)) {
+          return;
+        }
+        const { body } = response;
+        if (body) {
           yield put({
             type: 'update',
-            payload: { draft: { ...response, type, visable: true } },
+            payload: { draft: { ...body, type, visable: true } },
           });
         }
       }
     },
 
     *addDraft({ payload }: any, { put, call }: any) {
-      const response: DraftType = yield call(addDraft, payload);
-      if (response) {
-        const drafts: { data: DraftsStateType.Drafts } = yield call(queryDrafts);
-        if (drafts) {
-          yield put({
-            type: 'update',
-            payload: { drafts: drafts.data, draft: initDraft },
-          });
-        }
+      const response: ResponseType = yield call(addDraft, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const draftsList: ResponseType = yield call(queryDrafts, payload);
+      if (!ifResponseSuccess(draftsList)) {
+        return;
+      }
+      const { body } = draftsList;
+      if (body) {
+        const { data: drafts = [], count: total = 0, size = 0, page = 1 } = body;
+        yield put({
+          type: 'update',
+          payload: { drafts: drafts, total, size, page, draft: initDraft },
+        });
       }
     },
 
     *updateDraft({ payload }: any, { put, call }: any) {
-      const response: DraftType = yield call(updateDraft, payload);
-      if (response) {
-        const drafts: { data: DraftsStateType.Drafts } = yield call(queryDrafts);
-        if (drafts) {
-          yield put({
-            type: 'update',
-            payload: { drafts: drafts.data, draft: initDraft },
-          });
-        }
+      const response: ResponseType = yield call(updateDraft, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const draftsList: ResponseType = yield call(queryDrafts, payload);
+      if (!ifResponseSuccess(draftsList)) {
+        return;
+      }
+      const { body } = draftsList;
+      if (body) {
+        const { data: drafts = [], count: total = 0, size = 0, page = 1 } = body;
+        yield put({
+          type: 'update',
+          payload: { drafts: drafts, total, size, page, draft: initDraft },
+        });
       }
     },
 
     *deleteDraft({ payload }: any, { put, call }: any) {
-      yield call(deleteDraft, payload);
-      const drafts: { data: DraftsStateType.Drafts } = yield call(queryDrafts);
-      if (drafts) {
+      const response: ResponseType = yield call(deleteDraft, payload);
+      if (!ifResponseSuccess(response)) {
+        return;
+      }
+      const draftsList: ResponseType = yield call(queryDrafts, payload);
+      if (!ifResponseSuccess(draftsList)) {
+        return;
+      }
+      const { body } = draftsList;
+      if (body) {
+        const { data: drafts = [], count: total = 0, size = 0, page = 1 } = body;
         yield put({
           type: 'update',
-          payload: { drafts: drafts.data },
+          payload: { drafts: drafts, total, size, page, draft: initDraft },
         });
       }
     },

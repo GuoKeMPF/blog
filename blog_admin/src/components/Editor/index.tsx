@@ -22,7 +22,7 @@ const Editors = (props: { onChange?: (value: string) => void; value?: string }) 
       <Skeleton loading={loading} />
       <Editor
         initialValue={initValue}
-        tinymceScriptSrc="/admin/editor/tinymce.min.js"
+        tinymceScriptSrc="/editor/tinymce.min.js"
         onInit={mounted}
         init={{
           // 选定元素
