@@ -50,10 +50,6 @@ export const MenuIcon = () => {
     <Fragment>
       <div className={styles.container}>
         <div
-          onClick={close}
-          className={`${styles.mask} ${expand ? ' ' + styles.expand : ''}`}
-        ></div>
-        <div
           className={`${styles.MenuIcon} ${expand ? ' ' + styles.expand : ''}`}
           onClick={open}
         >
@@ -67,6 +63,10 @@ export const MenuIcon = () => {
           <div className={styles.icon}></div>
           <div className={styles.icon}></div>
         </div>
+        <div
+          onClick={close}
+          className={`${styles.mask} ${expand ? ' ' + styles.expand : ''}`}
+        ></div>
         <div className={styles.items}>
           <div
             className={`${styles.MenuItems} ${expand ? styles.expand : ''}`}
