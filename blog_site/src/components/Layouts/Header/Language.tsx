@@ -14,27 +14,29 @@ const Language: FC = () => {
   };
 
   return (
-    <ul className={styles.languages}>
-      <li className={styles.english}>
-        <button
-          className={styles.button}
-          onClick={() => switchLangues('en-US')}
-        >
-          En
-        </button>
-      </li>
-      <li className={styles.chinese}>
-        <button
-          className={styles.button}
-          onClick={() => switchLangues('zh-CN')}
-        >
-          中
-        </button>
-      </li>
-      <li className={styles.Language}>
-        <IconFont type="Languages" />
-      </li>
-    </ul>
+    <div className={styles.container}>
+      <ul className={styles.languages}>
+        <li className={styles.english}>
+          <button
+            className={styles.button}
+            onClick={() => switchLangues('en-US')}
+          >
+            En
+          </button>
+        </li>
+        <li className={styles.chinese}>
+          <button
+            className={styles.button}
+            onClick={() => switchLangues('zh-CN')}
+          >
+            中
+          </button>
+        </li>
+        <li className={styles.Language}>
+          <IconFont type="Languages" />
+        </li>
+      </ul>
+    </div>
   );
 };
 

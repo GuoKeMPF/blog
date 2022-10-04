@@ -1,20 +1,33 @@
 /**
 * https://ant.design/docs/spec/colors-cn
 */
+:root {
+  --space: 16px;
+  --themeColor: #000;
+  --themeBackground: #eee;
+  --maskColor: rgba(0, 0, 0, 0.5);
+  --shadowColor: #000;
 
-@margin: 16px;
+  --themeFontColor: #fff;
+  --themeFontColorGrey: #ccc;
+  --themeFontColorHover: #aaa;
+  --themeLinkColor: #fcfcfc;
+  --themeLinkHoverColor: #fff;
+}
 
-@padding: 16px;
+@margin: var(--space);
 
-@themeColor: #000;
-@themeBackground: #eee;
+@padding: var(--space);
 
-@themeFontColor: #fff;
-@themeFontColorGrey: #ccc;
-@themeFontColorHover: #aaa;
+@themeColor: var(--themeColor);
+@themeBackground: var(--themeBackground);
 
-@themeLinkColor: #fcfcfc;
-@themeLinkHoverColor: #fff;
+@themeFontColor: var(--themeFontColor);
+@themeFontColorGrey: var(--themeFontColorGrey);
+@themeFontColorHover: var(--themeFontColorHover);
+
+@themeLinkColor: var(--themeLinkColor);
+@themeLinkHoverColor: var(--themeLinkHoverColor);
 
 @headerHight: 60px;
 
@@ -22,9 +35,9 @@
 
 @step_time: 0.1s;
 
-@shadowColor: #000;
+@shadowColor: var(--shadowColor);
 
-@maskColor: rgba(0, 0, 0, 0.5);
+@maskColor: var(--maskColor);
 
 @radius: 8px;
 
