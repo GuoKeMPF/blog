@@ -53,8 +53,9 @@ const DraftItem = ({
           onConfirm={deleteItem}
           okText="是"
           cancelText="否"
+          key="delete"
         >
-          <DeleteOutlined key="delete" />
+          <DeleteOutlined />
         </Popconfirm>,
       ]}
     >

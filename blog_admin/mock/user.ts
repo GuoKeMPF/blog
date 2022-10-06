@@ -6,6 +6,9 @@ export default {
     res.status(200).send({
       data: 'admin',
       message: 'login success',
+      username: 'admin',
+      token: 'token',
+      csrftoken: 'csrftoken',
     });
   },
   'POST /api/logout/': (req: Request, res: Response) => {

@@ -10,12 +10,13 @@ export default [
       { component: './404' },
     ],
   },
+
   {
     path: '/dashboard',
     exact: true,
     name: '仪表盘',
     icon: 'BarChartOutlined',
-    component: './Dashboard',
+    component: './dashboard/index',
   },
 
   {

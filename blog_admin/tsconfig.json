@@ -43,7 +43,8 @@
     ".stylelintrc.js",
     ".prettierrc.js",
     "jest.config.js",
-    "mock/*"
+    "mock/*",
+    "mock/.ts"
   ],
   "exclude": [
     "node_modules",
