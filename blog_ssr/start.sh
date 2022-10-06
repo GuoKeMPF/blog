@@ -6,11 +6,9 @@ echo "
 "
 eval 'npm install yarn -g tyarn -g'
 
-if [ ! -d "./node_modules" ]
-then
-    echo "install first"
-    eval "tyarn"
-fi
+
+echo "install first"
+eval "tyarn"
 
 
 echo "
