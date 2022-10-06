@@ -15,9 +15,9 @@ class DashboardView(ModelViewSet):
         text_count = Text.objects.count()
         picture_count = Picture.objects.count()
         audio_count = Audio.objects.count()
-        return JsonResponse({"data": {
+        return JsonResponse({
             "draft": draft_count,
             "text": text_count,
             "picture": picture_count,
             "audio": audio_count,
-        }}, status=200, safe=False)
+        }, status=200, safe=False)
