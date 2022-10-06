@@ -3,12 +3,13 @@ import { ProFormText, LoginForm } from '@ant-design/pro-form';
 import Footer from '@/components/Footer';
 import styles from './index.less';
 import { connect } from 'umi';
-import type { ConnectRC, Loading } from 'umi';
+import type { ConnectRC, Loading, Dispatch } from 'umi';
 import { encrypt } from '@/utils/jsencrypt';
 import logo from '@/assets/images/logo.png';
 
 interface PageProps {
   loading: boolean;
+  dispatch: Dispatch;
 }
 const Login: ConnectRC<PageProps> = ({ dispatch }) => {
   const handleSubmit = async (values: { username: string; password: string }) => {

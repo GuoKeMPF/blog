@@ -48,6 +48,7 @@ const Text = ({
   const { title, description, content, visable } = text;
   return (
     <Modal
+      title="说说"
       onCancel={onConcel}
       maskClosable={false}
       footer={null}

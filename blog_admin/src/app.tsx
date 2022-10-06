@@ -5,6 +5,7 @@ import { getSession, sessionKeys } from '@/utils/sessionStorage';
 import { SettingDrawer } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
 import { Fragment } from 'react';
+import GlobalForm from '@/components/globalForm';
 import type { RunTimeLayoutConfig } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
@@ -27,6 +28,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       return (
         <Fragment>
           {children}
+
+          <GlobalForm />
           {!props.location?.pathname?.includes('/login') && (
             <SettingDrawer
               disableUrlParams

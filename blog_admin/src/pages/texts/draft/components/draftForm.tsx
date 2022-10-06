@@ -47,7 +47,14 @@ const Draft = ({
 
   const { title, description, content, visable } = draft;
   return (
-    <Modal onCancel={onConcel} footer={null} destroyOnClose visible={visable} width={'100%'}>
+    <Modal
+      title="草稿箱"
+      onCancel={onConcel}
+      footer={null}
+      destroyOnClose
+      visible={visable}
+      width={'80%'}
+    >
       <Form
         name="draft"
         {...formItemLayout}

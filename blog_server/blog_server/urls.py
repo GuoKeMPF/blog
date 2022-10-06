@@ -9,14 +9,19 @@ from text.views import TextViewSet
 from picture.views import PictureViewSet
 from audio.views import AudioViewSet
 from user.views import LoginView, LogoutView
+from dashboard.views import DashboardView
 
 
 urlpatterns = [
 
-    # 登陆等处
+    # 登陆退出
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
 
+    # 看板
+    path("dashboard/", DashboardView.as_view(
+        {"get": "retrieve"}
+    ), name="dashboard"),
 
     # 草稿
     path("draft/", DraftViewSet.as_view(

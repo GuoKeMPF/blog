@@ -1,4 +1,5 @@
-import { Button, Card, Popconfirm, Space, Table, TableColumnsType, Typography } from 'antd';
+import type { TableColumnsType } from 'antd';
+import { Button, Card, Popconfirm, Space, Table, Typography } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { CaretRightOutlined, DeleteOutlined, DownloadOutlined } from '@ant-design/icons';
