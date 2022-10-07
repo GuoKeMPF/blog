@@ -82,6 +82,7 @@ const menus = {
         '/pages/Tools/code/index.md',
         '/pages/Tools/mind/index.md',
         '/pages/Tools/flow/index.md',
+        '/pages/Tools/RegExp/index.md',
       ],
     },
   ],
