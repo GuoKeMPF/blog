@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "dumi dev",
-    "dev": "cross-env ./set_env.sh && dumi dev",
+    "dev": "cross-env dumi dev",
     "docs": "dumi build",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist",
@@ -20,11 +20,6 @@
   "typings": "dist/index.d.ts",
   "gitHooks": {
     "pre-commit": "lint-staged"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/GuoKeMPF/dumi.git",
-    "branch": "dev"
   },
   "lint-staged": {
     "*.{js,jsx,less,md,json}": [
