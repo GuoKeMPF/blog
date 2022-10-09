@@ -66,7 +66,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r'^https?:\/\/([\S]?)(\.?)+(mapanfeng\.com)'
+    r'^https?:\/\/([a-zA-Z\.]?)+(mapanfeng\.com)'
 ]
 CORS_ALLOW_CREDENTIALS = True
 
