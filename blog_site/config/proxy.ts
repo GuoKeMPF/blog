@@ -1,6 +1,7 @@
 
 let target = '';
-target = `http://localhost:8000/`
+// target = `http://localhost:8000/`
+target = `	https://api.mapanfeng.com/`
 
 /**
  * proxy config

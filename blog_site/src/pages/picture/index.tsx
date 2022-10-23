@@ -9,6 +9,7 @@ import ImageContainer from "./ImageContainer";
 import ImageModal from "./ImageModal";
 import styles from './index.less';
 
+const gutter = 20;
 
 type PictureContextType = {
   visiable: boolean,
@@ -78,9 +79,9 @@ const Picture: FC<PageProps> = ({
           getCellHeight={(row, containerW = 0) => {
             const imgaeW = row.width || 0;
             if (imgaeW > containerW) {
-              return row.height * containerW / imgaeW + 20
+              return row.height * containerW / imgaeW + gutter
             } else {
-              return row.height
+              return row.height + gutter
             }
           }}
           cellClassName={styles.row}
