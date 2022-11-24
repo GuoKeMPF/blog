@@ -71,6 +71,7 @@ const menus = {
         '/pages/Others/web_transfer_prtcl/status/index.md',
         '/pages/Others/git/index.md',
         '/pages/Others/git/ssh/index.md',
+        '/pages/Others/nodeModules/index.md',
       ],
     },
   ],
