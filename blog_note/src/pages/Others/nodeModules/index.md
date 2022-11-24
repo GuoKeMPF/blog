@@ -1,4 +1,9 @@
-# 关于 npm 之后 依赖包
+---
+title: 关于 npm 依赖包
+toc: menu
+---
+
+# 关于 npm 依赖包
 
 1. 首先通过 `npm init` 初始化一个项目。
 
