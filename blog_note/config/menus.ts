@@ -52,6 +52,7 @@ const menus = {
       children: [
         '/pages/Algorithm/index.md',
         '/pages/Algorithm/operator/index.md',
+        '/pages/Algorithm/loop/index.md',
         '/pages/Algorithm/skill/index.md',
         '/pages/Algorithm/complexity/index.md',
         '/pages/Algorithm/sort/index.md',
