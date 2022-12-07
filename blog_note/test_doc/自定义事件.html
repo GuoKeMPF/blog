@@ -10,28 +10,24 @@
 
 <body>
     <p id="text"></p>
-    <button id="btn">派发</button>
-    <button id="btn1">派发1</button>
 </body>
 <script>
 
-    const el = document.getElementById("btn");
-    el.addEventListener("myclick", modifyText);
+
+    document.addEventListener("myclick", modifyText);
 
     let count = 0
     function modifyText(e) {
-        console.log(e);
         const text = document.getElementById("text");
         text.innerText = ++count
-        console.dir(text)
     }
 
-    const el1 = document.getElementById("btn1");
-    el1.addEventListener("click", function (e) {
-        console.log(e);
-        const event = new PointerEvent('myclick');
-        el.dispatchEvent(event)
-    });
+
+    setInterval(() => {
+        const event = new Event('myclick');
+        document.dispatchEvent(event)
+    }, 1000);
+
 
 
 </script>
