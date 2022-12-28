@@ -56,6 +56,7 @@ const menus = {
         '/pages/Algorithm/skill/index.md',
         '/pages/Algorithm/complexity/index.md',
         '/pages/Algorithm/sort/index.md',
+        '/pages/Algorithm/binaryTree/index.md',
       ],
     },
   ],
