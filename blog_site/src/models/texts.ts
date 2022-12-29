@@ -52,7 +52,7 @@ const Text: ModelType = {
         yield put({
           type: 'update',
           payload: {
-            texts: [...pretexts, response.data],
+            texts: [...pretexts, ...response.data],
             total: response.count,
           },
         });
