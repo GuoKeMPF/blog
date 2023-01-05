@@ -11,11 +11,11 @@ const Footer: React.FC = () => {
       </p>
       <div className={styles.info}>
         <Link to={'/'}>主页</Link>
-        <a target="_blank" href={'/admin'}>
+        <a target="_blank" href={'https://admin.mapanfeng.com'}>
           数据管理中心
         </a>
         <a target="_blank" href={'https://beian.miit.gov.cn/'}>
-          <img className={styles.beianicon} src={beian} />
+          <img className={styles.beianicon} src={beian} alt="备案号" />
           备案号：皖ICP备2021018570号
         </a>
       </div>
