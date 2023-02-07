@@ -27,22 +27,20 @@ ssh-keygen -t rsa -C 'yourEmail@xx.com' -f ~/.ssh/github-rsa
 ```config
 # gitlab
 Host gitlab.com
-    Host gitlab
-    HostName gitlab.com
-    User xxx@qq.com
-    PreferredAuthentications publickey
-    IdentityFile ~/.ssh/gitlab-rsa.pub
+HostName gitlab.com
+User xxx@qq.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/gitlab-rsa
 # github
 Host github.com
-    Host github
-    HostName github.com
-    User xxx@qq.com
-    PreferredAuthentications publickey
-    IdentityFile ~/.ssh/github-rsa.pub
+HostName github.com
+User xxx@qq.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/github-rsa
  # 配置文件参数
  # Host : Host可以看作是一个你要识别的模式，对识别的模式，进行配置对应的的主机名和ssh文件
  # HostName : 要登录主机的主机名( 服务器IP)
- #  Port 22 : 端口
+ # Port 22 : 端口
  # User : 用户名
  # IdentityFile : 指明上面User对应的identityFile路径，认证文件
  # StrictHostKeyChecking : yes 关闭提示
@@ -71,11 +69,10 @@ ssh -T git@XXX.com
 ```config
 ...
 Host xxx.com
-    Host xxx
-    HostName xxx.com
-    User xxx@qq.com
-    PreferredAuthentications publickey
-    IdentityFile ~/.ssh/xxx.rsa.pub
+HostName xxx.com
+User XXX
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/xxx.rsa
 ...
 ```
 4. 启动服务器，之后便可以 ssh 链接服务器。

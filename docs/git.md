@@ -21,27 +21,25 @@ ssh-keygen -t rsa -C 'yourEmail@xx.com' -f ~/.ssh/github-rsa
 ```
 # gitlab
 Host gitlab.com
-    Host gitlab
-    HostName gitlab.com
-    User xxx@qq.com
-    PreferredAuthentications publickey
-    IdentityFile ~/.ssh/gitlab-rsa.pub
+HostName gitlab.com
+User xxx@qq.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/gitlab-rsa
 # github
 Host github.com
-    Host github
-    HostName github.com
-    User xxx@qq.com
-    PreferredAuthentications publickey
-    IdentityFile ~/.ssh/github-rsa.pub
+HostName github.com
+User xxx@qq.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/github-rsa
  # 配置文件参数
  # Host : Host可以看作是一个你要识别的模式，对识别的模式，进行配置对应的的主机名和ssh文件
  # HostName : 要登录主机的主机名( 服务器IP)
- #  Port 22 : 端口
+ # Port 22 : 端口
  # User : 用户名
  # IdentityFile : 指明上面User对应的identityFile路径，认证文件
  # StrictHostKeyChecking : yes 关闭提示
 ```
-注意⚠️：生成ssh key时，-f ~/.ssh/gitlab-rsa中~/.ssh/gitlab-rsa是生成路径，必须正确。
+注意：生成ssh key时，-f ~/.ssh/gitlab-rsa中~/.ssh/gitlab-rsa是生成路径，必须正确。
 问题
 
 按照常规方法生成 ssh key ，并将 public key 添加到 git 账户中后，ssh 链接失败，一直报错 com@gitlab.com: Permission denied (publickey).
@@ -50,13 +48,15 @@ Host github.com
 
 找到 ssh_config 文件，做出如下设置：
 
+```
 Host *
-    SendEnv LANG LC_*
-    IdentityFile ~/.ssh/github-rsa
-    IdentityFile ~/.ssh/gitlab-rsa
-    HostkeyAlgorithms +ssh-rsa  
-    PubkeyAcceptedAlgorithms +ssh-rsa
-    PubkeyAcceptedKeyTypes +ssh-rsa
+SendEnv LANG LC_*
+IdentityFile ~/.ssh/github-rsa
+IdentityFile ~/.ssh/gitlab-rsa
+HostkeyAlgorithms +ssh-rsa  
+PubkeyAcceptedAlgorithms +ssh-rsa
+PubkeyAcceptedKeyTypes +ssh-rsa
+```
 
 重新链接即可成功。
 
