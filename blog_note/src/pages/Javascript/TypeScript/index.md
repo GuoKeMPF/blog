@@ -141,3 +141,264 @@ const p1 = new Promise<ProResType | PrRejType>(
   },
 );
 ```
+
+
+### type 和 interface
+
+1.  `type` 的类型别名可以用于其他的类型，比如 联合类型、元组类型、基本类型，`interface` 不行
+
+```ts
+type TestA = {
+  x: number;
+};
+
+type TestB = {
+  y: number;
+};
+// 联合类型
+type Union = TestA | TestB;
+// 元组类型
+type Enum = [TestA, TestB];
+// 基本类型
+type Base = Number;
+```
+
+
+2. `type` 的别名不可以多次定义会报错，而 `interface` 则可以多次定义，会将其视为合并到一起。
+
+```ts
+interface A {
+  a: string;
+  b: boolean;
+}
+
+// 之后声明的属性不能和之前的重复
+interface A {
+  c: Array<number>;
+  //   a: number;        // 提示 a 属性已经被声明过
+}
+const a: A = {
+  a: "",
+  b: true,
+  c: [],
+};
+
+
+
+type B = {
+  a: string;
+  b: boolean;
+};
+// //  提示 B 已经被定义
+// type B = {
+//   c: Array<number>;
+// };
+```
+
+
+3. `type` 能用 `in` 关键字，而 `interface` 不行。
+
+```ts
+type Keys = "name" | "age";
+
+type Man = {
+  [key in Keys]: string;
+};
+
+const man: Man = {
+  name: "aa",
+  age: "18",
+};
+```
+
+
+4.  默认导出的方式不同，`inerface` 支持同时声明，默认导出，而 `type` 必须先声明后导出
+
+```ts
+export default interface C1 {
+  name: string;
+}
+
+type C2 = {
+  name: string;
+};
+export default C2;
+```
+
+5. 拓展方式不一样
+
+`interface` 用 `extends` 拓展 `type` 用 `&` 来拓展
+
+```ts
+interface D {
+  d: string;
+}
+
+interface D1 extends D {
+  e: string;
+}
+
+const d1: D1 = {
+  d: "",
+  e: "",
+};
+
+type T = {
+  d: string;
+};
+
+type T1 = T & {
+  e: string;
+};
+
+const t1: T1 = {
+  d: "",
+  e: "",
+};
+```
+
+### Omit 剔除类型中某些项
+
+`type Omit<T, K extends string | number | symbol>`
+
+T: 从 T 中删除属性
+
+K: 被剔除的键值
+
+```ts
+interface A {
+  a: string;
+  b: boolean;
+  c: Array<number>;
+}
+
+type AO = Omit<A, "a">;
+// interface AO {
+//   b: boolean;
+//   c: Array<number>;
+// }
+
+const ao: AO = {
+  b: true,
+  c: [],
+};
+
+type AOS = Omit<A, "a" | "c">;
+// 属性 a , c被 omit 操作剔除
+// interface AOS {
+//   b: boolean;
+// }
+const aos: AOS = {
+  c: [],
+};
+```
+
+### Pick 选取类型中指定类型
+
+`type Pick<T, K extends string | number | symbol>`
+
+T: 从 T 保留属性
+
+K: 被保留的键值
+
+```ts
+interface A {
+  a: string;
+  b: boolean;
+  c: Array<number>;
+}
+
+type AP = Pick<A, "a">;
+// interface AO {
+//   a: string;
+// }
+
+const ap: AP = {
+  a: '',
+};
+
+type APS = Pick<A, "a" | "c">;
+// 属性 a , c被 omit 操作剔除
+// interface AOS {
+//   b: boolean;
+//   c: Array<number>;
+// }
+const aps: APS = {
+  a: "",
+  c: [],
+};
+```
+
+
+### Exclude
+
+```ts
+type Exclude<T, U> = T extends U ? never : T
+```
+作用：如果 T 是 U 的子类型则返回 never 不是则返回 T
+
+```ts
+type T = string| boolean | number
+const t = [1]
+type TE = string | Array<number> | number
+
+type TEC = Exclude<T, TE>
+
+const tex1: TEC = 'ss'
+const tex4: TEC = 2
+const tex5: TEC = []
+const tex3: TEC = true
+
+interface A {
+  a: string;
+  b: boolean;
+}
+
+
+interface B {
+  c: Array<number>,
+  d: number
+}
+
+type C  = Exclude<B, A>
+
+const c: C = {
+  d: 1,
+  c: [],
+}
+
+```
+
+
+### Extract
+
+
+```ts
+type T = string | boolean | number
+const t = [1]
+type TE = string | Array<number> | number
+
+type TEX = Extract<T, TE> // string | number
+
+const tex1: TEX = 'ss'
+const tex4: TEX = 2
+
+interface A {
+  a: string;
+  b: boolean;
+}
+
+
+interface B extends A {
+  c:Array<number>
+}
+
+type C  = Extract<B, A>
+
+const c: C = {
+  a: 'ss',
+  c: [],
+  b: false
+}
+
+```
