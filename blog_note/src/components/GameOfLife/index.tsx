@@ -1,6 +1,7 @@
 import { Button, Form, InputNumber, message, Space } from "antd";
 import type { FC } from "react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import React from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import gameOfLife from "./gameOfLife";
 
 namespace GameOfLifeStates {
@@ -21,7 +22,7 @@ namespace GameOfLifeStates {
   export type currentStatus = "running" | "stoped";
 }
 
-const padding = 100,
+const padding = 20,
   lineWeight = 1;
 
 const initVal: Array<GameOfLifeStates.Cell> = [];
@@ -71,22 +72,32 @@ const GameOfLife: FC = () => {
       setMapConfig({
         ...mapConfig,
       });
+    }
+  }, []);
+  useEffect(() => {
+    if (container.current && canvas.current) {
+      const size = container.current.getBoundingClientRect();
+      const { width: w } = size;
+      const c = Math.floor((w - 2 * padding - lineWeight) / mapConfig.xAxis);
+      const height = c * mapConfig.yAxis + 2 * padding;
+      const width = c * mapConfig.xAxis + 2 * padding + lineWeight;
+      canvas.current.width = width + lineWeight;
+      canvas.current.height = height + lineWeight;
       setMapSize({ width, height });
       setCell(c);
     }
-  }, []);
+  }, [mapConfig]);
 
-  const drawMap = () => {
+  const drawMap = useCallback(() => {
     const { current } = canvas;
     const ctx = current?.getContext("2d");
     if (ctx && mapSize) {
       /**
        * bg
        */
-      ctx.fillStyle = "#fff";
+      ctx.clearRect(0, 0, mapSize.width, mapSize.height);
       const innerW = mapSize.width - padding,
         innerH = mapSize.height - padding;
-      ctx.fillRect(0, 0, mapSize.width, mapSize.height);
       /**
        * line
        */
@@ -100,30 +111,35 @@ const GameOfLife: FC = () => {
       }
       ctx.strokeStyle = "#0f000";
       ctx.stroke();
-      /**
-       * cell
-       */
+
       initMap.forEach((i) => {
         const { x, y } = i;
         ctx.fillStyle = "#000";
         ctx.fillRect(x * cell + padding, y * cell + padding, cell, cell);
       });
     }
-  };
+  }, [mapSize, cell, initMap]);
 
   useEffect(() => {
     drawMap();
-  }, [cell, drawMap, initMap, mapConfig]);
+  }, [drawMap, cell, initMap]);
 
   const start = () => {
     setStatus("running");
-    console.log(form.getFieldsValue());
     form
       .validateFields()
       .then((values) => {
+        setMapConfig({
+          ...values,
+        });
         // 需要判断是否有超出地图的值
-
-        const generationNext = gameOfLife(mapConfig, initMap);
+        const filtered: GameOfLifeStates.InitSet = new Map();
+        initMap.forEach((value, key) => {
+          if (value.x <= values.xAxis && value.y <= values.yAxis) {
+            filtered.set(key, value);
+          }
+        });
+        const generationNext = gameOfLife(values, filtered);
         const id = window.setInterval(() => {
           const nextValues = generationNext();
           if (nextValues.size === 0) {
@@ -132,6 +148,7 @@ const GameOfLife: FC = () => {
               content: "没有任何细胞生存",
             });
             stop();
+            return;
           }
           setInitMap(nextValues);
         }, 1000);
