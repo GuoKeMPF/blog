@@ -76,6 +76,7 @@ const menus = {
         '/pages/Others/git/ssh/index.md',
         '/pages/Others/nodeModules/index.md',
         '/pages/Others/markdown/index.md',
+        '/pages/Others/GameOfLife/index.md',
       ],
     },
   ],
@@ -87,7 +88,7 @@ const menus = {
         '/pages/Tools/code/index.md',
         '/pages/Tools/mind/index.md',
         '/pages/Tools/flow/index.md',
-        '/pages/Tools/RegExp/index.md'
+        '/pages/Tools/RegExp/index.md',
       ],
     },
   ],
