@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import datetime
 import environ
+import ast
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,10 +24,10 @@ env.read_env('./envs/.env.%s' % env_name)
 
 
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = env('DEBUG')
-SESSION_COOKIE_SECURE = env('SESSION_COOKIE_SECURE')
-ALLOWED_HOSTS = env('ALLOWED_HOSTS')
-CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS')
+DEBUG =ast.literal_eval(env('DEBUG'))
+SESSION_COOKIE_SECURE =ast.literal_eval(env('SESSION_COOKIE_SECURE'))
+ALLOWED_HOSTS = ast.literal_eval(env('ALLOWED_HOSTS'))
+CSRF_TRUSTED_ORIGINS = ast.literal_eval(env('CSRF_TRUSTED_ORIGINS'))
 DOMAIN = env('DOMAIN')
 STATIC_DOAMIN = env('STATIC_DOAMIN')
 IMAGE_PATH = env('IMAGE_PATH')
@@ -45,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    "rest_framework.authtoken",
+    'rest_framework_simplejwt',
     'django_filters',
     "draft.apps.DraftConfig",
     "text.apps.TextConfig",
@@ -175,14 +176,15 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ]
 }
 
 
-JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
-    'JWT_AUTH_HEADER_PREFIX': JWT_AUTH_HEADER_PREFIX,
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME':  datetime.timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME':  datetime.timedelta(days=10),
 }

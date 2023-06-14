@@ -9,12 +9,9 @@ from django.middleware.csrf import get_token
 from utils.cryptography.decrypt import decrypt
 
 from django.conf import settings
-from rest_framework_jwt.settings import api_settings
+from utils.token.getUserToken import get_tokens_for_user
+
 # Create your views here.
-
-jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
-
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginView(View):
@@ -26,18 +23,19 @@ class LoginView(View):
         realname = decrypt(username)
         realpwd = decrypt(password)
         user = authenticate(username=realname, password=realpwd)
-        payload = jwt_payload_handler(user)
-        token = jwt_encode_handler(payload)
-        csrftoken = get_token(request)
-
-        HEADER_AUTH_PREFIX = settings.JWT_AUTH_HEADER_PREFIX
         if user is not None:
             if user.is_active:
+                csrftoken = get_token(request)
+                access = get_tokens_for_user(user)
+                refresh = access.get('refresh')
+                token = access.get('token')
+                HEADER_AUTH_PREFIX = settings.JWT_AUTH_HEADER_PREFIX
                 login(request, user)
                 print("token", token)
                 return JsonResponse({
                     "username": user.get_username(),
                     "message": "login success",
+                    "refresh": refresh,
                     "token": HEADER_AUTH_PREFIX + ' '+token,
                     "csrftoken": csrftoken
                 })
