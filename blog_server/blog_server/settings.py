@@ -20,7 +20,9 @@ PROJECT_ENV=production python manage.py crontab add
 """
 env_name = env.str('PROJECT_ENV', 'develop')
 # reading .env file
-env.read_env('./envs/.env.%s' % env_name)
+
+print(f"./envs/{env_name}.env")
+environ.Env.read_env(f"./envs/{env_name}.env")
 
 
 SECRET_KEY = env('SECRET_KEY')
