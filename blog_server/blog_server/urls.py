@@ -1,8 +1,24 @@
+"""
+URL configuration for blog_server project.
 
-from django.contrib import admin
-from django.urls import path, include
-from rest_framework.documentation import include_docs_urls
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/4.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.contrib import admin
+from django.urls import path
+
 
 from draft.views import DraftViewSet
 from text.views import TextViewSet
@@ -13,11 +29,9 @@ from dashboard.views import DashboardView
 
 
 urlpatterns = [
-
     # 登陆退出
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
-
     # 看板
     path("dashboard/", DashboardView.as_view(
         {"get": "retrieve"}
@@ -69,7 +83,6 @@ urlpatterns = [
          AudioViewSet.as_view({"get": "retrieve", "delete": "destroy"}), name="audio"),
 
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path('docs/', include_docs_urls(title='docs', description='api description'))
 ]
+
 urlpatterns += staticfiles_urlpatterns()

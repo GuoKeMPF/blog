@@ -4,12 +4,7 @@ import datetime
 import environ
 import ast
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
 
 env = environ.Env()
 
@@ -36,23 +31,24 @@ IMAGE_PATH = env('IMAGE_PATH')
 AUDIO_PATH = env('AUDIO_PATH')
 JWT_AUTH_HEADER_PREFIX = env('JWT_AUTH_HEADER_PREFIX')
 
-
 # Application definition
-
 INSTALLED_APPS = [
-    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',
+
+
+    "user.apps.UserConfig",
     "draft.apps.DraftConfig",
     "text.apps.TextConfig",
-    "user.apps.UserConfig",
     "picture.apps.PictureConfig",
     "audio.apps.AudioConfig"
 ]
@@ -68,10 +64,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r'^https?:\/\/([a-zA-Z\.]?)+(mapanfeng\.com)'
 ]
 CORS_ALLOW_CREDENTIALS = True
+
 
 ROOT_URLCONF = 'blog_server.urls'
 
@@ -95,7 +93,7 @@ WSGI_APPLICATION = 'blog_server.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -106,7 +104,7 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -125,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
+# https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 ANGUAGE_CODE = 'zh-hans'
 
@@ -139,8 +137,7 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
-
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = '/server_static/'
 STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'server_static')
 # 设置图片等静态文件的路径
@@ -149,10 +146,12 @@ STATICFILES_DIRS = [
 ]
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# REST 分页
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "utils.pagination.Pagination",
@@ -183,8 +182,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ]
 }
-
-
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME':  datetime.timedelta(days=7),
