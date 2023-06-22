@@ -30,6 +30,11 @@ STATIC_DOAMIN = env('STATIC_DOAMIN')
 IMAGE_PATH = env('IMAGE_PATH')
 AUDIO_PATH = env('AUDIO_PATH')
 JWT_AUTH_HEADER_PREFIX = env('JWT_AUTH_HEADER_PREFIX')
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https?:\/\/([a-zA-Z\.]?)+(mapanfeng\.com)'
+]
+CORS_ALLOW_CREDENTIALS = True
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -65,10 +70,6 @@ MIDDLEWARE = [
 ]
 
 
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r'^https?:\/\/([a-zA-Z\.]?)+(mapanfeng\.com)'
-]
-CORS_ALLOW_CREDENTIALS = True
 
 
 ROOT_URLCONF = 'blog_server.urls'
