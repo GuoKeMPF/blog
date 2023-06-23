@@ -4,17 +4,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-
 var _ggEditor = require("gg-editor");
-
 var _MenuItem = _interopRequireDefault(require("./MenuItem"));
-
 var _index = _interopRequireDefault(require("./index.less"));
-
 var _react = _interopRequireDefault(require("react"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var FlowContextMenu = function FlowContextMenu() {
   return /*#__PURE__*/_react.default.createElement(_ggEditor.ContextMenu, {
     className: _index.default.contextMenu
@@ -52,6 +46,5 @@ var FlowContextMenu = function FlowContextMenu() {
     text: "Paste Here"
   })));
 };
-
 var _default = FlowContextMenu;
 exports.default = _default;

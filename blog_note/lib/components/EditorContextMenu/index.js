@@ -21,11 +21,7 @@ Object.defineProperty(exports, "MindContextMenu", {
     return _MindContextMenu.default;
   }
 });
-
 var _FlowContextMenu = _interopRequireDefault(require("./FlowContextMenu"));
-
 var _KoniContextMenu = _interopRequireDefault(require("./KoniContextMenu"));
-
 var _MindContextMenu = _interopRequireDefault(require("./MindContextMenu"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

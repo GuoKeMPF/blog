@@ -1,0 +1,11 @@
+{
+  "name": "demo_modules",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "author": "",
+  "license": "ISC",
+  "bin": {
+    "demo": "bin/index.js"
+  }
+}

@@ -4,15 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-
 var _react = _interopRequireDefault(require("react"));
-
 var _antd = require("antd");
-
 var _sticky = _interopRequireDefault(require("./sticky.less"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var useCallbackConponent = function useCallbackConponent() {
   return /*#__PURE__*/_react.default.createElement("div", {
     className: _sticky.default.contianer
@@ -26,6 +21,5 @@ var useCallbackConponent = function useCallbackConponent() {
     className: _sticky.default.tfoot
   }, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("td", null, "tf1"), /*#__PURE__*/_react.default.createElement("td", null, "tf2"), /*#__PURE__*/_react.default.createElement("td", null, "tf3"), /*#__PURE__*/_react.default.createElement("td", null, "tf4"), /*#__PURE__*/_react.default.createElement("td", null, "tf5")))), /*#__PURE__*/_react.default.createElement("footer", null));
 };
-
 var _default = useCallbackConponent;
 exports.default = _default;

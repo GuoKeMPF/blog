@@ -4,21 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-
 var _antd = require("antd");
-
 var _ggEditor = require("gg-editor");
-
 var _ToolbarButton = _interopRequireDefault(require("./ToolbarButton"));
-
 var _index = _interopRequireDefault(require("./index.less"));
-
 var _CommondSave = _interopRequireDefault(require("./CommondSave"));
-
 var _react = _interopRequireDefault(require("react"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var FlowToolbar = function FlowToolbar() {
   return /*#__PURE__*/_react.default.createElement(_ggEditor.Toolbar, {
     className: _index.default.toolbar
@@ -83,6 +75,5 @@ var FlowToolbar = function FlowToolbar() {
     text: "save"
   }));
 };
-
 var _default = FlowToolbar;
 exports.default = _default;

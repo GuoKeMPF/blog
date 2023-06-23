@@ -4,19 +4,12 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-
 var _ggEditor = require("gg-editor");
-
 var _react = _interopRequireDefault(require("react"));
-
 var _antd = require("antd");
-
 var _DetailForm = _interopRequireDefault(require("./DetailForm"));
-
 var _index = _interopRequireDefault(require("./index.less"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var FlowDetailPanel = function FlowDetailPanel() {
   return /*#__PURE__*/_react.default.createElement(_ggEditor.DetailPanel, {
     className: _index.default.detailPanel
@@ -38,6 +31,5 @@ var FlowDetailPanel = function FlowDetailPanel() {
     bordered: false
   })));
 };
-
 var _default = FlowDetailPanel;
 exports.default = _default;

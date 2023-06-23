@@ -1,11 +1,8 @@
 "use strict";
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 const puppeteer = require('puppeteer');
-
 const config = {
   headless: false,
   devtools: true,
@@ -28,11 +25,9 @@ const interceptionList = [{
     })
   }
 }];
-
 function bootstrap() {
   return _bootstrap.apply(this, arguments);
 }
-
 function _bootstrap() {
   _bootstrap = _asyncToGenerator(function* () {
     const browser = yield puppeteer.launch(config);
@@ -42,14 +37,12 @@ function _bootstrap() {
       var _ref = _asyncToGenerator(function* (req) {
         const inRequestType = requestType.includes(req.resourceType());
         const inInterceptionList = interceptionList.find(item => req.url().includes(item.path));
-
         if (inRequestType && inInterceptionList) {
           yield req.respond(inInterceptionList.response);
         } else {
           yield req.continue();
         }
       });
-
       return function (_x) {
         return _ref.apply(this, arguments);
       };
@@ -58,5 +51,4 @@ function _bootstrap() {
   });
   return _bootstrap.apply(this, arguments);
 }
-
 bootstrap();
