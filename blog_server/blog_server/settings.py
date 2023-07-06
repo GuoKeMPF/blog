@@ -31,6 +31,11 @@ IMAGE_PATH = env('IMAGE_PATH')
 AUDIO_PATH = env('AUDIO_PATH')
 JWT_AUTH_HEADER_PREFIX = env('JWT_AUTH_HEADER_PREFIX')
 
+# path
+# 是否自动忽略url末尾 /
+APPEND_SLASH = True
+
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
