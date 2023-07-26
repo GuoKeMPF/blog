@@ -21,11 +21,7 @@ Object.defineProperty(exports, "MindDetailPanel", {
     return _MindDetailPanel.default;
   }
 });
-
 var _FlowDetailPanel = _interopRequireDefault(require("./FlowDetailPanel"));
-
 var _KoniDetailPanel = _interopRequireDefault(require("./KoniDetailPanel"));
-
 var _MindDetailPanel = _interopRequireDefault(require("./MindDetailPanel"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

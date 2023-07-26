@@ -4,17 +4,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-
 var _ggEditor = require("gg-editor");
-
 var _react = _interopRequireDefault(require("react"));
-
 var _MenuItem = _interopRequireDefault(require("./MenuItem"));
-
 var _index = _interopRequireDefault(require("./index.less"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var MindContextMenu = function MindContextMenu() {
   return /*#__PURE__*/_react.default.createElement(_ggEditor.ContextMenu, {
     className: _index.default.contextMenu
@@ -39,6 +33,5 @@ var MindContextMenu = function MindContextMenu() {
     command: "redo"
   })));
 };
-
 var _default = MindContextMenu;
 exports.default = _default;

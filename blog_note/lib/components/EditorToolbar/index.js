@@ -21,11 +21,7 @@ Object.defineProperty(exports, "MindToolbar", {
     return _MindToolbar.default;
   }
 });
-
 var _FlowToolbar = _interopRequireDefault(require("./FlowToolbar"));
-
 var _KoniToolbar = _interopRequireDefault(require("./KoniToolbar"));
-
 var _MindToolbar = _interopRequireDefault(require("./MindToolbar"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

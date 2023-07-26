@@ -19,7 +19,6 @@ map.set(1, 111111);
 /**
  * key 可以为任意值
  */
-
 const key = {
   a: 'aa'
 };
@@ -28,10 +27,10 @@ map.set(key, {
 });
 const getValue = map.get(key);
 console.log('getValue', getValue);
+
 /**
  * 不同的引用值会被当成不同的值
  */
-
 map.set({
   a: 'aa'
 }, {
@@ -46,12 +45,13 @@ const getValue1 = map.get({
   b: 'bb'
 });
 console.log('getValue1', getValue1);
+
 /**
  * 链式赋值
  */
-
 const m = new Map();
 m.set(1, '111').set(2, '222').set(3, 333);
+
 /**
  * {
  *  1 => 111111,
