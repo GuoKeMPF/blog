@@ -1,3 +1,4 @@
+FROM centos:7
 FROM python:3.11.4
 
 
@@ -8,4 +9,5 @@ RUN pip config set install.trusted-host mirrors.aliyun.com
 RUN pip install --upgrade pip
 RUN pip install -r ./requirements.txt
 RUN chmod +777 start.sh
+EXPOSE 8000
 CMD ["/bin/sh","start.sh"]
