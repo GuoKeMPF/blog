@@ -1,10 +1,9 @@
+echo "start ssr"
 
-echo "start server"
-
-usage="./start_server.sh [-b|--build]"
+usage="./start_ssr.sh [-b|--build]"
 
 run_cmd="docker-compose "
-compose_file="docker-compose-server.yml"
+compose_file="docker-compose-ssr.yml"
 cmd=""
 
 if [[ $# -gt 0 ]]; then
@@ -25,7 +24,6 @@ if [[ $# -gt 0 ]]; then
         esac
     done
 fi
-
 
 if [[ "$build" == true ]]; then
     cmd="${run_cmd} -f ${compose_file} up --build"
