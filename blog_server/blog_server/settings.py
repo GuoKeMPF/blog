@@ -18,16 +18,6 @@ env_name = env.str('PROJECT_ENV', 'develop')
 
 file_path =f"./envs/{env_name}.env"
 file_path = file_path.replace('\r', '').replace('\n', '')
-
-print(env_name)
-print(file_path)
-
-with open(file_path, 'r') as file:
-    content = file.read()
-
-print(content)
-
-
 environ.Env.read_env(file_path)
 
 
