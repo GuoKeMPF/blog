@@ -19,8 +19,6 @@
 # "
 # eval 'npm install yarn -g tyarn -g'
 
-export NODE_OPTIONS=--openssl-legacy-provider
-
 source ./blog_admin/build.sh
 
 eval 'mkdir -p ./blog_nginx/blog_static/admin/'
