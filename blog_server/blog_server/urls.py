@@ -19,7 +19,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 from django.urls import path
 
-
+from home.views import HomeView
 from draft.views import DraftViewSet
 from text.views import TextViewSet
 from picture.views import PictureViewSet
@@ -30,6 +30,7 @@ from dashboard.views import DashboardView
 
 urlpatterns = [
     # 登陆退出
+    path("/", HomeView.as_view(), name="home"),
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     # 看板
