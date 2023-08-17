@@ -9,3 +9,4 @@ eval "tyarn"
 
 echo "start ssr with eggjs"
 eval "npm run start"
+echo "started ssr with eggjs"
