@@ -4,9 +4,10 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 import base64
 
-import os
+from os.path import dirname
 
-path = os.path.dirname(__file__)
+path = dirname(__file__)
+print(path)
 
 with open(path+"/private_key_pem.pem", "rb") as key_file:
     private_key = serialization.load_pem_private_key(

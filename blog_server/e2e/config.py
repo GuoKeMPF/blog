@@ -8,4 +8,4 @@ server 服务器地址
 
 account = "admin"
 password = "admin"
-server = "http://localhost:8000/"
+server = "http://127.0.0.1:8000/"
