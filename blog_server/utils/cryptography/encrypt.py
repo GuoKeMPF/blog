@@ -5,14 +5,13 @@ import base64
 from os.path import dirname
 
 path = dirname(__file__)
-print(path)
 
-print(path)
 with open(path+"/public_key_pem.pem", "rb") as key_file:
     public_key = serialization.load_pem_public_key(
         key_file.read(),
         backend=default_backend()
     )
+
 
 def encrypt(message: str):
     message = message.encode('utf-8')

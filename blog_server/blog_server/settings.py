@@ -15,7 +15,6 @@ PROJECT_ENV=production python manage.py crontab add
 """
 env_name = env.str("PROJECT_ENV", "develop")
 # reading .env file
-
 file_path = f"./envs/{env_name}.env"
 file_path = file_path.replace("\r", "").replace("\n", "")
 environ.Env.read_env(file_path)
@@ -25,7 +24,8 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = ast.literal_eval(env("DEBUG"))
 SESSION_COOKIE_SECURE = ast.literal_eval(env("SESSION_COOKIE_SECURE"))
 # ALLOWED_HOSTS = ast.literal_eval(env("ALLOWED_HOSTS"))
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]','api.mapanfeng.com','admin.mapanfeng.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]',
+                 'api.mapanfeng.com', 'admin.mapanfeng.com']
 DOMAIN = env("DOMAIN")
 STATIC_DOAMIN = env("STATIC_DOAMIN")
 IMAGE_PATH = env("IMAGE_PATH")

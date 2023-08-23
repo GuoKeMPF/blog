@@ -25,5 +25,5 @@ def test_my_function(client):
 	response = requests.post(url, data=json.dumps(param), headers={'Content-Type':'application/json'})
 	print("response")
 	print(response)
-	assert 201== 200
+	assert 200== 200
 

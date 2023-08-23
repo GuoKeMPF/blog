@@ -30,7 +30,7 @@ from dashboard.views import DashboardView
 
 urlpatterns = [
     # 登陆退出
-    path("/", HomeView.as_view(), name="home"),
+    path("aaa/", HomeView.as_view(), name="home"),
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     # 看板
