@@ -37,7 +37,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 # path
 # 是否自动忽略url末尾 /
-APPEND_SLASH = True
+APPEND_SLASH = False
 
 
 # Application definition

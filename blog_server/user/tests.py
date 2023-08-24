@@ -1,7 +1,9 @@
 
+from json import dumps, loads
 from django.test import TestCase, Client
 from utils.cryptography.encrypt import encrypt
 from utils.cryptography.decrypt import decrypt
+from django.urls import reverse
 
 username = 'admin'
 password = 'admin'
@@ -19,6 +21,7 @@ class LoginTestCase(TestCase):
             "username": encodeUserName,
             "password": encodePwd
         }
-        response = self.client.post('aaa/', data=params)
+        response = self.client.post(
+            reverse('login'), data=params, content_type='application/json')
         print(response)
         self.assertEqual(response.status_code, 200)
