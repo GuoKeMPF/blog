@@ -20,9 +20,22 @@
 			"request": "launch",
 			"program": "${workspaceFolder}\\manage.py",
 			"args": [
-				"test"
+				"test",
+				"--settings=blog_server.settings"
 			],
 			"django": true,
+		},
+		{
+			"name": "e2e test",
+			"type": "python",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"module": "pytest",
+			"args": [
+				"-v",
+				"${file}"
+			],
+			"console": "integratedTerminal",
 		},
 	]
 }
