@@ -7,7 +7,6 @@ import base64
 from os.path import dirname
 
 path = dirname(__file__)
-print(path)
 
 with open(path+"/private_key_pem.pem", "rb") as key_file:
     private_key = serialization.load_pem_private_key(

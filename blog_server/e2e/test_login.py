@@ -8,16 +8,6 @@ from utils.cryptography.encrypt import encrypt
 import pytest
 from django.test import Client
 
-url = getUrl('login')
-encodePwd = encrypt(password)
-encodeUser = encrypt(account)
-param = {
-    "username": encodeUser,
-    "password": encodePwd,
-}
-j = json.dumps(param)
-print(j)
-
 
 @pytest.fixture
 def client():
@@ -25,8 +15,13 @@ def client():
 
 
 def test_my_function(client):
+    url = getUrl('login')
+    encodePwd = encrypt(password)
+    encodeUser = encrypt(account)
+    param = {
+        "username": encodeUser,
+        "password": encodePwd,
+    }
     response = requests.post(url, data=json.dumps(param), headers={
                              'Content-Type': 'application/json'})
-    print("response")
-    print(response)
     assert response.status_code == 200

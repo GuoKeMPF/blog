@@ -31,6 +31,7 @@ urlpatterns = [
             "patch": "partial_update", "delete": "destroy"}
     ), name="draft"),
 
+
     # 文章
     re_path(r"^text/?$", TextViewSet.as_view(
         {"get": "list", "post": "create"}
