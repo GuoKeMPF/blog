@@ -1,5 +1,4 @@
 
-from json import dumps, loads
 from django.test import TestCase, Client
 from utils.cryptography.encrypt import encrypt
 from django.contrib.auth import get_user_model
