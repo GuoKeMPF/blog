@@ -21,8 +21,8 @@
 			"program": "${workspaceFolder}\\manage.py",
 			"args": [
 				"test",
-				"--settings=blog_server.test_settings",
-				"--keepdb"
+				"--keepdb",
+				"--settings=blog_server.test_settings"
 			],
 			"django": true,
 		},
