@@ -4,15 +4,14 @@ from utils.cryptography.encrypt import encrypt
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-username = 'admin'
-password = 'admin'
+from test.config import username, password
+from test.UserTestCase import UserTestCase
 
 
-class LoginTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
 
-    def test_create_superuser(self):
+class GlobalSetupTestCase(UserTestCase):
+    @classmethod
+    def setUpTestData(cls):
         User = get_user_model()
         admin_user = User.objects.create_superuser(
             username='admin',
@@ -20,8 +19,13 @@ class LoginTestCase(TestCase):
             email='admin@qq.com'
         )
 
-        self.assertTrue(admin_user.is_superuser)
-        self.assertTrue(admin_user.is_staff)
+
+class LoginTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        
+
+    def test_create_superuser(self):
         encodePwd = encrypt(password)
         encodeUserName = encrypt(username)
         params = {
