@@ -9,18 +9,8 @@ from test.UserTestCase import UserTestCase
 
 
 
-class GlobalSetupTestCase(UserTestCase):
-    @classmethod
-    def setUpTestData(cls):
-        User = get_user_model()
-        admin_user = User.objects.create_superuser(
-            username='admin',
-            password='admin',
-            email='admin@qq.com'
-        )
 
-
-class LoginTestCase(TestCase):
+class LoginTestCase(UserTestCase):
     def setUp(self):
         self.client = Client()
         

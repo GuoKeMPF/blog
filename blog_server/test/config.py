@@ -6,3 +6,4 @@ Config.
 
 username = 'admin'
 password = 'admin'
+email="admin@qq.com"
