@@ -1,4 +1,3 @@
-
 echo "stop server"
 
 usage="./stop_server.sh"
