@@ -1,0 +1,93 @@
+.pagination {
+  display: flex;
+  padding: 0;
+  margin: $margin;
+  list-style: none;
+  align-items: center;
+}
+
+.left {
+  justify-content: flex-start;
+}
+
+.center {
+  justify-content: center;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.item {
+  width: $px32;
+  height: $px32;
+}
+
+.pre,
+.next {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  cursor: pointer;
+
+  .arrow {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    width: $px8;
+    height: $px8;
+    transform-origin: center 50%;
+    transform: rotate(45deg);
+  }
+}
+
+.pre .arrow {
+  border-bottom: 1px solid $themeFontColor;
+  border-left: 1px solid $themeFontColor;
+}
+
+.next .arrow {
+  border-top: 1px solid $themeFontColor;
+  border-right: 1px solid $themeFontColor;
+}
+
+.focus {
+  background: none;
+  border: none;
+  outline: none;
+  color: $themeFontColor;
+  width: $px32;
+  height: 100%;
+  font-size: inherit;
+  text-align: right;
+  background: none;
+}
+
+.delimiter {
+  margin: 0 $px8;
+}
+
+.current {
+  width: $px32;
+  height: 100%;
+  font-size: inherit;
+  text-align: right;
+  background: none;
+  border: none;
+  color: $themeFontColor;
+}
+
+.current:focus {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid $themeFontColor;
+}
+
+.total {
+  display: inline-block;
+  width: $px32;
+}

@@ -1,0 +1,148 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  color: inherit;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+
+
+/**
+* https://ant.design/docs/spec/colors-cn
+*/
+:root {
+  --space: 16px;
+  --themeColor: #000;
+  --themeBackground: #eee;
+  --maskColor: rgba(0, 0, 0, 0.5);
+  --shadowColor: #000;
+
+  --themeFontColor: #fff;
+  --themeFontColorGrey: #ccc;
+  --themeFontColorHover: #aaa;
+  --themeLinkColor: #fcfcfc;
+  --themeLinkHoverColor: #fff;
+}
+
+
+
+$margin: var(--space);
+$padding: var(--space);
+
+$themeColor: var(--themeColor);
+$themeBackground: var(--themeBackground);
+$themeFontColor: var(--themeFontColor);
+$themeFontColorGrey: var(--themeFontColorGrey);
+$themeFontColorHover: var(--themeFontColorHover);
+$themeLinkColor: var(--themeLinkColor);
+$themeLinkHoverColor: var(--themeLinkHoverColor);
+
+$headerHight: 60px;
+
+$footerHight: 108px;
+
+$step_time: 0.1s;
+
+$shadowColor: var(--shadowColor);
+
+$maskColor: var(--maskColor);
+
+$radius: 8px;
+
+$px32: 32px;
+$px16: 16px;
+$px8: 8px;
+$px4: 4px;
+
+$fontSize_32: 32px
