@@ -1,23 +1,20 @@
-
 .footer {
-  padding:$padding;
-  min-height: $footerHight;
+  padding: var(--padding);
+  min-height: var(--footerHight);
 }
 
 .beianicon {
   width: 16px;
   height: 16px;
   vertical-align: middle;
-  margin: 0 $px4;
+  margin: 0 var(--px4);
 }
-
 
 @media screen and (min-width: 650px) {
   .footer {
     a {
-      margin: 0 $margin;
+      margin: 0 var(--margin);
     }
-
 
     .copyright {
       text-align: center;

@@ -1,8 +1,8 @@
 .context {
   box-sizing: border-box;
   min-height: 100vh;
-  background-color: $themeColor;
-  color: $themeFontColor;
+  background-color: var(--themeColor);
+  color: var(--themeFontColor);
   width: 100%;
   box-sizing: border-box;
   background: url("../assets/images/home-banner.png") no-repeat center center;

@@ -4,13 +4,13 @@ import type { FC } from "react";
 
 import IconFont from "@/components/IconFont";
 
-import { setLocale } from "umi";
+// import { setLocale } from "umi";
 
 type Languages = "zh-CN" | "en-US";
 
 const Language: FC = () => {
   const switchLangues = (type: Languages) => {
-    setLocale(type, false);
+    // setLocale(type, false);
   };
 
   return (

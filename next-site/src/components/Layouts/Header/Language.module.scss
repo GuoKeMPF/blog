@@ -1,21 +1,19 @@
-$itemSize: 36px;
-$Gap: 8px;
-
-$containerH: 108px;
-$translateYChinese: 44px;
-$translateYEnglish: 88px;
-
 .container {
+  --itemSize: 36px;
+  --Gap: 8px;
+  --containerH: 108px;
+  --translateYChinese: 44px;
+  --translateYEnglish: 88px;
   height: 38px;
   overflow: visible;
   .languages {
     box-sizing: content-box;
-    width: $itemSize;
-    height: $itemSize;
-    line-height: $itemSize;
+    width: var(--itemSize);
+    height: var(--itemSize);
+    line-height: var(--itemSize);
     text-align: center;
-    top: $padding;
-    right: $padding;
+    top: var(--padding);
+    right: var(--padding);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -26,8 +24,8 @@ $translateYEnglish: 88px;
   .english,
   .Language {
     position: absolute;
-    width: $itemSize;
-    height: $itemSize;
+    width: var(--itemSize);
+    height: var(--itemSize);
     border-radius: 50%;
     cursor: pointer;
   }
@@ -43,17 +41,17 @@ $translateYEnglish: 88px;
   .chinese .button,
   .english .button,
   .Language {
-    width: $itemSize;
-    height: $itemSize;
+    width: var(--itemSize);
+    height: var(--itemSize);
     border-radius: 50%;
     outline: none;
-    border: 1px solid $themeBackground;
-    background-color: $themeColor;
-    color: $themeFontColor;
+    border: 1px solid var(--themeBackground);
+    background-color: var(--themeColor);
+    color: var(--themeFontColor);
   }
 
   .languages:hover {
-    height: $containerH;
+    height: var(--containerH);
   }
 
   .languages:hover .chinese {

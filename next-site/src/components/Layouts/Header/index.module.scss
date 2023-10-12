@@ -1,15 +1,13 @@
-
-
 .header {
-  height: $headerHight;
+  height: var(--headerHight);
   z-index: 50;
   position: sticky;
   top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding:$padding;
-  background-color: $maskColor;
+  padding: var(--padding);
+  background-color: var(--maskColor);
 }
 
 .nav {
@@ -19,7 +17,7 @@
   display: flex;
   justify-content: space-around;
   .navlink {
-    color: $themeFontColorHover;
+    color: var(--themeFontColorHover);
   }
   a:hover {
     color: inherit;

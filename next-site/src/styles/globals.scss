@@ -95,9 +95,6 @@ a {
   text-decoration: none;
 }
 
-
-
-
 /**
 * https://ant.design/docs/spec/colors-cn
 */
@@ -113,36 +110,38 @@ a {
   --themeFontColorHover: #aaa;
   --themeLinkColor: #fcfcfc;
   --themeLinkHoverColor: #fff;
+
+  --margin: var(--space);
+  --padding: var(--space);
+
+  --themeColor: var(--themeColor);
+  --themeBackground: var(--themeBackground);
+  --themeFontColor: var(--themeFontColor);
+  --themeFontColorGrey: var(--themeFontColorGrey);
+  --themeFontColorHover: var(--themeFontColorHover);
+  --themeLinkColor: var(--themeLinkColor);
+  --themeLinkHoverColor: var(--themeLinkHoverColor);
+
+  --headerHight: 60px;
+
+  --footerHight: 108px;
+
+  --step_time: 0.1s;
+  --step_time1: var(--step_time)
+  --step_time2: calc(var(--step_time) * 2)
+  --step_time3: calc(var(--step_time) * 3)
+  --step_time4: calc(var(--step_time) * 4)
+
+  --shadowColor: var(--shadowColor);
+
+  --maskColor: var(--maskColor);
+
+  --radius: 8px;
+
+  --px32: 32px;
+  --px16: 16px;
+  --px8: 8px;
+  --px4: 4px;
+
+  --fontSize_32: 32px;
 }
-
-
-
-$margin: var(--space);
-$padding: var(--space);
-
-$themeColor: var(--themeColor);
-$themeBackground: var(--themeBackground);
-$themeFontColor: var(--themeFontColor);
-$themeFontColorGrey: var(--themeFontColorGrey);
-$themeFontColorHover: var(--themeFontColorHover);
-$themeLinkColor: var(--themeLinkColor);
-$themeLinkHoverColor: var(--themeLinkHoverColor);
-
-$headerHight: 60px;
-
-$footerHight: 108px;
-
-$step_time: 0.1s;
-
-$shadowColor: var(--shadowColor);
-
-$maskColor: var(--maskColor);
-
-$radius: 8px;
-
-$px32: 32px;
-$px16: 16px;
-$px8: 8px;
-$px4: 4px;
-
-$fontSize_32: 32px

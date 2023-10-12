@@ -1,7 +1,7 @@
 import beian from "@/assets/images/beian.png";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "index.module.scss";
+import styles from "./index.module.scss";
 const Footer: React.FC = () => {
   const defaultMessage = "那个老麻的网站";
   const currentYear = new Date().getFullYear();

@@ -1,4 +1,3 @@
-
 .outer {
   width: 100%;
   height: 100%;
@@ -9,9 +8,9 @@
 .inner {
   width: 100%;
   height: 100%;
-  padding:$padding;
+  padding: var(--padding);
   position: relative;
-  transition: all $step_time*4;
+  transition: all var(--step_time4);
   box-sizing: border-box;
 }
 
@@ -19,10 +18,10 @@
 .inner::before,
 .outer::after,
 .outer::before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
-  background-color: $themeBackground;
+  background-color: var(--themeBackground);
   width: 0px;
   height: 0px;
 }
@@ -31,31 +30,31 @@
   top: 0;
   left: 0;
   height: 1px;
-  transition: all $step_time;
-  transition-delay: $step_time*3;
+  transition: all var(--step_time1);
+  transition-delay: var(--step_time3);
 }
 
 .inner::before {
   top: 0;
   right: 0;
   width: 1px;
-  transition: all $step_time;
-  transition-delay: $step_time*2;
+  transition: all var(--step_time1);
+  transition-delay: var(--step_time2);
 }
 
 .inner::after {
   bottom: 0;
   right: 0;
   height: 1px;
-  transition: all $step_time;
-  transition-delay: $step_time;
+  transition: all var(--step_time1);
+  transition-delay: var(--step_time1);
 }
 
 .outer::after {
   bottom: 0;
   left: 0;
   width: 1px;
-  transition: all $step_time;
+  transition: all var(--step_time1);
   transition-delay: 0s;
 }
 
@@ -70,15 +69,15 @@
 }
 
 .outer:hover::after {
-  transition-delay: $step_time*3;
+  transition-delay: var(--step_time3);
 }
 
 .outer:hover .inner::after {
-  transition-delay: $step_time*2;
+  transition-delay: var(--step_time2);
 }
 
 .outer:hover .inner::before {
-  transition-delay: $step_time;
+  transition-delay: var(--step_time1);
 }
 
 .outer:hover::before {

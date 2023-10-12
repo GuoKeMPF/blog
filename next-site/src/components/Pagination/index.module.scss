@@ -1,7 +1,7 @@
 .pagination {
   display: flex;
   padding: 0;
-  margin: $margin;
+  margin: var(--margin);
   list-style: none;
   align-items: center;
 }
@@ -19,8 +19,8 @@
 }
 
 .item {
-  width: $px32;
-  height: $px32;
+  width: var(--px32);
+  height: var(--px32);
 }
 
 .pre,
@@ -38,29 +38,29 @@
     display: inline-block;
     margin: 0;
     padding: 0;
-    width: $px8;
-    height: $px8;
+    width: var(--px8);
+    height: var(--px8);
     transform-origin: center 50%;
     transform: rotate(45deg);
   }
 }
 
 .pre .arrow {
-  border-bottom: 1px solid $themeFontColor;
-  border-left: 1px solid $themeFontColor;
+  border-bottom: 1px solid var(--themeFontColor);
+  border-left: 1px solid var(--themeFontColor);
 }
 
 .next .arrow {
-  border-top: 1px solid $themeFontColor;
-  border-right: 1px solid $themeFontColor;
+  border-top: 1px solid var(--themeFontColor);
+  border-right: 1px solid var(--themeFontColor);
 }
 
 .focus {
   background: none;
   border: none;
   outline: none;
-  color: $themeFontColor;
-  width: $px32;
+  color: var(--themeFontColor);
+  width: var(--px32);
   height: 100%;
   font-size: inherit;
   text-align: right;
@@ -68,26 +68,26 @@
 }
 
 .delimiter {
-  margin: 0 $px8;
+  margin: 0 var(--px8);
 }
 
 .current {
-  width: $px32;
+  width: var(--px32);
   height: 100%;
   font-size: inherit;
   text-align: right;
   background: none;
   border: none;
-  color: $themeFontColor;
+  color: var(--themeFontColor);
 }
 
 .current:focus {
   border: none;
   outline: none;
-  border-bottom: 1px solid $themeFontColor;
+  border-bottom: 1px solid var(--themeFontColor);
 }
 
 .total {
   display: inline-block;
-  width: $px32;
+  width: var(--px32);
 }
