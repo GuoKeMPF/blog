@@ -3,9 +3,9 @@ import type { FC, ReactElement } from "react";
 import Background from "@/components/Background";
 import BaseLayout from "@/layouts/BaseLayout";
 
-import type { NextPageWithLayout } from "./_app";
-
 import styles from "./index.module.scss";
+
+import type { NextPageWithLayout } from "./_app";
 
 const Home: NextPageWithLayout = () => {
   return (

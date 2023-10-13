@@ -11,7 +11,7 @@ interface BaseLayoutPropsType {
 const BaseLayout: FunctionComponent<BaseLayoutPropsType> = ({ children }) => {
   return (
     <div className={styles.context}>
-      <Header />
+      <Header></Header>
       <Main>
         <Body>{children}</Body>
       </Main>
@@ -19,5 +19,4 @@ const BaseLayout: FunctionComponent<BaseLayoutPropsType> = ({ children }) => {
     </div>
   );
 };
-
 export default BaseLayout;

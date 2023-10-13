@@ -4,10 +4,10 @@ import type { FC } from "react";
 interface Props extends HTMLAttributes<HTMLElement> {
   type: string;
 }
-const Icons: FC<Props> = ({ type }) => {
+const Icons: FC<Props> = ({ type, className }) => {
   return (
-    <svg className="icon" aria-hidden="true">
-      <use xlinkHref={type}></use>
+    <svg className={`icon ${className}`} aria-hidden="true">
+      <use xlinkHref={`#${type}`}></use>
     </svg>
   );
 };

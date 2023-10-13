@@ -1,7 +1,38 @@
-/* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
-*/
+:root {
+  --space: 16px;
+  --themeColor: #000;
+  --themeBackground: #eee;
+  --maskColor: rgba(0, 0, 0, 0.5);
+  --shadowColor: #000;
+
+  --themeFontColor: #fff;
+  --themeFontColorGrey: #ccc;
+  --themeFontColorHover: #aaa;
+  --themeLinkColor: #fcfcfc;
+  --themeLinkHoverColor: #fff;
+
+  --margin: var(--space);
+  --padding: var(--space);
+
+  --headerHight: 60px;
+
+  --footerHight: 108px;
+
+  --step_time: 0.1s;
+  --step_time1: var(--step_time);
+  --step_time2: calc(var(--step_time) * 2);
+  --step_time3: calc(var(--step_time) * 3);
+  --step_time4: calc(var(--step_time) * 4);
+
+  --radius: 8px;
+
+  --px32: 32px;
+  --px16: 16px;
+  --px8: 8px;
+  --px4: 4px;
+
+  --fontSize_32: 32px;
+}
 
 html,
 body,
@@ -88,60 +119,18 @@ video {
 }
 
 body {
-  margin: 0;
+  min-height: 100vh;
+  background-color: var(--themeColor);
 }
 
 a {
   text-decoration: none;
 }
 
-/**
-* https://ant.design/docs/spec/colors-cn
-*/
-:root {
-  --space: 16px;
-  --themeColor: #000;
-  --themeBackground: #eee;
-  --maskColor: rgba(0, 0, 0, 0.5);
-  --shadowColor: #000;
-
-  --themeFontColor: #fff;
-  --themeFontColorGrey: #ccc;
-  --themeFontColorHover: #aaa;
-  --themeLinkColor: #fcfcfc;
-  --themeLinkHoverColor: #fff;
-
-  --margin: var(--space);
-  --padding: var(--space);
-
-  --themeColor: var(--themeColor);
-  --themeBackground: var(--themeBackground);
-  --themeFontColor: var(--themeFontColor);
-  --themeFontColorGrey: var(--themeFontColorGrey);
-  --themeFontColorHover: var(--themeFontColorHover);
-  --themeLinkColor: var(--themeLinkColor);
-  --themeLinkHoverColor: var(--themeLinkHoverColor);
-
-  --headerHight: 60px;
-
-  --footerHight: 108px;
-
-  --step_time: 0.1s;
-  --step_time1: var(--step_time)
-  --step_time2: calc(var(--step_time) * 2)
-  --step_time3: calc(var(--step_time) * 3)
-  --step_time4: calc(var(--step_time) * 4)
-
-  --shadowColor: var(--shadowColor);
-
-  --maskColor: var(--maskColor);
-
-  --radius: 8px;
-
-  --px32: 32px;
-  --px16: 16px;
-  --px8: 8px;
-  --px4: 4px;
-
-  --fontSize_32: 32px;
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }
