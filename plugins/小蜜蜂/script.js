@@ -416,30 +416,27 @@
 
 	function initGameStart() {
 		if (window.innerWidth > 1200) {
-			screen.canvas.width = 1200;
-			screen.canvas.height = 500;
 			gameSize = {
 				width: 1200,
-				height: 500,
+				height: 700,
 			};
 			invaderMultiplier = 3;
 		} else if (window.innerWidth > 800) {
-			screen.canvas.width = 900;
-			screen.canvas.height = 600;
 			gameSize = {
 				width: 900,
 				height: 600,
 			};
 			invaderMultiplier = 2;
 		} else {
-			screen.canvas.width = 600;
-			screen.canvas.height = 300;
 			gameSize = {
 				width: 600,
 				height: 300,
 			};
 			invaderMultiplier = 1;
 		}
+
+		screen.canvas.width = gameSize.width;
+		screen.canvas.height = gameSize.height;
 
 		kills = 0;
 		invaderAttackRate = 0.999;
@@ -453,6 +450,6 @@
 		game.update();
 		game.draw();
 
-		// requestAnimationFrame(init);
+		requestAnimationFrame(init);
 	}
 })();

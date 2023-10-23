@@ -6,8 +6,7 @@ import { ReactNode } from "react";
 var screen, game;
 
 // Assets
-var invaderCanvas,
-	invaderMultiplier,
+var invaderMultiplier,
 	invaderSize = 20,
 	invaderAttackRate: number = 0,
 	invaderSpeed,
@@ -17,8 +16,6 @@ var invaderCanvas,
 var i = 0,
 	kills = 0,
 	spawnDelayCounter = invaderSpawnDelay;
-
-var invaderDownTimer;
 
 // Text
 var blocks = [
@@ -41,27 +38,43 @@ interface GameType {
 	lost: boolean;
 	player: any;
 	invaders: never[];
-	element: String | ReactNode;
+	screen: CanvasRenderingContext2D;
+	gameSize: {
+		width: number;
+		height: number;
+	};
 }
 
-class Game implements GameType {
+interface GameContructorType {
+	element: string | HTMLCanvasElement;
+}
+
+export class Game implements GameType {
 	invaderShots: never[];
 	level: number;
 	lost: boolean;
 	player: any;
 	invaders: never[];
-	screen: CanvasRenderingContext2D;
-	element: ReactNode | string;
-	constructor({ element }) {
+	screen: CanvasRenderingContext2D | undefined;
+	gameSize: { width: number; height: number };
+	canvas!: HTMLCanvasElement;
+
+	constructor({ element }: GameContructorType) {
 		this.level = -1;
 		this.lost = false;
 		this.player = new Player();
 		this.invaders = [];
 		this.invaderShots = [];
+		this.gameSize = {
+			width: 0,
+			height: 0,
+		};
 
 		var invaderAsset = new Image();
 		invaderAsset.onload = () => {
-			invaderCanvas = document.createElement("canvas");
+			const invaderCanvas = document.createElement(
+				"canvas"
+			) as HTMLCanvasElement;
 			invaderCanvas.width = invaderSize;
 			invaderCanvas.height = invaderSize;
 			invaderCanvas.getContext("2d").drawImage(invaderAsset, 0, 0);
@@ -70,42 +83,35 @@ class Game implements GameType {
 			if (typeof element === "string") {
 				node = document.querySelector(element) as HTMLCanvasElement;
 			} else {
-				node = element;
+				node = element as HTMLCanvasElement;
 			}
-
 			// Game Creation
-			const canvas = node;
-			if (!canvas) {
+			if (!node) {
 				throw new Error("未找到画布元素");
 			}
+			const canvas = node;
 			this.screen = canvas.getContext("2d") as CanvasRenderingContext2D;
-
-			initGameStart();
-			init();
+			this.canvas = canvas;
+			this.initGameStart();
 		};
 		invaderAsset.src = "//stillh.art/project/spaceInvaders/invader.gif";
 	}
 
 	initGameStart = () => {
+		let gameSize;
 		if (window.innerWidth > 1200) {
-			screen.canvas.width = 1200;
-			screen.canvas.height = 500;
 			gameSize = {
 				width: 1200,
-				height: 500,
+				height: 700,
 			};
 			invaderMultiplier = 3;
 		} else if (window.innerWidth > 800) {
-			screen.canvas.width = 900;
-			screen.canvas.height = 600;
 			gameSize = {
 				width: 900,
 				height: 600,
 			};
 			invaderMultiplier = 2;
 		} else {
-			screen.canvas.width = 600;
-			screen.canvas.height = 300;
 			gameSize = {
 				width: 600,
 				height: 300,
@@ -113,6 +119,9 @@ class Game implements GameType {
 			invaderMultiplier = 1;
 		}
 
+		this.canvas.width = gameSize.width;
+		this.canvas.height = gameSize.height;
+		this.gameSize = gameSize;
 		kills = 0;
 		invaderAttackRate = 0.999;
 		invaderSpeed = 20;
@@ -126,7 +135,9 @@ class Game implements GameType {
 		// Next level
 		if (this.invaders.length === 0) {
 			spawnDelayCounter += 1;
-			if (spawnDelayCounter < invaderSpawnDelay) return;
+			if (spawnDelayCounter < invaderSpawnDelay) {
+				return;
+			}
 
 			this.level += 1;
 
@@ -195,11 +206,15 @@ class Game implements GameType {
 
 		screen.beginPath();
 
-		var i;
 		this.player.draw();
-		if (!this.lost)
-			for (i = 0; i < this.invaders.length; i++) this.invaders[i].draw();
-		for (i = 0; i < this.invaderShots.length; i++) this.invaderShots[i].draw();
+		if (!this.lost) {
+			for (let i = 0; i < this.invaders.length; i++) {
+				this.invaders[i].draw();
+			}
+		}
+		for (let i = 0; i < this.invaderShots.length; i++) {
+			this.invaderShots[i].draw();
+		}
 
 		screen.fill();
 	};
@@ -230,17 +245,37 @@ class Invader implements InvaderType {
 	size: { width: number; height: number };
 	patrolX: number;
 	speedX: any;
-	constructor({ coordinates, invaderSpeed }) {
+	game: Game;
+	constructor({ coordinates, invaderSpeed, game}) {
 		this.active = true;
 		this.coordinates = coordinates;
 		this.size = {
 			width: invaderSize,
 			height: invaderSize,
 		};
+	this.game = game
 
 		this.patrolX = 0;
 		this.speedX = invaderSpeed;
 	}
+
+
+
+	update = () => {
+		if (Math.random() > invaderAttackRate && !game.invadersBelow(this)) {
+			var projectile = new Projectile(
+				{
+					x: this.coordinates.x + this.size.width / 2,
+					y: this.coordinates.y + this.size.height - 5,
+				},
+				{
+					x: 0,
+					y: 2,
+				}
+			);
+			game.invaderShots.push(projectile);
+		}
+	},
 
 	draw = () => {
 		if (this.active)
@@ -497,44 +532,3 @@ const createInvaders = () => {
 	}
 	return invaders;
 };
-
-const initGameStart = () => {
-	if (window.innerWidth > 1200) {
-		screen.canvas.width = 1200;
-		screen.canvas.height = 500;
-		gameSize = {
-			width: 1200,
-			height: 500,
-		};
-		invaderMultiplier = 3;
-	} else if (window.innerWidth > 800) {
-		screen.canvas.width = 900;
-		screen.canvas.height = 600;
-		gameSize = {
-			width: 900,
-			height: 600,
-		};
-		invaderMultiplier = 2;
-	} else {
-		screen.canvas.width = 600;
-		screen.canvas.height = 300;
-		gameSize = {
-			width: 600,
-			height: 300,
-		};
-		invaderMultiplier = 1;
-	}
-
-	kills = 0;
-	invaderAttackRate = 0.999;
-	invaderSpeed = 20;
-	spawnDelayCounter = invaderSpawnDelay;
-
-	game = new Game();
-};
-
-function init() {
-	game.update();
-	game.draw();
-	// requestAnimationFrame(init);
-}

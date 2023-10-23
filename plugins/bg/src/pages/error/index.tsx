@@ -1,6 +1,21 @@
 /** @format */
 
+import { useRef, useEffect } from "react";
+
+import { Game } from "./lib";
+
 const ErrorPage = () => {
+	const canvasRef = useRef(null);
+
+	useEffect(() => {
+		let game;
+		if (canvasRef.current) {
+			game = new Game({ element: canvasRef.current });
+		}
+
+		return () => {};
+	}, []);
+
 	return (
 		<div>
 			<p>
@@ -10,7 +25,7 @@ const ErrorPage = () => {
 				<button id='restart'>Restart</button>
 			</p>
 
-			<canvas id='space-invaders' />
+			<canvas ref={canvasRef} id='space-invaders' />
 		</div>
 	);
 };
