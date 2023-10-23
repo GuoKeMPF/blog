@@ -19,17 +19,17 @@ var i = 0,
 
 // Text
 var blocks = [
-	[3, 4, 8, 9, 10, 15, 16],
-	[2, 4, 7, 11, 14, 16],
-	[1, 4, 7, 11, 13, 16],
-	[1, 2, 3, 4, 5, 7, 11, 13, 14, 15, 16, 17],
-	[4, 7, 11, 16],
-	[4, 8, 9, 10, 16],
+  [3, 4, 8, 9, 10, 15, 16],
+  [2, 4, 7, 11, 14, 16],
+  [1, 4, 7, 11, 13, 16],
+  [1, 2, 3, 4, 5, 7, 11, 13, 14, 15, 16, 17],
+  [4, 7, 11, 16],
+  [4, 8, 9, 10, 16],
 ];
 
 let gameSize = {
-	width: 1200,
-	height: 500,
+  width: 1200,
+  height: 500,
 };
 
 interface GameType {
@@ -127,9 +127,11 @@ export class Game implements GameType {
 		invaderSpeed = 20;
 		spawnDelayCounter = invaderSpawnDelay;
 
-		this.update();
-		this.draw();
-	};
+  update = () => {
+    // Next level
+    if (this.invaders.length === 0) {
+      spawnDelayCounter += 1;
+      if (spawnDelayCounter < invaderSpawnDelay) return;
 
 	update = () => {
 		// Next level
@@ -139,72 +141,80 @@ export class Game implements GameType {
 				return;
 			}
 
-			this.level += 1;
+      invaderAttackRate -= 0.002;
+      invaderSpeed += 10;
 
-			invaderAttackRate -= 0.002;
-			invaderSpeed += 10;
+      this.invaders = createInvaders();
 
-			this.invaders = createInvaders();
+      spawnDelayCounter = 0;
+    }
 
-			spawnDelayCounter = 0;
-		}
+    if (!this.lost) {
+      // Collision
+      this.player.projectile.forEach((projectile) => {
+        this.invaders.forEach((invader) => {
+          if (collides(projectile, invader)) {
+            invader.destroy();
+            projectile.active = false;
+          }
+        });
+      });
 
-		if (!this.lost) {
-			// Collision
-			this.player.projectile.forEach((projectile) => {
-				this.invaders.forEach((invader) => {
-					if (collides(projectile, invader)) {
-						invader.destroy();
-						projectile.active = false;
-					}
-				});
-			});
+      this.invaderShots.forEach((invaderShots) => {
+        if (collides(invaderShots, this.player)) {
+          this.player.destroy();
+        }
+      });
 
-			this.invaderShots.forEach((invaderShots) => {
-				if (collides(invaderShots, this.player)) {
-					this.player.destroy();
-				}
-			});
+      for (i = 0; i < this.invaders.length; i++) {
+        this.invaders[i].update();
+      }
+    }
 
-			for (i = 0; i < this.invaders.length; i++) {
-				this.invaders[i].update();
-			}
-		}
+    // Don't stop player & projectiles.. they look nice
+    this.player.update();
+    for (i = 0; i < game.invaderShots.length; i++) {
+      this.invaderShots[i].update();
+    }
 
-		// Don't stop player & projectiles.. they look nice
-		this.player.update();
-		for (i = 0; i < game.invaderShots.length; i++) {
-			this.invaderShots[i].update();
-		}
+    this.invaders = this.invaders.filter((invader) => {
+      return invader.active;
+    });
+  };
 
-		this.invaders = this.invaders.filter((invader) => {
-			return invader.active;
-		});
-	};
+  draw = () => {
+    if (this.lost) {
+      screen.fillStyle = "rgba(0, 0, 0, 0.03)";
+      screen.fillRect(0, 0, gameSize.width, gameSize.height);
 
-	draw = () => {
-		if (this.lost) {
-			screen.fillStyle = "rgba(0, 0, 0, 0.03)";
-			screen.fillRect(0, 0, gameSize.width, gameSize.height);
+      screen.font = "55px Lucida Console";
+      screen.textAlign = "center";
+      screen.fillStyle = "white";
+      screen.fillText("You lost", gameSize.width / 2, gameSize.height / 2);
+      screen.fillText(
+        "Points: " + kills,
+        gameSize.width / 2,
+        gameSize.height / 2 + 30
+      );
+    } else {
+      screen.clearRect(0, 0, gameSize.width, gameSize.height);
 
-			screen.font = "55px Lucida Console";
-			screen.textAlign = "center";
-			screen.fillStyle = "white";
-			screen.fillText("You lost", gameSize.width / 2, gameSize.height / 2);
-			screen.fillText(
-				"Points: " + kills,
-				gameSize.width / 2,
-				gameSize.height / 2 + 30
-			);
-		} else {
-			screen.clearRect(0, 0, gameSize.width, gameSize.height);
+      screen.font = "10px Lucida Console";
+      screen.textAlign = "right";
+      screen.fillText("Points: " + kills, gameSize.width, gameSize.height - 12);
+    }
 
-			screen.font = "10px Lucida Console";
-			screen.textAlign = "right";
-			screen.fillText("Points: " + kills, gameSize.width, gameSize.height - 12);
-		}
+    screen.beginPath();
 
-		screen.beginPath();
+    this.player.draw();
+    if (!this.lost) {
+      for (let i = 0; i < this.invaders.length; i++) {
+        this.invaders[i].draw();
+      }
+    }
+    for (let i = 0; i < this.invaderShots.length; i++) {
+      this.invaderShots[i].draw();
+    }
 
 		this.player.draw();
 		if (!this.lost) {
@@ -216,27 +226,24 @@ export class Game implements GameType {
 			this.invaderShots[i].draw();
 		}
 
-		screen.fill();
-	};
-
-	invadersBelow = (invader) => {
-		return (
-			this.invaders.filter((b) => {
-				return (
-					Math.abs(invader.coordinates.x - b.coordinates.x) === 0 &&
-					b.coordinates.y > invader.coordinates.y
-				);
-			}).length > 0
-		);
-	};
+  invadersBelow = (invader) => {
+    return (
+      this.invaders.filter((b) => {
+        return (
+          Math.abs(invader.coordinates.x - b.coordinates.x) === 0 &&
+          b.coordinates.y > invader.coordinates.y
+        );
+      }).length > 0
+    );
+  };
 }
 
 interface InvaderType {
-	active: boolean;
-	coordinates: any;
-	size: { width: number; height: number };
-	patrolX: number;
-	speedX: any;
+  active: boolean;
+  coordinates: any;
+  size: { width: number; height: number };
+  patrolX: number;
+  speedX: any;
 }
 
 class Invader implements InvaderType {
@@ -255,9 +262,9 @@ class Invader implements InvaderType {
 		};
 	this.game = game
 
-		this.patrolX = 0;
-		this.speedX = invaderSpeed;
-	}
+    this.patrolX = 0;
+    this.speedX = invaderSpeed;
+  }
 
 
 
@@ -287,248 +294,248 @@ class Invader implements InvaderType {
 			this.patrolX += this.speedX;
 			this.coordinates.y += this.size.height;
 
-			if (this.coordinates.y + this.size.height * 2 > gameSize.height)
-				game.lost = true;
-		} else {
-			this.coordinates.x += this.speedX;
-			this.patrolX += this.speedX;
-		}
-	};
-	destroy = () => {
-		this.active = false;
-		kills += 1;
-	};
+      if (this.coordinates.y + this.size.height * 2 > gameSize.height)
+        game.lost = true;
+    } else {
+      this.coordinates.x += this.speedX;
+      this.patrolX += this.speedX;
+    }
+  };
+  destroy = () => {
+    this.active = false;
+    kills += 1;
+  };
 }
 
 interface PlayerType {
-	active: boolean;
-	size: { width: number; height: number };
-	shooterHeat: number;
-	coordinates: { x: number; y: number };
-	projectile: never[];
-	keyboarder: any;
+  active: boolean;
+  size: { width: number; height: number };
+  shooterHeat: number;
+  coordinates: { x: number; y: number };
+  projectile: never[];
+  keyboarder: any;
 }
 
 class Player implements PlayerType {
-	active: boolean;
-	size: { width: number; height: number };
-	shooterHeat: number;
-	coordinates: { x: number; y: number };
-	projectile: never[];
-	keyboarder: any;
-	constructor() {
-		this.active = true;
-		this.size = {
-			width: 16,
-			height: 8,
-		};
-		this.shooterHeat = -3;
-		this.coordinates = {
-			x: (gameSize.width / 2 - this.size.width / 2) | 0,
-			y: gameSize.height - this.size.height * 2,
-		};
+  active: boolean;
+  size: { width: number; height: number };
+  shooterHeat: number;
+  coordinates: { x: number; y: number };
+  projectile: never[];
+  keyboarder: any;
+  constructor() {
+    this.active = true;
+    this.size = {
+      width: 16,
+      height: 8,
+    };
+    this.shooterHeat = -3;
+    this.coordinates = {
+      x: (gameSize.width / 2 - this.size.width / 2) | 0,
+      y: gameSize.height - this.size.height * 2,
+    };
 
-		this.projectile = [];
-		this.keyboarder = new KeyController();
-	}
+    this.projectile = [];
+    this.keyboarder = new KeyController();
+  }
 
-	update = () => {
-		for (var i = 0; i < this.projectile.length; i++)
-			this.projectile[i].update();
+  update = () => {
+    for (var i = 0; i < this.projectile.length; i++)
+      this.projectile[i].update();
 
-		this.projectile = this.projectile.filter(function (projectile) {
-			return projectile.active;
-		});
+    this.projectile = this.projectile.filter(function (projectile) {
+      return projectile.active;
+    });
 
-		if (!this.active) return;
+    if (!this.active) return;
 
-		if (
-			this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) &&
-			this.coordinates.x > 0
-		)
-			this.coordinates.x -= 2;
-		else if (
-			this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) &&
-			this.coordinates.x < gameSize.width - this.size.width
-		)
-			this.coordinates.x += 2;
+    if (
+      this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) &&
+      this.coordinates.x > 0
+    )
+      this.coordinates.x -= 2;
+    else if (
+      this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) &&
+      this.coordinates.x < gameSize.width - this.size.width
+    )
+      this.coordinates.x += 2;
 
-		if (this.keyboarder.isDown(this.keyboarder.KEYS.Space)) {
-			this.shooterHeat += 1;
-			if (this.shooterHeat < 0) {
-				var projectile = new Projectile(
-					{
-						x: this.coordinates.x + this.size.width / 2 - 1,
-						y: this.coordinates.y - 1,
-					},
-					{
-						x: 0,
-						y: -7,
-					}
-				);
-				this.projectile.push(projectile);
-			} else if (this.shooterHeat > 12) this.shooterHeat = -3;
-		} else {
-			this.shooterHeat = -3;
-		}
-	};
+    if (this.keyboarder.isDown(this.keyboarder.KEYS.Space)) {
+      this.shooterHeat += 1;
+      if (this.shooterHeat < 0) {
+        var projectile = new Projectile(
+          {
+            x: this.coordinates.x + this.size.width / 2 - 1,
+            y: this.coordinates.y - 1,
+          },
+          {
+            x: 0,
+            y: -7,
+          }
+        );
+        this.projectile.push(projectile);
+      } else if (this.shooterHeat > 12) this.shooterHeat = -3;
+    } else {
+      this.shooterHeat = -3;
+    }
+  };
 
-	draw = () => {
-		if (this.active) {
-			screen.rect(
-				this.coordinates.x,
-				this.coordinates.y,
-				this.size.width,
-				this.size.height
-			);
-			screen.rect(this.coordinates.x - 2, this.coordinates.y + 2, 20, 6);
-			screen.rect(this.coordinates.x + 6, this.coordinates.y - 4, 4, 4);
-		}
+  draw = () => {
+    if (this.active) {
+      screen.rect(
+        this.coordinates.x,
+        this.coordinates.y,
+        this.size.width,
+        this.size.height
+      );
+      screen.rect(this.coordinates.x - 2, this.coordinates.y + 2, 20, 6);
+      screen.rect(this.coordinates.x + 6, this.coordinates.y - 4, 4, 4);
+    }
 
-		for (var i = 0; i < this.projectile.length; i++) this.projectile[i].draw();
-	};
-	destroy = () => {
-		this.active = false;
-		game.lost = true;
-	};
+    for (var i = 0; i < this.projectile.length; i++) this.projectile[i].draw();
+  };
+  destroy = () => {
+    this.active = false;
+    game.lost = true;
+  };
 }
 
 interface ProjectileType {
-	active: boolean;
-	coordinates: any;
-	size: { width: number; height: number };
-	velocity: any;
+  active: boolean;
+  coordinates: any;
+  size: { width: number; height: number };
+  velocity: any;
 }
 
 class Projectile implements ProjectileType {
-	active: boolean;
-	coordinates: any;
-	size: { width: number; height: number };
-	velocity: any;
-	constructor(
-		coordinates: { x: number; y: number },
-		velocity: { x: number; y: number }
-	) {
-		this.active = true;
-		this.coordinates = coordinates;
-		this.size = {
-			width: 3,
-			height: 3,
-		};
-		this.velocity = velocity;
-	}
-	update = () => {
-		this.coordinates.x += this.velocity.x;
-		this.coordinates.y += this.velocity.y;
+  active: boolean;
+  coordinates: any;
+  size: { width: number; height: number };
+  velocity: any;
+  constructor(
+    coordinates: { x: number; y: number },
+    velocity: { x: number; y: number }
+  ) {
+    this.active = true;
+    this.coordinates = coordinates;
+    this.size = {
+      width: 3,
+      height: 3,
+    };
+    this.velocity = velocity;
+  }
+  update = () => {
+    this.coordinates.x += this.velocity.x;
+    this.coordinates.y += this.velocity.y;
 
-		if (this.coordinates.y > gameSize.height || this.coordinates.y < 0)
-			this.active = false;
-	};
-	draw = () => {
-		if (this.active)
-			screen.rect(
-				this.coordinates.x,
-				this.coordinates.y,
-				this.size.width,
-				this.size.height
-			);
-	};
+    if (this.coordinates.y > gameSize.height || this.coordinates.y < 0)
+      this.active = false;
+  };
+  draw = () => {
+    if (this.active)
+      screen.rect(
+        this.coordinates.x,
+        this.coordinates.y,
+        this.size.width,
+        this.size.height
+      );
+  };
 }
 
 interface KeyControllerType {
-	KEYS: { LEFT: KEYTypes; RIGHT: KEYTypes; Space: KEYTypes };
-	keyCode: KEYTypes[];
-	keyState: Record<string, boolean>;
+  KEYS: { LEFT: KEYTypes; RIGHT: KEYTypes; Space: KEYTypes };
+  keyCode: KEYTypes[];
+  keyState: Record<string, boolean>;
 }
 
 type KEYTypes = "37" | "39" | "32";
 
 class KeyController {
-	KEYS: { LEFT: KEYTypes; RIGHT: KEYTypes; Space: KEYTypes };
-	keyCode: KEYTypes[];
-	keyState: Record<string, boolean>;
-	constructor() {
-		this.KEYS = {
-			LEFT: "37",
-			RIGHT: "39",
-			Space: "32",
-		};
-		this.keyCode = ["37", "39", "32"];
-		this.keyState = {};
-	}
+  KEYS: { LEFT: KEYTypes; RIGHT: KEYTypes; Space: KEYTypes };
+  keyCode: KEYTypes[];
+  keyState: Record<string, boolean>;
+  constructor() {
+    this.KEYS = {
+      LEFT: "37",
+      RIGHT: "39",
+      Space: "32",
+    };
+    this.keyCode = ["37", "39", "32"];
+    this.keyState = {};
+  }
 
-	init = () => {
-		window.addEventListener("keydown", this.keyDown);
-		window.addEventListener("keyup", this.keyUp);
-	};
+  init = () => {
+    window.addEventListener("keydown", this.keyDown);
+    window.addEventListener("keyup", this.keyUp);
+  };
 
-	distory = () => {
-		window.removeEventListener("keydown", this.keyDown);
-		window.removeEventListener("keyup", this.keyUp);
-	};
+  distory = () => {
+    window.removeEventListener("keydown", this.keyDown);
+    window.removeEventListener("keyup", this.keyUp);
+  };
 
-	keyDown = (e: KeyboardEvent) => {
-		e.preventDefault();
-		for (let counter = 0; counter < this.keyCode.length; counter++)
-			if (this.keyCode[counter] == e.code) {
-				this.keyState[e.code] = true;
-			}
-	};
+  keyDown = (e: KeyboardEvent) => {
+    e.preventDefault();
+    for (let counter = 0; counter < this.keyCode.length; counter++)
+      if (this.keyCode[counter] == e.code) {
+        this.keyState[e.code] = true;
+      }
+  };
 
-	keyUp = (e: KeyboardEvent) => {
-		e.preventDefault();
-		for (let counter = 0; counter < this.keyCode.length; counter++)
-			if (this.keyCode[counter] === e.code) {
-				this.keyState[e.code] = false;
-			}
-	};
+  keyUp = (e: KeyboardEvent) => {
+    e.preventDefault();
+    for (let counter = 0; counter < this.keyCode.length; counter++)
+      if (this.keyCode[counter] === e.code) {
+        this.keyState[e.code] = false;
+      }
+  };
 
-	isDown = (keyCode: KEYTypes) => {
-		return this.keyState[keyCode] === true;
-	};
+  isDown = (keyCode: KEYTypes) => {
+    return this.keyState[keyCode] === true;
+  };
 }
 
 // Other functions
 // ---------------
 const collides = (a, b) => {
-	return (
-		a.coordinates.x < b.coordinates.x + b.size.width &&
-		a.coordinates.x + a.size.width > b.coordinates.x &&
-		a.coordinates.y < b.coordinates.y + b.size.height &&
-		a.coordinates.y + a.size.height > b.coordinates.y
-	);
+  return (
+    a.coordinates.x < b.coordinates.x + b.size.width &&
+    a.coordinates.x + a.size.width > b.coordinates.x &&
+    a.coordinates.y < b.coordinates.y + b.size.height &&
+    a.coordinates.y + a.size.height > b.coordinates.y
+  );
 };
 
 const getPixelRow = (rowRaw) => {
-	var textRow = [],
-		placer = 0,
-		row = Math.floor(rowRaw / invaderMultiplier);
-	if (row >= blocks.length) return [];
-	for (var i = 0; i < blocks[row].length; i++) {
-		var tmpContent = blocks[row][i] * invaderMultiplier;
-		for (var j = 0; j < invaderMultiplier; j++)
-			textRow[placer + j] = tmpContent + j;
-		placer += invaderMultiplier;
-	}
-	return textRow;
+  var textRow = [],
+    placer = 0,
+    row = Math.floor(rowRaw / invaderMultiplier);
+  if (row >= blocks.length) return [];
+  for (var i = 0; i < blocks[row].length; i++) {
+    var tmpContent = blocks[row][i] * invaderMultiplier;
+    for (var j = 0; j < invaderMultiplier; j++)
+      textRow[placer + j] = tmpContent + j;
+    placer += invaderMultiplier;
+  }
+  return textRow;
 };
 
 // Write Text
 // -----------
 const createInvaders = () => {
-	var invaders = [];
+  var invaders = [];
 
-	var i = blocks.length * invaderMultiplier;
-	while (i--) {
-		var j = getPixelRow(i);
-		for (var k = 0; k < j.length; k++) {
-			invaders.push(
-				new Invader({
-					x: j[k] * invaderSize,
-					y: i * invaderSize,
-				})
-			);
-		}
-	}
-	return invaders;
+  var i = blocks.length * invaderMultiplier;
+  while (i--) {
+    var j = getPixelRow(i);
+    for (var k = 0; k < j.length; k++) {
+      invaders.push(
+        new Invader({
+          x: j[k] * invaderSize,
+          y: i * invaderSize,
+        })
+      );
+    }
+  }
+  return invaders;
 };
