@@ -8,12 +8,20 @@ const ErrorPage = () => {
 	const canvasRef = useRef(null);
 
 	useEffect(() => {
-		let game;
+		let game: Game;
 		if (canvasRef.current) {
-			game = new Game({ element: canvasRef.current });
+			game = new Game({
+				element: canvasRef.current,
+				onReady: (g) => {
+					console.log('g', g);
+					g.start()
+				}
+			});
+			console.log('mount');
+
 		}
 
-		return () => {};
+		return () => { };
 	}, []);
 
 	return (

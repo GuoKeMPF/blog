@@ -3,22 +3,21 @@ type RequestAnimationProps = {
 };
 
 type RequestAnimationStatustype = {
-  init: 'init',
-  running: 'running',
-  stop: 'stop',
-}
+  init: "init";
+  running: "running";
+  stop: "stop";
+};
 
 export const RequestAnimationStatus: RequestAnimationStatustype = {
-  init: 'init',
-  running: 'running',
-  stop: 'stop',
-}
-
+  init: "init",
+  running: "running",
+  stop: "stop",
+};
 
 export default class RequestAnimation {
   callback: Function;
   requestID: number | undefined;
-  status: 'init' | 'running' | 'stop' = "init";
+  status: "init" | "running" | "stop" = "init";
   constructor(props: RequestAnimationProps) {
     this.callback = props.callback;
   }
@@ -33,9 +32,7 @@ export default class RequestAnimation {
     }
   };
   stop = () => {
-    console.log('stop');
-
-    this.status = RequestAnimationStatus.stop
+    this.status = RequestAnimationStatus.stop;
     if (this.requestID) {
       cancelAnimationFrame(this.requestID);
     }
