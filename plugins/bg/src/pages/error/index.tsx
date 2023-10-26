@@ -13,15 +13,15 @@ const ErrorPage = () => {
 			game = new Game({
 				element: canvasRef.current,
 				onReady: (g) => {
-					console.log('g', g);
-					g.start()
-				}
+					console.log("g", g);
+					g.start();
+				},
 			});
-			console.log('mount');
-
+			console.log("mount");
+			console.log(game);
 		}
 
-		return () => { };
+		return () => {};
 	}, []);
 
 	return (
