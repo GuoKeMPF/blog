@@ -12,7 +12,7 @@ const ErrorPage = () => {
 		if (canvasRef.current) {
 			game = new Game({
 				element: canvasRef.current,
-				onReady: (g) => {
+				onReady: (g: Game) => {
 					console.log("g", g);
 					g.start();
 				},
@@ -21,7 +21,7 @@ const ErrorPage = () => {
 			console.log(game);
 		}
 
-		return () => {};
+		return () => { };
 	}, []);
 
 	return (
