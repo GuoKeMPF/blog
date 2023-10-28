@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 
-import { Game } from "./lib";
+import { Game } from "./lib.js";
 
 const ErrorPage = () => {
 	const canvasRef = useRef(null);
@@ -21,7 +21,7 @@ const ErrorPage = () => {
 			console.log(game);
 		}
 
-		return () => { };
+		return () => {};
 	}, []);
 
 	return (
