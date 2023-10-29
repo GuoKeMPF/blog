@@ -33,10 +33,12 @@ export class Game {
 	constructor({ element, onReady }) {
 		this.level = -1;
 		this.lost = false;
+		this.win = false;
 		this.invaders = [];
 		this.invaderShots = [];
 		this.invaderSpeed = 20;
 		this.onReady = onReady;
+		this.invaderDownTimer = null;
 		let node;
 		if (typeof element === "string") {
 			node = document.querySelector(element);
@@ -88,7 +90,6 @@ export class Game {
 			invaderCanvas.height = invaderSize;
 			invaderCanvas?.getContext("2d").drawImage(invaderAsset, 0, 0);
 			this.invaders = this.createInvaders();
-			console.log("invaderAsset.onload");
 			this.initGameStart();
 			this.ready();
 		};
@@ -110,9 +111,15 @@ export class Game {
 
 	start = () => {
 		this.requestAnimation.start();
+		this.invaderDownTimer = setInterval(() => {
+			for (let i = 0; i < this.invaders.length; i++) {
+				this.invaders[i].move();
+			}
+		}, 1000);
 	};
 
 	onFailed = () => {
+		this.invaderDownTimer - null;
 		this.requestAnimation.stop();
 	};
 
@@ -162,20 +169,25 @@ export class Game {
 					const ifShotInvader = collides(projectile, invader);
 					if (ifShotInvader) {
 						invader.destroy();
-						console.log("projectile", projectile.destroy);
 						projectile.destroy();
 					}
 				});
 			});
 
-			this.invaders = this.invaders.filter((item) => item.active);
+			this.invaders = this.invaders.reduce((pre, cur) => {
+				if (cur.active) {
+					cur.update();
+					pre.push(cur);
+				}
+				return pre;
+			}, []);
+			this.win = this.invaders.length === 0;
 
 			this.invaderShots.forEach((invaderShots) => {
 				if (collides(invaderShots, this.player)) {
 					this.player.destroy();
 				}
 			});
-			this.invaders.forEach((invader) => invader.update());
 		} else {
 			this.onFailed();
 		}
@@ -186,29 +198,45 @@ export class Game {
 	};
 
 	draw = () => {
-		if (this.lost) {
+		if (this.win) {
 			this.screen.fillStyle = "rgba(0, 0, 0, 0.03)";
-			this.screen.fillRect(0, 0, gameSize.width, gameSize.height);
-
+			this.screen.fillRect(0, 0, this.gameSize.width, this.gameSize.height);
 			this.screen.font = "55px Lucida Console";
 			this.screen.textAlign = "center";
 			this.screen.fillStyle = "white";
-			this.screen.fillText("You lost", gameSize.width / 2, gameSize.height / 2);
 			this.screen.fillText(
-				"Points: " + this.kills,
-				gameSize.width / 2,
-				gameSize.height / 2 + 30
+				"胜利",
+				this.gameSize.width / 2,
+				this.gameSize.height / 2
 			);
+			this.screen.fillText(
+				"得分" + this.kills,
+				this.gameSize.width / 2,
+				this.gameSize.height + 100
+			);
+			this.screen.fill();
+		} else if (this.lost) {
+			this.screen.fillStyle = "rgba(0, 0, 0, 0.03)";
+			this.screen.fillRect(0, 0, this.gameSize.width, this.gameSize.height);
+			this.screen.font = "55px Lucida Console";
+			this.screen.textAlign = "center";
+			this.screen.fillStyle = "white";
+			this.screen.fillText(
+				"失败",
+				this.gameSize.width / 2,
+				this.gameSize.height / 2
+			);
+			this.screen.fillText(
+				"得分" + this.kills,
+				this.gameSize.width / 2,
+				this.gameSize.height / 2 + 100
+			);
+			this.screen.fill();
 		} else {
-			this.screen.clearRect(0, 0, gameSize.width, gameSize.height);
-
+			this.screen.clearRect(0, 0, this.gameSize.width, this.gameSize.height);
 			this.screen.font = "10px Lucida Console";
-			this.screen.textAlign = "right";
-			this.screen.fillText(
-				"Points: " + this.kills,
-				gameSize.width,
-				gameSize.height - 12
-			);
+			this.screen.textAlign = "end";
+			this.screen.fillText("得分" + this.kills, 40, this.gameSize.height - 20);
 		}
 
 		this.screen.beginPath();
@@ -315,10 +343,10 @@ class Player {
 		};
 		this.gameSize = gameSize;
 		this.game = game;
-		this.shooterHeat = -3;
+		this.shooterHeat = -1;
 		this.coordinates = {
 			x: (gameSize.width / 2 - this.size.width / 2) | 0,
-			y: gameSize.height - this.size.height * 2,
+			y: gameSize.height - this.size.height * 2 - 32,
 		};
 		this.screen = screen;
 		this.projectile = [];
@@ -341,12 +369,12 @@ class Player {
 			this.keyboarder.keyStates.has(this.keyboarder.KEYS.LEFT) &&
 			this.coordinates.x > 0
 		) {
-			this.coordinates.x -= 2;
+			this.coordinates.x -= 3;
 		} else if (
 			this.keyboarder.keyStates.has(this.keyboarder.KEYS.RIGHT) &&
 			this.coordinates.x < this.gameSize.width - this.size.width
 		) {
-			this.coordinates.x += 2;
+			this.coordinates.x += 3;
 		}
 
 		if (this.keyboarder.keyStates.has(this.keyboarder.KEYS.Space)) {
@@ -365,11 +393,11 @@ class Player {
 					gameSize: this.gameSize,
 				};
 				this.projectile.push(new Projectile(params));
-			} else if (this.shooterHeat > 6) {
-				this.shooterHeat = -3;
+			} else if (this.shooterHeat > 5) {
+				this.shooterHeat = -1;
 			}
 		} else {
-			this.shooterHeat = -3;
+			this.shooterHeat = -1;
 		}
 	};
 
