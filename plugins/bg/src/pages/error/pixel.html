@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div><button id="export">导出</button>
+        <button id="back">回退</button>
+    </div>
+    <canvas id="canvas" width="400" height="200"></canvas>
+    <script src="script.js"></script>
+</body>
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const unit = 16;
+    const num = 16
+
+    canvas.width = unit * num;
+    canvas.height = unit * num;
+
+    const points = [{ x: 0, y: -5 }];
+
+    const exportBtn = document.getElementById('export')
+    exportBtn.addEventListener('click', () => {
+        console.log(points)
+    })
+
+    const backBtn = document.getElementById('back')
+    exportBtn.addEventListener('click', () => {
+        if (points.length > 1) {
+            points.pop()
+            draw()
+        }
+    })
+
+    document.addEventListener('keydown', function (event) {
+        const code = event.code
+        let nextCode = {}
+        const preCode = points[points.length - 1]
+        const { x, y } = preCode
+        switch (code) {
+            case 'ArrowUp':
+                nextCode = {
+                    x,
+                    y: y + 1
+                }
+                break;
+            case 'ArrowRight':
+                // ->
+                nextCode = {
+                    x: x + 1,
+                    y,
+                }
+                break;
+            case 'ArrowDown':
+                nextCode = {
+                    x,
+                    y: y - 1
+                }
+                break;
+            case 'ArrowLeft':
+                // <-
+                nextCode = {
+                    x: x - 1,
+                    y,
+                }
+                break;
+            default:
+                break;
+        }
+        points.push(nextCode)
+        draw()
+    });
+
+    const draw = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.beginPath();
+
+        ctx.fillStyle = "black";
+        ctx.strokeStyle = "black";
+        points.forEach((item, index) => {
+            if (index === 0) {
+                ctx.moveTo(item.x * unit, item.y * unit);
+            } else {
+
+                ctx.lineTo(item.x * unit, item.y * unit);
+            }
+        })
+        ctx.stroke()
+        ctx.fill();
+    }
+
+
+
+</script>
+
+</html>
