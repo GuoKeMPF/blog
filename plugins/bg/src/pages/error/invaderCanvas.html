@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>title</title>
+</head>
+
+<body>
+	<div><button id="export">导出</button>
+		<button id="back">回退</button>
+	</div>
+	<br>
+	<canvas id="canvas"></canvas>
+</body>
+<script>
+	const canvas = document.getElementById('canvas');
+	const ctx = canvas.getContext('2d');
+
+	const unit = 32;
+	const num = 11
+
+	canvas.width = unit * num;
+	canvas.height = unit * num;
+
+	const invaderPath = {
+		body: [
+			{
+				x: 0,
+				y: 5,
+			},
+			{
+				x: 0,
+				y: 6,
+			},
+			{
+				x: 0,
+				y: 7,
+			},
+			{
+				x: 1,
+				y: 7,
+			},
+			{
+				x: 1,
+				y: 6,
+			},
+			{
+				x: 1,
+				y: 5,
+			},
+			{
+				x: 2,
+				y: 5,
+			},
+			{
+				x: 2,
+				y: 6,
+			},
+			{
+				x: 2,
+				y: 7,
+			},
+			{
+				x: 3,
+				y: 7,
+			},
+			{
+				x: 3,
+				y: 8,
+			},
+			{
+				x: 2,
+				y: 8,
+			},
+			{
+				x: 2,
+				y: 9,
+			},
+			{
+				x: 2,
+				y: 10,
+			},
+			{
+				x: 2,
+				y: 11,
+			},
+			{
+				x: 3,
+				y: 11,
+			},
+			{
+				x: 4,
+				y: 11,
+			},
+			{
+				x: 4,
+				y: 10,
+			},
+			{
+				x: 4,
+				y: 9,
+			},
+			{
+				x: 4,
+				y: 8,
+			},
+			{
+				x: 5,
+				y: 8,
+			},
+			{
+				x: 5,
+				y: 7,
+			},
+			{
+				x: 6,
+				y: 7,
+			},
+			{
+				x: 6,
+				y: 8,
+			},
+			{
+				x: 7,
+				y: 8,
+			},
+			{
+				x: 7,
+				y: 9,
+			},
+			{
+				x: 7,
+				y: 10,
+			},
+			{
+				x: 7,
+				y: 11,
+			},
+			{
+				x: 8,
+				y: 11,
+			},
+			{
+				x: 9,
+				y: 11,
+			},
+			{
+				x: 9,
+				y: 10,
+			},
+			{
+				x: 9,
+				y: 9,
+			},
+			{
+				x: 9,
+				y: 8,
+			},
+			{
+				x: 8,
+				y: 8,
+			},
+			{
+				x: 8,
+				y: 7,
+			},
+			{
+				x: 9,
+				y: 7,
+			},
+			{
+				x: 9,
+				y: 6,
+			},
+			{
+				x: 9,
+				y: 5,
+			},
+			{
+				x: 10,
+				y: 5,
+			},
+			{
+				x: 10,
+				y: 6,
+			},
+			{
+				x: 10,
+				y: 7,
+			},
+			{
+				x: 11,
+				y: 7,
+			},
+			{
+				x: 11,
+				y: 6,
+			},
+			{
+				x: 11,
+				y: 5,
+			},
+			{
+				x: 10,
+				y: 5,
+			},
+			{
+				x: 10,
+				y: 4,
+			},
+			{
+				x: 9,
+				y: 4,
+			},
+			{
+				x: 9,
+				y: 3,
+			},
+			{
+				x: 8,
+				y: 3,
+			},
+			{
+				x: 8,
+				y: 2,
+			},
+			{
+				x: 9,
+				y: 2,
+			},
+			{
+				x: 9,
+				y: 1,
+			},
+			{
+				x: 10,
+				y: 1,
+			},
+			{
+				x: 10,
+				y: 0,
+			},
+			{
+				x: 9,
+				y: 0,
+			},
+			{
+				x: 9,
+				y: 1,
+			},
+			{
+				x: 8,
+				y: 1,
+			},
+			{
+				x: 8,
+				y: 2,
+			},
+			{
+				x: 7,
+				y: 2,
+			},
+			{
+				x: 7,
+				y: 3,
+			},
+			{
+				x: 6,
+				y: 3,
+			},
+			{
+				x: 5,
+				y: 3,
+			},
+			{
+				x: 4,
+				y: 3,
+			},
+			{
+				x: 4,
+				y: 2,
+			},
+			{
+				x: 3,
+				y: 2,
+			},
+			{
+				x: 3,
+				y: 1,
+			},
+			{
+				x: 2,
+				y: 1,
+			},
+			{
+				x: 2,
+				y: 0,
+			},
+			{
+				x: 1,
+				y: 0,
+			},
+			{
+				x: 1,
+				y: 1,
+			},
+			{
+				x: 2,
+				y: 1,
+			},
+			{
+				x: 2,
+				y: 2,
+			},
+			{
+				x: 3,
+				y: 2,
+			},
+			{
+				x: 3,
+				y: 3,
+			},
+			{
+				x: 2,
+				y: 3,
+			},
+			{
+				x: 2,
+				y: 4,
+			},
+			{
+				x: 1,
+				y: 4,
+			},
+			{
+				x: 1,
+				y: 5,
+			},
+		],
+		eye: [
+			[
+				{ x: 4, y: 4 },
+				{ x: 3, y: 4 },
+				{ x: 3, y: 5 },
+				{ x: 4, y: 5 },
+			],
+			[
+				{ x: 8, y: 4 },
+				{ x: 7, y: 4 },
+				{ x: 7, y: 5 },
+				{ x: 8, y: 5 },
+			],
+		],
+	};
+
+
+	const draw = () => {
+		ctx.clearRect(0, 0, canvas.width, canvas.height)
+		ctx.beginPath();
+
+		// body
+		const { body, eye } = invaderPath
+		ctx.fillStyle = "#000";
+		ctx.strokeStyle = "#000";
+		body.forEach((item, index, arr) => {
+			if (index === 0) {
+				ctx.moveTo(item.x * unit, item.y * unit);
+			} else {
+				ctx.lineTo(item.x * unit, item.y * unit);
+			}
+		})
+		ctx.stroke()
+		ctx.fill();
+
+
+
+
+		ctx.fillStyle = "#fff";
+		ctx.strokeStyle = "#fff";
+
+
+		eye.forEach((e) => {
+			const eyePath = e;
+			ctx.beginPath();
+			eyePath.forEach((item, index, arr) => {
+				if (index === 0) {
+					ctx.moveTo(item.x * unit, item.y * unit);
+				} else {
+					ctx.lineTo(item.x * unit, item.y * unit);
+				}
+			})
+			ctx.stroke()
+			ctx.fill();
+		})
+
+	}
+
+	draw()
+</script>
+
+</html>

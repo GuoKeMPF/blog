@@ -5,33 +5,420 @@ import { ReactNode } from "react";
 import RequestAnimation from "@/utils/requestAnimation";
 
 const theme = {
-	backgroundColor: "#fff",
-	elementColor: "#000",
+	backgroundColor: "#00000000",
+	elementColor: "#fff",
 };
 
 // Assets
-var invaderCanvas,
-	invaderSize = 20,
-	invaderAttackRate = 0;
-
-// Text
-// const blocks = [
-// 	[3, 4, 8, 9, 10, 15, 16],
-// 	[2, 4, 7, 11, 14, 16],
-// 	[1, 4, 7, 11, 13, 16],
-// 	[1, 2, 3, 4, 5, 7, 11, 13, 14, 15, 16, 17],
-// 	[4, 7, 11, 16],
-// 	[4, 8, 9, 10, 16],
-// ];
-const blocks = [[3, 4, 5, 6, 7]];
-
+const invaderSize = 20;
+const invaderAttackRate = 0.99;
 let gameSize = {
 	width: 1200,
 	height: 500,
 };
 
+const invaderSpeed = 400;
+
+const invaderPath = {
+	body: [
+		{
+			x: 0,
+			y: 5,
+		},
+		{
+			x: 0,
+			y: 6,
+		},
+		{
+			x: 0,
+			y: 7,
+		},
+		{
+			x: 1,
+			y: 7,
+		},
+		{
+			x: 1,
+			y: 6,
+		},
+		{
+			x: 1,
+			y: 5,
+		},
+		{
+			x: 2,
+			y: 5,
+		},
+		{
+			x: 2,
+			y: 6,
+		},
+		{
+			x: 2,
+			y: 7,
+		},
+		{
+			x: 3,
+			y: 7,
+		},
+		{
+			x: 3,
+			y: 8,
+		},
+		{
+			x: 2,
+			y: 8,
+		},
+		{
+			x: 2,
+			y: 9,
+		},
+		{
+			x: 2,
+			y: 10,
+		},
+		{
+			x: 2,
+			y: 11,
+		},
+		{
+			x: 3,
+			y: 11,
+		},
+		{
+			x: 4,
+			y: 11,
+		},
+		{
+			x: 4,
+			y: 10,
+		},
+		{
+			x: 4,
+			y: 9,
+		},
+		{
+			x: 4,
+			y: 8,
+		},
+		{
+			x: 5,
+			y: 8,
+		},
+		{
+			x: 5,
+			y: 7,
+		},
+		{
+			x: 6,
+			y: 7,
+		},
+		{
+			x: 6,
+			y: 8,
+		},
+		{
+			x: 7,
+			y: 8,
+		},
+		{
+			x: 7,
+			y: 9,
+		},
+		{
+			x: 7,
+			y: 10,
+		},
+		{
+			x: 7,
+			y: 11,
+		},
+		{
+			x: 8,
+			y: 11,
+		},
+		{
+			x: 9,
+			y: 11,
+		},
+		{
+			x: 9,
+			y: 10,
+		},
+		{
+			x: 9,
+			y: 9,
+		},
+		{
+			x: 9,
+			y: 8,
+		},
+		{
+			x: 8,
+			y: 8,
+		},
+		{
+			x: 8,
+			y: 7,
+		},
+		{
+			x: 9,
+			y: 7,
+		},
+		{
+			x: 9,
+			y: 6,
+		},
+		{
+			x: 9,
+			y: 5,
+		},
+		{
+			x: 10,
+			y: 5,
+		},
+		{
+			x: 10,
+			y: 6,
+		},
+		{
+			x: 10,
+			y: 7,
+		},
+		{
+			x: 11,
+			y: 7,
+		},
+		{
+			x: 11,
+			y: 6,
+		},
+		{
+			x: 11,
+			y: 5,
+		},
+		{
+			x: 10,
+			y: 5,
+		},
+		{
+			x: 10,
+			y: 4,
+		},
+		{
+			x: 9,
+			y: 4,
+		},
+		{
+			x: 9,
+			y: 3,
+		},
+		{
+			x: 8,
+			y: 3,
+		},
+		{
+			x: 8,
+			y: 2,
+		},
+		{
+			x: 9,
+			y: 2,
+		},
+		{
+			x: 9,
+			y: 1,
+		},
+		{
+			x: 10,
+			y: 1,
+		},
+		{
+			x: 10,
+			y: 0,
+		},
+		{
+			x: 9,
+			y: 0,
+		},
+		{
+			x: 9,
+			y: 1,
+		},
+		{
+			x: 8,
+			y: 1,
+		},
+		{
+			x: 8,
+			y: 2,
+		},
+		{
+			x: 7,
+			y: 2,
+		},
+		{
+			x: 7,
+			y: 3,
+		},
+		{
+			x: 6,
+			y: 3,
+		},
+		{
+			x: 5,
+			y: 3,
+		},
+		{
+			x: 4,
+			y: 3,
+		},
+		{
+			x: 4,
+			y: 2,
+		},
+		{
+			x: 3,
+			y: 2,
+		},
+		{
+			x: 3,
+			y: 1,
+		},
+		{
+			x: 2,
+			y: 1,
+		},
+		{
+			x: 2,
+			y: 0,
+		},
+		{
+			x: 1,
+			y: 0,
+		},
+		{
+			x: 1,
+			y: 1,
+		},
+		{
+			x: 2,
+			y: 1,
+		},
+		{
+			x: 2,
+			y: 2,
+		},
+		{
+			x: 3,
+			y: 2,
+		},
+		{
+			x: 3,
+			y: 3,
+		},
+		{
+			x: 2,
+			y: 3,
+		},
+		{
+			x: 2,
+			y: 4,
+		},
+		{
+			x: 1,
+			y: 4,
+		},
+		{
+			x: 1,
+			y: 5,
+		},
+	],
+	eye: [
+		[
+			{ x: 4, y: 4 },
+			{ x: 3, y: 4 },
+			{ x: 3, y: 5 },
+			{ x: 4, y: 5 },
+		],
+		[
+			{ x: 8, y: 4 },
+			{ x: 7, y: 4 },
+			{ x: 7, y: 5 },
+			{ x: 8, y: 5 },
+		],
+	],
+};
+
+// 404
+export const blocks404 = [
+	[3, 4, 8, 9, 10, 15, 16],
+	[2, 4, 7, 11, 14, 16],
+	[1, 4, 7, 11, 13, 16],
+	[1, 2, 3, 4, 5, 7, 11, 13, 14, 15, 16, 17],
+	[4, 7, 11, 16],
+	[4, 8, 9, 10, 16],
+];
+
+export const blocks500 = [
+	[0, 1, 2, 3, 4, 7, 8, 9, 12, 13, 14, 15, 16],
+	[0, 6, 10, 12],
+	[0, 1, 2, 3, 6, 10, 12, 13, 14, 15],
+	[4, 6, 10, 16],
+	[0, 4, 6, 10, 12, 16],
+	[1, 2, 3, 7, 8, 9, 13, 14, 15],
+];
+
+const createInvaderUnit = () => {
+	const invaderCanvas = document.createElement("canvas");
+	const ctx = invaderCanvas.getContext("2d");
+
+	const unit = 32;
+	const num = 11;
+	invaderCanvas.width = unit * num;
+	invaderCanvas.height = unit * num;
+
+	ctx.clearRect(0, 0, invaderCanvas.width, invaderCanvas.height);
+	ctx.beginPath();
+
+	// body
+	const { body, eye } = invaderPath;
+	ctx.fillStyle = theme.elementColor;
+	ctx.strokeStyle = theme.elementColor;
+	body.forEach((item, index, arr) => {
+		if (index === 0) {
+			ctx.moveTo(item.x * unit, item.y * unit);
+		} else {
+			ctx.lineTo(item.x * unit, item.y * unit);
+		}
+	});
+	ctx.stroke();
+	ctx.fill();
+
+	ctx.fillStyle = theme.backgroundColor;
+	ctx.strokeStyle = theme.backgroundColor;
+
+	eye.forEach((e) => {
+		const eyePath = e;
+		ctx.beginPath();
+		eyePath.forEach((item, index, arr) => {
+			if (index === 0) {
+				ctx.moveTo(item.x * unit, item.y * unit);
+			} else {
+				ctx.lineTo(item.x * unit, item.y * unit);
+			}
+		});
+		ctx.stroke();
+		ctx.fill();
+	});
+
+	return invaderCanvas;
+};
+
+const invaderUnit = createInvaderUnit();
+
 export class Game {
-	constructor({ element, onReady }) {
+	constructor({ element, onReady, blocks }) {
 		this.level = -1;
 		this.lost = false;
 		this.win = false;
@@ -40,6 +427,7 @@ export class Game {
 		this.invaderSpeed = 20;
 		this.onReady = onReady;
 		this.invaderDownTimer = null;
+		this.blocks = blocks;
 		let node;
 		if (typeof element === "string") {
 			node = document.querySelector(element);
@@ -80,25 +468,15 @@ export class Game {
 		this.invaderMultiplier = invaderMultiplier;
 		this.gameSize = gameSize;
 		this.kills = 0;
-		invaderAttackRate = 0.999;
 		const context = this;
 		this.player = new Player({ screen, gameSize, game: context });
-		const invaderAsset = new Image();
-
-		invaderAsset.onload = () => {
-			invaderCanvas = document.createElement("canvas");
-			invaderCanvas.width = invaderSize;
-			invaderCanvas.height = invaderSize;
-			invaderCanvas?.getContext("2d").drawImage(invaderAsset, 0, 0);
-			this.invaders = this.createInvaders();
-			this.initGameStart();
-			this.ready();
-		};
 
 		this.requestAnimation = new RequestAnimation({
 			callback: this.initGameStart,
 		});
-		invaderAsset.src = "//stillh.art/project/spaceInvaders/invader.gif";
+		this.invaders = this.createInvaders();
+		this.initGameStart();
+		this.ready();
 	}
 
 	initGameStart = () => {
@@ -116,7 +494,7 @@ export class Game {
 			for (let i = 0; i < this.invaders.length; i++) {
 				this.invaders[i].move();
 			}
-		}, 1000);
+		}, invaderSpeed);
 	};
 
 	onFailed = () => {
@@ -126,7 +504,7 @@ export class Game {
 
 	createInvaders = () => {
 		const invaders = [];
-		let i = blocks.length * this.invaderMultiplier;
+		let i = this.blocks.length * this.invaderMultiplier;
 		while (i--) {
 			var j = this.getPixelRow(i, this.invaderMultiplier);
 			for (var k = 0; k < j.length; k++) {
@@ -151,9 +529,11 @@ export class Game {
 		var textRow = [],
 			placer = 0,
 			row = Math.floor(rowRaw / invaderMultiplier);
-		if (row >= blocks.length) return [];
-		for (var i = 0; i < blocks[row].length; i++) {
-			var tmpContent = blocks[row][i] * invaderMultiplier;
+		if (row >= this.blocks.length) {
+			return [];
+		}
+		for (var i = 0; i < this.blocks[row].length; i++) {
+			var tmpContent = this.blocks[row][i] * invaderMultiplier;
 			for (var j = 0; j < invaderMultiplier; j++) {
 				textRow[placer + j] = tmpContent + j;
 			}
@@ -204,7 +584,7 @@ export class Game {
 			this.screen.fillRect(0, 0, this.gameSize.width, this.gameSize.height);
 			this.screen.font = "55px Lucida Console";
 			this.screen.textAlign = "center";
-			this.screen.fillStyle = "white";
+			this.screen.fillStyle = theme.elementColor;
 			this.screen.fillText(
 				"胜利",
 				this.gameSize.width / 2,
@@ -221,7 +601,7 @@ export class Game {
 			this.screen.fillRect(0, 0, this.gameSize.width, this.gameSize.height);
 			this.screen.font = "55px Lucida Console";
 			this.screen.textAlign = "center";
-			this.screen.fillStyle = "white";
+			this.screen.fillStyle = theme.elementColor;
 			this.screen.fillText(
 				"失败",
 				this.gameSize.width / 2,
@@ -307,9 +687,15 @@ class Invader {
 	draw = () => {
 		if (this.active) {
 			this.screen.drawImage(
-				invaderCanvas,
+				invaderUnit,
+				0,
+				0,
+				invaderUnit.width,
+				invaderUnit.height,
 				this.coordinates.x,
-				this.coordinates.y
+				this.coordinates.y,
+				invaderSize,
+				invaderSize
 			);
 		}
 	};
@@ -404,6 +790,7 @@ class Player {
 
 	draw = () => {
 		if (this.active) {
+			this.screen.fillStyle = theme.elementColor;
 			this.screen.rect(
 				this.coordinates.x,
 				this.coordinates.y,

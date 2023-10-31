@@ -2,7 +2,9 @@
 
 import { useRef, useEffect } from "react";
 
-import { Game } from "./lib.js";
+import { Game, blocks500 } from "./lib.js";
+
+import styles from "./index.less";
 
 const ErrorPage = () => {
 	const canvasRef = useRef(null);
@@ -13,19 +15,17 @@ const ErrorPage = () => {
 			game = new Game({
 				element: canvasRef.current,
 				onReady: (g: Game) => {
-					console.log("g", g);
 					g.start();
 				},
+				blocks: [[1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 20, 23]],
 			});
-			console.log("mount");
-			console.log(game);
 		}
 
 		return () => {};
 	}, []);
 
 	return (
-		<div>
+		<div className={styles.bg}>
 			<p>
 				Space Invadors destroyed this page! Take revenge on them!
 				<br /> Use <span>Space</span> to shoot and <span>←</span>&#160;
