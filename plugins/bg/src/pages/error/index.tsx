@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 
-import { Game, blocks500 } from "./lib.js";
+import { Game, blocks500 } from "./lib";
 
 import styles from "./index.less";
 
@@ -17,11 +17,11 @@ const ErrorPage = () => {
 				onReady: (g: Game) => {
 					g.start();
 				},
-				blocks: [[1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 20, 23]],
+				blocks: [[17]],
 			});
 		}
 
-		return () => {};
+		return () => { };
 	}, []);
 
 	return (

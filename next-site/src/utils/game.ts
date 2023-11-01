@@ -383,8 +383,8 @@ export const blocks500: BlocksType = [
   [1, 2, 3, 7, 8, 9, 13, 14, 15],
 ];
 
-const createInvaderUnit = () => {
-  const invaderCanvas = document.createElement("canvas");
+const createInvaderUnit = (): HTMLCanvasElement => {
+  const invaderCanvas = window.document.createElement("canvas");
   const ctx = invaderCanvas.getContext("2d") as CanvasRenderingContext2D;
 
   const unit = 32;
@@ -428,8 +428,6 @@ const createInvaderUnit = () => {
 
   return invaderCanvas;
 };
-
-const invaderUnit = createInvaderUnit();
 
 export class Game {
   level: number;
@@ -538,6 +536,7 @@ export class Game {
   createInvaders = () => {
     const invaders = [];
     let i = this.blocks.length * this.invaderMultiplier;
+    const invaderUnit: HTMLCanvasElement = createInvaderUnit();
     while (i--) {
       var j = this.getPixelRow(i, this.invaderMultiplier);
       for (var k = 0; k < j.length; k++) {
@@ -547,6 +546,7 @@ export class Game {
               x: j[k] * invaderSize,
               y: i * invaderSize,
             },
+            invaderUnit,
             game: this,
             speedX: this.invaderSpeed,
             screen: this.screen,
@@ -691,6 +691,7 @@ interface InvaderProps {
   screen: CanvasRenderingContext2D;
   game: Game;
   gameSize: GameSize;
+  invaderUnit: HTMLCanvasElement;
 }
 
 class Invader {
@@ -702,13 +703,22 @@ class Invader {
   patrolX: number;
   speedX: number;
   gameSize: GameSize;
-  constructor({ coordinates, speedX, screen, game, gameSize }: InvaderProps) {
+  invaderUnit: HTMLCanvasElement;
+  constructor({
+    coordinates,
+    speedX,
+    screen,
+    game,
+    gameSize,
+    invaderUnit,
+  }: InvaderProps) {
     this.active = true;
     this.coordinates = coordinates;
     this.size = {
       width: invaderSize,
       height: invaderSize,
     };
+    this.invaderUnit = invaderUnit;
     this.screen = screen;
     this.game = game;
     this.patrolX = 0;
@@ -741,11 +751,11 @@ class Invader {
   draw = () => {
     if (this.active) {
       this.screen.drawImage(
-        invaderUnit,
+        this.invaderUnit,
         0,
         0,
-        invaderUnit.width,
-        invaderUnit.height,
+        this.invaderUnit.width,
+        this.invaderUnit.height,
         this.coordinates.x,
         this.coordinates.y,
         invaderSize,
