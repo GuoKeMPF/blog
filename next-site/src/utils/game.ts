@@ -18,7 +18,8 @@ interface Coordinates {
 
 interface GameProps {
   element: string | ReactNode;
-  onReady: Function;
+  onReady?: Function;
+  onFailed?: Function;
   blocks: BlocksType;
 }
 
@@ -29,9 +30,9 @@ const theme = {
 
 // Assets
 const invaderSize = 20;
-const invaderAttackRate = 0.995;
+const invaderAttackRate = 0.996;
 
-const invaderSpeed = 500;
+const invaderSpeed = 600;
 
 const invaderPath = {
   body: [
@@ -436,8 +437,9 @@ export class Game {
   invaders: Invader[];
   invaderShots: Projectile[];
   invaderSpeed: number;
-  onReady: Function;
-  invaderDownTimer: null | NodeJS.Timer;
+  onReady?: Function;
+  onFailed?: Function;
+  invaderDownTimer: undefined | number | NodeJS.Timeout;
   blocks: BlocksType;
   screen: CanvasRenderingContext2D;
   invaderMultiplier: number;
@@ -445,7 +447,8 @@ export class Game {
   kills: number;
   player: Player;
   requestAnimation: RequestAnimation;
-  constructor({ element, onReady, blocks }: GameProps) {
+
+  constructor({ element, onReady, blocks, onFailed }: GameProps) {
     this.level = -1;
     this.lost = false;
     this.win = false;
@@ -453,7 +456,8 @@ export class Game {
     this.invaderShots = [];
     this.invaderSpeed = 20;
     this.onReady = onReady;
-    this.invaderDownTimer = null;
+    this.onFailed = onFailed;
+    this.invaderDownTimer = undefined;
     this.blocks = blocks;
     let node;
     if (typeof element === "string") {
@@ -477,19 +481,19 @@ export class Game {
     if (window.innerWidth >= 1600) {
       gameSize = {
         width: 1600,
-        height: 600,
+        height: 700,
       };
       invaderMultiplier = 3;
     } else if (window.innerWidth > 900) {
       gameSize = {
         width: 900,
-        height: 500,
+        height: 560,
       };
       invaderMultiplier = 2;
     } else {
       gameSize = {
         width: 600,
-        height: 400,
+        height: 500,
       };
       invaderMultiplier = 1;
     }
@@ -515,8 +519,16 @@ export class Game {
     this.update();
   };
 
+  reset = () => {
+    this.player = new Player({
+      screen: this.screen,
+      gameSize: this.gameSize,
+      game: this,
+    });
+  };
+
   ready = () => {
-    this.onReady(this);
+    this.onReady && this.onReady(this);
   };
 
   start = () => {
@@ -527,9 +539,20 @@ export class Game {
       }
     }, invaderSpeed);
   };
+  failed = () => {
+    this.onFailed && this.onFailed(this);
+  };
+  setFailed = () => {
+    setTimeout(() => {
+      clearInterval(this.invaderDownTimer);
+      this.invaderDownTimer = undefined;
+      this.requestAnimation.stop();
+    }, 5000);
+  };
 
-  onFailed = () => {
-    this.invaderDownTimer = null;
+  destroy = () => {
+    clearInterval(this.invaderDownTimer);
+    this.invaderDownTimer = undefined;
     this.requestAnimation.stop();
   };
 
@@ -603,7 +626,7 @@ export class Game {
         }
       });
     } else {
-      this.onFailed();
+      this.setFailed();
     }
 
     // Don't stop player & projectiles.. they look nice
@@ -654,8 +677,8 @@ export class Game {
     if (this.win || this.lost) {
       this.screen.fill();
       this.player.draw();
-      this.requestAnimation.stop();
       this.player.destroy();
+      this.setFailed();
     }
 
     this.screen.beginPath();
