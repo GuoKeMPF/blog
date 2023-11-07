@@ -1,0 +1,18 @@
+.context {
+	box-sizing: border-box;
+	min-height: 100vh;
+	background-color: var(--themeColor);
+	color: var(--themeFontColor);
+	width: 100%;
+	box-sizing: border-box;
+	background-size: cover;
+	background-attachment: fixed;
+}
+
+@media screen and (min-width: 1056px) {
+	.context {
+		width: 1024px;
+		margin: 0 auto;
+		background-color: inherit;
+	}
+}
