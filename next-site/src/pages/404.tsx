@@ -63,7 +63,7 @@ const Page404: NextPageWithLayout = () => {
 			<canvas ref={canvasRef} className={styles.canvas} id='space-invaders' />
 
 			<Footer
-				actions={<>{failed && <button onClick={restart}>重新开始</button>}</>}
+				actions={<>{<button onClick={restart}>重新开始</button>}</>}
 			></Footer>
 		</div>
 	);
