@@ -14,7 +14,7 @@ export const Header = () => {
 				<Link href='/' className={styles.navlink}>
 					首页
 				</Link>
-				<Link href='/texts' className={styles.navlink}>
+				<Link href='/text' className={styles.navlink}>
 					日志
 				</Link>
 				<Link href='/picture' className={styles.navlink}>
