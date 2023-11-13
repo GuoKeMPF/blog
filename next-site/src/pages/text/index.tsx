@@ -12,43 +12,65 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { queryTexts } from "@/services";
 
 import styles from "./index.module.scss";
-import { initializeStore } from "@/store/store";
-import { useText } from "@/store/stores";
-
-
+import { TextParams } from "@/services/API";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { query } = context;
 	const res = await queryTexts({ ...query });
-	const zustandStore = initializeStore({
-		text: {
-			size: res.size ?? 50,
-			page: res.page ?? 1,
-			loading: false,
-			texts: res.data || [],
-		},
-	});
-
 	return {
 		props: {
-			initialZustandState: JSON.parse(JSON.stringify(zustandStore.getState())),
+			initialState: {
+				size: res.size ?? 50,
+				page: res.page ?? 1,
+				loading: false,
+				texts: res.data || [],
+			},
 		},
 	};
 };
 
-const Home: NextPageWithLayout = ({ }: InferGetServerSidePropsType<
+const Home: NextPageWithLayout = ({ initialState }: InferGetServerSidePropsType<
 	typeof getServerSideProps
 >) => {
-	const { loading, texts, total } = useText();
+	const [loading, setLoading] = useState(initialState.loading)
+	const [texts, setTexts] = useState(initialState.texts)
+	const [total, setTotal] = useState(initialState.total)
+	const [page, setPage] = useState(initialState.page)
+	const [size, setSize] = useState(initialState.size)
+
+
+	const getTexts = async (query: TextParams) => {
+		setLoading(true)
+		const response = await queryTexts({ ...query })
+		setLoading(false)
+		setPage(response.page)
+		setSize(response.size)
+		setTotal(response.count)
+		return response.data
+	}
+
 
 	const loadMore = async () => {
+		const query = {
+			size: size,
+			page: page + 1
+		}
+		return await getTexts(query)
+	}
 
-		return []
+	const loadPre = async () => {
+		if (page <= 1) {
+			return []
+		}
+		const query = {
+			size: size,
+			page: page - 1
+		}
+		return await getTexts(query)
 	}
 
 
 	return (
-		// <></>
 		<Spin loading={loading}>
 			<div className={styles.container}>
 				<VirtualScroll

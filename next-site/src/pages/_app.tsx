@@ -5,7 +5,6 @@ import type { AppProps } from "next/app";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 
-import StoreProvider from "@/store/StoreProvider";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 	getLayout?: (page: ReactElement) => ReactNode;
@@ -20,8 +19,6 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 	const getLayout = Component.getLayout ?? ((page) => page);
 
 	return getLayout(
-		<StoreProvider {...pageProps.initialZustandState}>
-			<Component {...pageProps} />
-		</StoreProvider>
+		<Component {...pageProps} />
 	);
 }

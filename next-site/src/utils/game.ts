@@ -941,6 +941,7 @@ class Player {
   };
   destroy = () => {
     this.active = false;
+    this.game.status = "lost";
     this.keyboarder.destroy();
   };
 }
