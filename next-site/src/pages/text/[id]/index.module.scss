@@ -2,22 +2,6 @@
 	overflow: hidden;
 }
 
-.texts {
-	position: relative;
-
-	&:after {
-		opacity: 1;
-		position: absolute;
-		content: '';
-		width: 100%;
-		max-height: 30px;
-		height: 50%;
-		left: 0;
-		bottom: 0;
-		background: linear-gradient(#00000000, var(--themeColor));
-	}
-}
-
 @media screen and (max-width: 650px) {
 	.row {
 		display: flex;
@@ -39,7 +23,6 @@
 
 		.texts {
 			flex: 1;
-			padding: var(--px8) 0;
 		}
 	}
 }
@@ -65,7 +48,6 @@
 		.texts {
 			flex-shrink: 0;
 			width: calc(50% - var(--margin));
-			padding: var(--px16) 0;
 		}
 	}
 

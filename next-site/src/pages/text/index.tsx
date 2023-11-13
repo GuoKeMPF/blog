@@ -6,7 +6,7 @@ import type { NextPageWithLayout } from "../_app";
 
 import Spin from "@/components/Spin";
 import VirtualScroll from "@/components/VirtualScroll";
-import { TextItem } from "@/components/Text";
+import { TextItem } from "@/components/features/Text";
 
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { queryTexts } from "@/services";
@@ -29,66 +29,66 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	};
 };
 
-const Home: NextPageWithLayout = ({ initialState }: InferGetServerSidePropsType<
-	typeof getServerSideProps
->) => {
-	const [loading, setLoading] = useState(initialState.loading)
-	const [texts, setTexts] = useState(initialState.texts)
-	const [total, setTotal] = useState(initialState.total)
-	const [page, setPage] = useState(initialState.page)
-	const [size, setSize] = useState(initialState.size)
-
+const Home: NextPageWithLayout = ({
+	initialState,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+	const [loading, setLoading] = useState(initialState.loading);
+	const [texts, setTexts] = useState(initialState.texts);
+	const [total, setTotal] = useState(initialState.total);
+	const [page, setPage] = useState(initialState.page);
+	const [size, setSize] = useState(initialState.size);
 
 	const getTexts = async (query: TextParams) => {
-		setLoading(true)
-		const response = await queryTexts({ ...query })
-		setLoading(false)
-		setPage(response.page)
-		setSize(response.size)
-		setTotal(response.count)
-		return response.data
-	}
-
+		setLoading(true);
+		const response = await queryTexts({ ...query });
+		setLoading(false);
+		setPage(response.page);
+		setSize(response.size);
+		setTotal(response.count);
+		return response.data;
+	};
 
 	const loadMore = async () => {
 		const query = {
 			size: size,
-			page: page + 1
-		}
-		return await getTexts(query)
-	}
+			page: page + 1,
+		};
+		return await getTexts(query);
+	};
 
 	const loadPre = async () => {
 		if (page <= 1) {
-			return []
+			return [];
 		}
 		const query = {
 			size: size,
-			page: page - 1
-		}
-		return await getTexts(query)
-	}
-
+			page: page - 1,
+		};
+		return await getTexts(query);
+	};
 
 	return (
 		<Spin loading={loading}>
-			<div className={styles.container}>
+			<div className={styles.container} id='texts'>
 				<VirtualScroll
 					loadMoreDate={loadMore}
 					initList={texts}
 					end={total === texts.length}
 					preSetCellHeight={60}
 					cellClassName={(data) => {
-						const { index } = data
-						const otherClassName = index % 2 === 0 ? styles.odd : styles.even
-						return `${styles.row} ${otherClassName}`
+						const { index } = data;
+						const otherClassName = index % 2 === 0 ? styles.odd : styles.even;
+						return `${styles.row} ${otherClassName}`;
 					}}
 					onRenderCell={(data: any) => (
 						<Fragment>
 							<div className={styles.line}>
 								<div className={styles.index}></div>
 							</div>
-							<div className={styles.texts}>
+							<div
+								id={`text_summary_${data.id}`}
+								className={`${styles.texts || ""} text_summary`}
+							>
 								<TextItem text={data} />
 							</div>
 						</Fragment>

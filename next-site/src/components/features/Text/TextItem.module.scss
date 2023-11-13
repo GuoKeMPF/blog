@@ -37,18 +37,6 @@
 	}
 }
 
-.text:after {
-	opacity: 1;
-	position: absolute;
-	content: '';
-	width: 100%;
-	max-height: 30px;
-	height: 50%;
-	left: 0;
-	bottom: 0;
-	background: linear-gradient(#00000000, var(--themeColor));
-}
-
 .text:hover {
 	box-shadow: 0 0 20px var(--shadowColor);
 	color: var(--themeFontColorGrey);
