@@ -11,7 +11,7 @@ const texts: [] = mockjs.mock({
       "ifPublic|1": "@boolean()",
       "id|+1": 0,
       create_time: Random.datetime("yyyy-MM-dd HH:mm:ss"),
-      title: "@title()",
+      "title|+1": 0,
       content: "@cparagraph()",
       description: "@cparagraph()",
     },

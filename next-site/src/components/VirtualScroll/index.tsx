@@ -11,7 +11,7 @@ import styles from "./index.module.scss";
 
 const ContainerContext = createContext({
   height: 0,
-  updateHeight: (d: any, v: number) => {},
+  updateHeight: (d: any, v: number) => { },
 });
 
 type ContainerCellProps = {
@@ -68,36 +68,54 @@ const PreloadCell: FC<PreloadCellProps> = ({
   );
 };
 
+type CellRowDataType = {
+  id: string | number
+  [key: string]: any
+}
+
+
+type CellPosition = DOMRect | undefined
+interface CellType {
+  data: CellRowDataType,
+  position: CellPosition
+}
+
+interface CellClassNameParams {
+  data: CellRowDataType,
+  index: number
+}
+
 type VirtualScrollProps = {
-  initList?: any[];
-  loadDate: () => Promise<any[] | undefined>;
+  initList?: CellRowDataType[];
+  loadMoreDate: () => Promise<CellRowDataType[] | undefined>;
   end: Boolean;
-  onRenderCell: (data: any) => JSX.Element;
+  onRenderCell: (data: CellRowDataType) => JSX.Element;
   preSetCellHeight?: number;
-  getCellHeight?: (row: any, width?: number) => number;
-  cellClassName?: string;
+  getCellHeight?: (row: CellRowDataType, width?: number) => number;
+  cellClassName?: string | ((callData: CellClassNameParams) => string);
 };
 
 const VirtualScroll: FC<VirtualScrollProps> = ({
-  loadDate,
+  loadMoreDate,
   end,
   onRenderCell,
   preSetCellHeight = 50,
   cellClassName = "",
   getCellHeight,
+  initList = [],
 }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const button = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const [list, setList] = useState<any[]>([]);
+  const [list, setList] = useState<(CellType | CellRowDataType)[]>(initList);
   const [appends, setAppends] = useState<any[]>([]);
-  const [visiableList, setVisiableList] = useState<any[]>([]);
+  const [visibleList, setVisibleList] = useState<any[]>([]);
   const [preload, setPreload] = useState<any>(undefined);
   const updateHeight = (d: any, h: any) => {
     const l = [...list];
     // 更新当前那一项的高度
-    const index = l.findIndex((l) => l.data.id === d.id);
+    const index = l.findIndex((l) => l?.data.id === d.id);
     if (index >= 0) {
       const pre = l[index - 1];
       const item = l[index];
@@ -114,15 +132,40 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
     setHeight(height + h - preSetCellHeight);
   };
   useEffect(() => {
-    initData();
+    initData()
+    window.addEventListener("scroll", scrollDown);
     return () => {
       window.removeEventListener("scroll", scrollDown);
     };
   }, []);
 
-  const initData = async () => {
-    await queryDate();
+  const initData = () => {
+    if (list.length > 0) {
+
+      const h = height + list.length * preSetCellHeight;
+      setHeight(h);
+      const appends = getAppends(list, list.length);
+      setList([...appends]);
+      setAppends(appends);
+    }
   };
+
+  const getAppends = (appends: any[], preListLength: number) => {
+    return appends.map((d, index) => {
+      let className: string = ''
+      const node = {
+        data: d, index: preListLength + index
+      }
+      if (typeof cellClassName === 'function') {
+        className = cellClassName(node)
+      } else {
+        className = cellClassName
+      }
+      return { ...node, className, position: undefined }
+    });
+  }
+
+
 
   useEffect(() => {
     window.addEventListener("scroll", scrollDown);
@@ -130,6 +173,7 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
       window.removeEventListener("scroll", scrollDown);
     };
   }, [list]);
+
   useEffect(() => {
     if (loading) {
       queryDate();
@@ -156,16 +200,16 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
         if (appends && appends.length > 0) {
           setAppends([...appends]);
         }
-        filterVisiable();
+        filterVisible();
       }, 20);
     } else {
-      filterVisiable();
+      filterVisible();
     }
   };
 
   const pushItemWithHeight = (appends: any[]) => {
     if (getCellHeight) {
-      filterVisiable();
+      filterVisible();
       if (appends?.length > 0 && container.current) {
         const first = appends.shift();
         const containerW = container.current.clientWidth;
@@ -175,10 +219,10 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
           if (appends && appends.length > 0) {
             setAppends([...appends]);
           }
-          filterVisiable();
+          filterVisible();
         }, 20);
       } else {
-        filterVisiable();
+        filterVisible();
       }
     }
   };
@@ -186,43 +230,43 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
   const scrollDown = async () => {
     // 加载下一页数据
     if (!loading) {
-      const endVisiable = ifEndVisiable();
-      if (endVisiable) {
+      const endVisible = ifEndVisible();
+      if (endVisible) {
         setLoading(true);
         return;
       }
-      filterVisiable();
+      filterVisible();
     }
   };
 
-  const ifEndVisiable = () => {
-    const position: any = button.current?.getBoundingClientRect();
-    return position.bottom < window.innerHeight;
+  const ifEndVisible = () => {
+    const position: CellPosition = button.current?.getBoundingClientRect();
+    return (position?.bottom || 0) < window.innerHeight;
   };
 
   const queryDate = async () => {
     if (end) {
       return;
     }
-    const data = await loadDate();
+    const data = await loadMoreDate();
     setLoading(false);
     if (!data) {
       return;
     }
     const h = height + data.length * preSetCellHeight;
     setHeight(h);
-    const appends = data.map((d) => ({ data: d, position: undefined }));
+    const appends = getAppends(data, list.length)
     setList([...list, ...appends]);
     setAppends(appends);
   };
 
-  const filterVisiable = () => {
+  const filterVisible = () => {
     const wH = window.innerHeight;
     const scrolled = window.scrollY;
     const offset = container.current?.offsetTop || 0;
     const l = [...list];
     // 将视图内的内容筛选出来
-    const visiables = l.filter(
+    const visibleList = l.filter(
       (item) =>
         item.position &&
         !(
@@ -230,7 +274,7 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
           wH + scrolled < item.position.top
         )
     );
-    setVisiableList(visiables);
+    setVisibleList(visibleList);
   };
 
   return (
@@ -241,9 +285,9 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
           className={styles.container}
           style={{ height: `${height}px` }}
         >
-          {visiableList.map((a) => (
+          {visibleList.map((a) => (
             <ContainerCell
-              cellClassName={cellClassName}
+              cellClassName={a.className}
               key={a.data.id}
               rowData={a}
             >
@@ -252,7 +296,7 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
           ))}
           <div className={styles.preload}>
             {preload && (
-              <PreloadCell cellClassName={cellClassName} rowData={preload}>
+              <PreloadCell cellClassName={preload.cellClassName} rowData={preload}>
                 {onRenderCell(preload.data)}
               </PreloadCell>
             )}

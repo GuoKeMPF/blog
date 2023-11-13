@@ -51,7 +51,7 @@
 		}
 	}
 
-	.row:nth-child(odd) {
+	.row.odd {
 		.line {
 			margin: 0 0 0 50%;
 			order: 0;
@@ -63,7 +63,7 @@
 		}
 	}
 
-	.row:nth-child(even) {
+	.row.even {
 		.line {
 			margin: 0 50% 0 0;
 			order: 1;
