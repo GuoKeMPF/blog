@@ -54,7 +54,6 @@ const Page404: NextPageWithLayout = () => {
 	}, []);
 
 	const restart = () => {
-		console.log(game);
 		game?.reset();
 	};
 

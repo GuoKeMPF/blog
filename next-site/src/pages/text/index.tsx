@@ -24,6 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 				page: res.page ?? 1,
 				loading: false,
 				texts: res.data || [],
+				total: res.count
 			},
 		},
 	};
@@ -53,6 +54,8 @@ const Home: NextPageWithLayout = ({
 			size: size,
 			page: page + 1,
 		};
+		console.log('loadMore');
+
 		return await getTexts(query);
 	};
 
@@ -71,9 +74,9 @@ const Home: NextPageWithLayout = ({
 		<Spin loading={loading}>
 			<div className={styles.container} id='texts'>
 				<VirtualScroll
-					loadMoreDate={loadMore}
+					loadMoreData={loadMore}
 					initList={texts}
-					end={total === texts.length}
+					hasNext={total > texts.length}
 					preSetCellHeight={60}
 					cellClassName={(data) => {
 						const { index } = data;

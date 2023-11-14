@@ -18,20 +18,21 @@ interface Coordinates {
 
 interface GameProps {
   element: string | ReactNode;
-  onReady: Function;
+  onReady?: Function;
+  onFailed?: Function;
   blocks: BlocksType;
 }
 
 const theme = {
-  backgroundColor: "#00000000",
+  backgroundColor: "#000000",
   elementColor: "#fff",
 };
 
 // Assets
 const invaderSize = 20;
-const invaderAttackRate = 0.995;
+const invaderAttackRate = 0.996;
 
-const invaderSpeed = 500;
+const invaderSpeed = 1000;
 
 const invaderPath = {
   body: [
@@ -383,8 +384,8 @@ export const blocks500: BlocksType = [
   [1, 2, 3, 7, 8, 9, 13, 14, 15],
 ];
 
-const createInvaderUnit = () => {
-  const invaderCanvas = document.createElement("canvas");
+const createInvaderUnit = (): HTMLCanvasElement => {
+  const invaderCanvas = window.document.createElement("canvas");
   const ctx = invaderCanvas.getContext("2d") as CanvasRenderingContext2D;
 
   const unit = 32;
@@ -429,33 +430,36 @@ const createInvaderUnit = () => {
   return invaderCanvas;
 };
 
-const invaderUnit = createInvaderUnit();
+type GameStatus = "init" | "running" | "lost" | "win" | "finish";
 
 export class Game {
   level: number;
-  lost: boolean;
-  win: boolean;
   invaders: Invader[];
   invaderShots: Projectile[];
   invaderSpeed: number;
-  onReady: Function;
-  invaderDownTimer: null | NodeJS.Timer;
+  onReady?: Function;
+  onFailed?: Function;
+  invaderDownTimer: undefined | number | NodeJS.Timeout;
   blocks: BlocksType;
   screen: CanvasRenderingContext2D;
-  invaderMultiplier: number;
-  gameSize: GameSize;
-  kills: number;
+  invaderMultiplier: number = 0;
+  gameSize: GameSize = {
+    width: 0,
+    height: 0,
+  };
+  kills: number = 0;
   player: Player;
   requestAnimation: RequestAnimation;
-  constructor({ element, onReady, blocks }: GameProps) {
+  status: GameStatus;
+  constructor({ element, onReady, blocks, onFailed }: GameProps) {
     this.level = -1;
-    this.lost = false;
-    this.win = false;
+    this.status = "init";
     this.invaders = [];
     this.invaderShots = [];
     this.invaderSpeed = 20;
     this.onReady = onReady;
-    this.invaderDownTimer = null;
+    this.onFailed = onFailed;
+    this.invaderDownTimer = undefined;
     this.blocks = blocks;
     let node;
     if (typeof element === "string") {
@@ -471,27 +475,30 @@ export class Game {
     const screen = canvas.getContext("2d") as CanvasRenderingContext2D;
     this.screen = screen;
 
-    let invaderMultiplier;
+    const containerW = (canvas.parentElement?.clientWidth ||
+      window.innerWidth) as number;
+
     let gameSize: GameSize = {
       width: 1200,
       height: 500,
     };
-    if (window.innerWidth >= 1600) {
+    let invaderMultiplier = 0;
+    if (containerW >= 1600) {
       gameSize = {
         width: 1600,
-        height: 600,
+        height: 700,
       };
       invaderMultiplier = 3;
-    } else if (window.innerWidth > 900) {
+    } else if (containerW > 900) {
       gameSize = {
         width: 900,
-        height: 500,
+        height: 560,
       };
       invaderMultiplier = 2;
     } else {
       gameSize = {
         width: 600,
-        height: 400,
+        height: 500,
       };
       invaderMultiplier = 1;
     }
@@ -500,44 +507,70 @@ export class Game {
     this.screen.canvas.height = gameSize.height;
     this.invaderMultiplier = invaderMultiplier;
     this.gameSize = gameSize;
-    this.kills = 0;
-    const context = this;
-    this.player = new Player({ screen, gameSize, game: context });
-
+    this.player = new Player({ screen: this.screen, gameSize, game: this });
     this.requestAnimation = new RequestAnimation({
-      callback: this.initGameStart,
+      callback: this.updateGame,
     });
-    this.invaders = this.createInvaders();
-    this.initGameStart();
-    this.ready();
+    this.init();
   }
 
-  initGameStart = () => {
+  init = () => {
+    this.kills = 0;
+    this.player.projectile = [];
+    this.invaderShots = [];
+    this.player = new Player({
+      screen: this.screen,
+      gameSize: this.gameSize,
+      game: this,
+    });
+    this.status = "init";
+    this.invaders = this.createInvaders();
+    this.updateGame();
+    this.ready();
+  };
+
+  updateGame = () => {
     this.draw();
     this.update();
   };
+  reset = () => {
+    this.init();
+  };
 
   ready = () => {
-    this.onReady(this);
+    this.onReady && this.onReady(this);
   };
 
   start = () => {
     this.requestAnimation.start();
+    clearInterval(this.invaderDownTimer);
     this.invaderDownTimer = setInterval(() => {
       for (let i = 0; i < this.invaders.length; i++) {
         this.invaders[i].move();
       }
     }, invaderSpeed);
   };
+  failed = () => {
+    this.onFailed && this.onFailed(this);
+  };
+  setFinish = () => {
+    if (this.status !== "init" && this.status !== "running") {
+      this.status = "init";
+      clearInterval(this.invaderDownTimer);
+      this.invaderDownTimer = undefined;
+      this.requestAnimation.stop();
+    }
+  };
 
-  onFailed = () => {
-    this.invaderDownTimer = null;
+  destroy = () => {
+    clearInterval(this.invaderDownTimer);
     this.requestAnimation.stop();
   };
 
   createInvaders = () => {
     const invaders = [];
     let i = this.blocks.length * this.invaderMultiplier;
+    const invaderUnit: HTMLCanvasElement = createInvaderUnit();
     while (i--) {
       var j = this.getPixelRow(i, this.invaderMultiplier);
       for (var k = 0; k < j.length; k++) {
@@ -547,6 +580,7 @@ export class Game {
               x: j[k] * invaderSize,
               y: i * invaderSize,
             },
+            invaderUnit,
             game: this,
             speedX: this.invaderSpeed,
             screen: this.screen,
@@ -575,8 +609,27 @@ export class Game {
     return textRow;
   };
 
+  setStatus = (status: GameStatus) => {
+    switch (status) {
+      case "finish":
+        setTimeout(() => {
+          this.status = status;
+        }, 5000);
+        break;
+      case "lost":
+      case "win":
+      case "running":
+      case "init":
+        this.status = status;
+        break;
+      default:
+        const _exhaustiveCheck: never = status;
+        return _exhaustiveCheck;
+    }
+  };
+
   update = () => {
-    if (!this.lost) {
+    if (this.status === "running" || this.status === "init") {
       // Collision
       this.player.projectile.forEach((projectile) => {
         this.invaders.forEach((invader) => {
@@ -595,15 +648,16 @@ export class Game {
         }
         return pre;
       }, [] as Invader[]);
-      this.win = this.invaders.length === 0;
+      if (this.invaders.length === 0) {
+        this.setStatus("win");
+      }
 
       this.invaderShots.forEach((invaderShots) => {
         if (collides(invaderShots, this.player)) {
           this.player.destroy();
+          this.failed();
         }
       });
-    } else {
-      this.onFailed();
     }
 
     // Don't stop player & projectiles.. they look nice
@@ -612,9 +666,10 @@ export class Game {
   };
 
   draw = () => {
-    if (this.win) {
-      this.screen.fillStyle = "rgba(0, 0, 0, 0.03)";
-      this.screen.fillRect(0, 0, this.gameSize.width, this.gameSize.height);
+    this.screen.fillStyle = "rgba(0, 0, 0, 0.3)";
+    this.screen.fillRect(0, 0, this.gameSize.width, this.gameSize.height);
+    this.screen.fill();
+    if (this.status === "win") {
       this.screen.font = "55px inherit inherit";
       this.screen.textAlign = "center";
       this.screen.fillStyle = theme.elementColor;
@@ -629,9 +684,7 @@ export class Game {
         this.gameSize.height + 100
       );
       this.screen.fill();
-    } else if (this.lost) {
-      this.screen.fillStyle = "rgba(0, 0, 0, 0.03)";
-      this.screen.fillRect(0, 0, this.gameSize.width, this.gameSize.height);
+    } else if (this.status === "lost") {
       this.screen.font = "55px inherit inherit";
       this.screen.textAlign = "center";
       this.screen.fillStyle = theme.elementColor;
@@ -647,21 +700,23 @@ export class Game {
       );
       this.screen.fill();
     } else {
-      this.screen.clearRect(0, 0, this.gameSize.width, this.gameSize.height);
       this.screen.font = "16px inherit inherit";
+      this.screen.fillStyle = theme.elementColor;
       this.screen.fillText("得分" + this.kills, 60, this.gameSize.height - 20);
     }
-    if (this.win || this.lost) {
-      this.screen.fill();
+    if (this.status === "win" || this.status === "lost") {
       this.player.draw();
-      this.requestAnimation.stop();
       this.player.destroy();
     }
+    if (this.status === "finish") {
+      this.setFinish();
+    }
 
+    this.screen.fill();
     this.screen.beginPath();
 
     this.player.draw();
-    if (!this.lost) {
+    if (this.status === "running" || this.status === "init") {
       for (let i = 0; i < this.invaders.length; i++) {
         this.invaders[i].draw();
       }
@@ -691,6 +746,7 @@ interface InvaderProps {
   screen: CanvasRenderingContext2D;
   game: Game;
   gameSize: GameSize;
+  invaderUnit: HTMLCanvasElement;
 }
 
 class Invader {
@@ -702,13 +758,22 @@ class Invader {
   patrolX: number;
   speedX: number;
   gameSize: GameSize;
-  constructor({ coordinates, speedX, screen, game, gameSize }: InvaderProps) {
+  invaderUnit: HTMLCanvasElement;
+  constructor({
+    coordinates,
+    speedX,
+    screen,
+    game,
+    gameSize,
+    invaderUnit,
+  }: InvaderProps) {
     this.active = true;
     this.coordinates = coordinates;
     this.size = {
       width: invaderSize,
       height: invaderSize,
     };
+    this.invaderUnit = invaderUnit;
     this.screen = screen;
     this.game = game;
     this.patrolX = 0;
@@ -741,11 +806,11 @@ class Invader {
   draw = () => {
     if (this.active) {
       this.screen.drawImage(
-        invaderUnit,
+        this.invaderUnit,
         0,
         0,
-        invaderUnit.width,
-        invaderUnit.height,
+        this.invaderUnit.width,
+        this.invaderUnit.height,
         this.coordinates.x,
         this.coordinates.y,
         invaderSize,
@@ -760,7 +825,7 @@ class Invader {
       this.coordinates.y += this.size.height;
 
       if (this.coordinates.y + this.size.height * 2 > this.gameSize.height) {
-        this.game.lost = true;
+        this.game.setStatus("lost");
       }
     } else {
       this.coordinates.x += this.speedX;
@@ -876,8 +941,8 @@ class Player {
   };
   destroy = () => {
     this.active = false;
-    this.game.lost = true;
-    this.keyboarder.destory();
+    this.game.status = "lost";
+    this.keyboarder.destroy();
   };
 }
 interface ProjectileProps {
@@ -947,7 +1012,7 @@ class KeyController {
     window.addEventListener("keyup", this.keyUp);
   };
 
-  destory = () => {
+  destroy = () => {
     window.removeEventListener("keydown", this.keyDown);
     window.removeEventListener("keyup", this.keyUp);
   };

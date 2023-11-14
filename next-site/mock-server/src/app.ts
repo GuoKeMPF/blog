@@ -6,6 +6,12 @@ import text from "./mock/text";
 const app = express();
 const port = 5500;
 
+app.all("*", (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+  next();
+});
+
 app.use("/", audio);
 app.use("/", picture);
 app.use("/", text);
