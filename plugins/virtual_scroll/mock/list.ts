@@ -1,13 +1,5 @@
 import type { Request, Response } from 'express';
 
-const wait = (timer: number = 2000) => {
-  return new Promise<void>((resolve, reject) => {
-    setTimeout(() => {
-      resolve();
-    }, timer);
-  });
-};
-
 const createColor = () => '#' + ((Math.random() * 0xffffff) << 0).toString(16);
 
 const createId = () =>
@@ -18,9 +10,10 @@ const createHeight = () => Math.random() * 200 + 100;
 const data = (length: number) => {
   const response = [];
   for (let index = 0; index < length; index++) {
+    const id = createId();
     response.push({
-      context: 'text',
-      id: createId(),
+      context: `${id} - text`,
+      id: id,
       height: createHeight(),
       color: createColor(),
     });
