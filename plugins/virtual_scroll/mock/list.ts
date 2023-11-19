@@ -15,6 +15,7 @@ const data = (length: number) => {
       context: `${id} - text`,
       id: id,
       height: createHeight(),
+      // height: 50,
       color: createColor(),
     });
   }

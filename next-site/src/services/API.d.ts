@@ -27,4 +27,15 @@ export type Text = {
 
 export type ID = number | string;
 
-export interface TextParams extends PageParams {}
+export interface TextParams extends PageParams, Partial<Text> {}
+
+export interface Picture {
+	id: ID;
+	name: string;
+	create_time: string;
+	src: string;
+	width: number;
+	height: number;
+}
+
+export interface PicturesParams extends PageParams, Partial<Picture> {}

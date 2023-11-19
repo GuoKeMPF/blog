@@ -113,8 +113,9 @@ type VirtualScrollProps = {
   loadMoreData: () => Promise<CellRowDataType[] | undefined>;
   hasNext: Boolean;
   onRenderCell: (data: CellRowDataType) => JSX.Element;
+  getCellHeight?: (row: CellRowDataType) => number;
+
   preSetCellHeight?: number;
-  getCellHeight?: (row: CellRowDataType, width?: number) => number;
   cellClassName?: string | ((callData: CellClassNameParams) => string);
 };
 
@@ -122,10 +123,10 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
   loadMoreData,
   hasNext,
   onRenderCell,
-  preSetCellHeight = 50,
   cellClassName = '',
   getCellHeight,
   initList = [],
+  preSetCellHeight = 100,
 }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const button = useRef<HTMLDivElement | null>(null);
@@ -161,15 +162,33 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
     };
   }, []);
 
-  const scrollDown = async () => {
+  const filterVisible = useCallback(() => {
+    const wH = window.innerHeight;
+    const scrolled = window.scrollY;
+    const offset = container.current?.offsetTop || 0;
+    const l = [...list];
+    // 将视图内的内容筛选出来
+
+    const visibleList = l.filter(
+      (item) =>
+        item.position &&
+        !(
+          item.position.bottom + offset < scrolled ||
+          wH + scrolled < item.position.top
+        ),
+    );
+
+    setVisibleList(visibleList);
+  }, [list]);
+
+  const scrollDown = useCallback(async () => {
     // 加载下一页数据
     if (!loading) {
       filterVisible();
     }
-  };
-  const loadNextData = useCallback(async () => {
-    console.log('hasNext');
+  }, [filterVisible]);
 
+  const loadNextData = useCallback(async () => {
     if (!hasNext) {
       return;
     }
@@ -182,10 +201,44 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
   }, [hasNext, loadMoreData]);
 
   useEffect(() => {
+    window.addEventListener('scroll', scrollDown);
     filterVisible();
+    return () => {
+      window.removeEventListener('scroll', scrollDown);
+    };
   }, [list]);
 
   useEffect(() => {
+    if (appends?.length > 0) {
+      // 如果有预设的获取高度的方法则直接更新高度
+      // 否则挂载一次子元素更新高度
+      if (getCellHeight) {
+        pushItemWithHeight();
+      } else {
+        pushItemWithMount();
+      }
+    }
+  }, [appends]);
+
+  const pushItemWithHeight = () => {
+    const appendList = [...appends];
+    let subHeight = 0,
+      subList: CellType[] = [],
+      initTop = list[list.length - 1]?.position?.bottom ?? 0;
+    appendList.forEach((item, index) => {
+      // 可以在这里处理每个异步函数的结果
+      const node = generatorNode(item, list.length, index, initTop);
+      const itemHeight = getCellHeight ? getCellHeight(item) : preSetCellHeight;
+      subHeight += itemHeight;
+      initTop += itemHeight;
+      subList.push(node);
+      index++;
+    });
+    setHeight(height + subHeight);
+    setList([...list, ...subList]);
+  };
+
+  const pushItemWithMount = () => {
     const appendList = [...appends];
     const proMountFirst = (first: PreloadData): Promise<PreloadData> => {
       const preMountPromise = new Promise((resolve, reject) => {
@@ -209,32 +262,35 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
     (async () => {
       let subHeight = 0,
         subList = [],
-        initTop = list[list.length - 1]?.position?.bottom ?? 0;
+        initTop = list[list.length - 1]?.position?.bottom ?? 0,
+        index = 0;
       for await (const result of iterator) {
         // 可以在这里处理每个异步函数的结果
         const { item, height: itemHeight } = result;
-        const node = generatorNode(item, list.length, initTop);
-        // setHeight(h);
-        // setList([...list, node]);
-        subHeight += itemHeight - preSetCellHeight;
+        const node = generatorNode(item, list.length, index, initTop);
+        subHeight += itemHeight;
         initTop += itemHeight;
         subList.push(node);
+        index++;
       }
+      console.log(height + subHeight);
+
       setHeight(height + subHeight);
       setList([...list, ...subList]);
       setPreload(undefined);
     })();
-  }, [appends]);
+  };
 
   const generatorNode = (
     item: CellRowDataType,
     length: number,
+    index: number,
     preBottom: number = 0,
   ) => {
     let className: string = '';
     const node = {
       data: item,
-      index: length,
+      index: length + index,
     };
     if (typeof cellClassName === 'function') {
       className = cellClassName(node);
@@ -250,25 +306,6 @@ const VirtualScroll: FC<VirtualScrollProps> = ({
         bottom: preBottom + item.height,
       },
     };
-  };
-
-  const filterVisible = () => {
-    const wH = window.innerHeight;
-    const scrolled = window.scrollY;
-    const offset = container.current?.offsetTop || 0;
-    const l = [...list];
-    // 将视图内的内容筛选出来
-    const visibleList = l.filter(
-      (item) =>
-        item.position &&
-        !(
-          item.position.bottom + offset < scrolled ||
-          wH + scrolled < item.position.top
-        ),
-    );
-    console.log(visibleList);
-
-    setVisibleList(visibleList);
   };
 
   return (

@@ -51,11 +51,13 @@ const Container: FC = () => {
           {
             context: 'text',
             id: '42764bfbf4ad9c00',
-            height: 127.22985777144898,
+            height: 150,
             color: '#b1fca1',
           },
         ]}
-        preSetCellHeight={preSetCellHeight}
+        getCellHeight={(data) => {
+          return data.height;
+        }}
         onRenderCell={(data: any) => <Cell data={data} />}
       />
       <p>footer</p>

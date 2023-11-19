@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useCallback, useRef } from "react";
 
 import type { NextPageWithLayout } from "../_app";
 
@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 				page: res.page ?? 1,
 				loading: false,
 				texts: res.data || [],
-				total: res.count
+				total: res.count,
 			},
 		},
 	};
@@ -34,38 +34,39 @@ const Home: NextPageWithLayout = ({
 	initialState,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 	const [loading, setLoading] = useState(initialState.loading);
-	const [texts, setTexts] = useState(initialState.texts);
 	const [total, setTotal] = useState(initialState.total);
-	const [page, setPage] = useState(initialState.page);
+	// const [page, setPage] = useState(initialState.page);
+	const page = useRef<number>(1);
 	const [size, setSize] = useState(initialState.size);
 
 	const getTexts = async (query: TextParams) => {
 		setLoading(true);
 		const response = await queryTexts({ ...query });
 		setLoading(false);
-		setPage(response.page);
 		setSize(response.size);
 		setTotal(response.count);
 		return response.data;
 	};
 
-	const loadMore = async () => {
+	const loadMore = useCallback(async () => {
+		const nextPage = page.current + 1;
 		const query = {
 			size: size,
-			page: page + 1,
+			page: nextPage,
 		};
-		console.log('loadMore');
+		page.current = nextPage;
 
 		return await getTexts(query);
-	};
+	}, [page]);
 
 	const loadPre = async () => {
-		if (page <= 1) {
+		if (page.current <= 1) {
 			return [];
 		}
+
 		const query = {
 			size: size,
-			page: page - 1,
+			page: page.current - 1,
 		};
 		return await getTexts(query);
 	};
@@ -75,8 +76,8 @@ const Home: NextPageWithLayout = ({
 			<div className={styles.container} id='texts'>
 				<VirtualScroll
 					loadMoreData={loadMore}
-					initList={texts}
-					hasNext={total > texts.length}
+					initList={initialState.texts}
+					hasNext={total > page.current * size}
 					preSetCellHeight={60}
 					cellClassName={(data) => {
 						const { index } = data;

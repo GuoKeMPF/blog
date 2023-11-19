@@ -5,24 +5,24 @@ import type { PictureStateType, Dispatch } from 'umi';
 
 import Spin from '@/components/Spin';
 import VirtualScroll from '@/components/VirtualScroll';
-import ImageContainer from "./ImageContainer";
-import ImageModal from "./ImageModal";
+import ImageContainer from './ImageContainer';
+import ImageModal from './ImageModal';
 import styles from './index.less';
 
 const gutter = 20;
 
 type PictureContextType = {
-  visiable: boolean,
-  setVisiable: (visiable: boolean) => void,
-  select: any,
-  setSelect: (d: any) => void,
-}
+  visiable: boolean;
+  setVisiable: (visiable: boolean) => void;
+  select: any;
+  setSelect: (d: any) => void;
+};
 
 export const PictureContext = createContext<PictureContextType>({
   visiable: false,
-  setVisiable: (visiable: boolean) => { },
+  setVisiable: (visiable: boolean) => {},
   select: undefined,
-  setSelect: (d: any) => { },
+  setSelect: (d: any) => {},
 });
 
 interface PageProps {
@@ -40,10 +40,8 @@ const Picture: FC<PageProps> = ({
 }) => {
   const [page, setPage] = useState<number>(1);
 
-
   const [visiable, setVisiable] = useState<boolean>(false);
   const [select, setSelect] = useState<any>(undefined);
-
 
   useEffect(() => {
     return () => {
@@ -52,7 +50,6 @@ const Picture: FC<PageProps> = ({
       });
     };
   }, []);
-
 
   const queryDate = async () => {
     const p = page;
@@ -71,17 +68,21 @@ const Picture: FC<PageProps> = ({
 
   return (
     <Spin loading={loadingPictures}>
-      <PictureContext.Provider value={{ visiable, setVisiable, select, setSelect }}>
+      <PictureContext.Provider
+        value={{ visiable, setVisiable, select, setSelect }}
+      >
         <VirtualScroll
           loadDate={queryDate}
           end={total === pictures.length}
           preSetCellHeight={60}
+          // ! to do
+          // 宽度应该根据容器设置的值算出来
           getCellHeight={(row, containerW = 0) => {
             const imgaeW = row.width || 0;
             if (imgaeW > containerW) {
-              return row.height * containerW / imgaeW + gutter
+              return (row.height * containerW) / imgaeW + gutter;
             } else {
-              return row.height + gutter
+              return row.height + gutter;
             }
           }}
           cellClassName={styles.row}
