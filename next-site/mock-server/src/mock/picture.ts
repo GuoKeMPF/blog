@@ -28,7 +28,7 @@ const mockImg = () => {
 	return images[Math.floor(Math.random() * 3)];
 };
 
-const pictures: any[] = Array(100)
+const pictures: any[] = Array(30)
 	.fill({
 		create_time: "2021-12-10 11:54:29",
 		name: "mock picture.png",

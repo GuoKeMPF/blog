@@ -39,3 +39,14 @@ export interface Picture {
 }
 
 export interface PicturesParams extends PageParams, Partial<Picture> {}
+
+export interface AudioType {
+	id: ID;
+	src: string;
+	create_time?: string;
+	name: string;
+	description: string;
+	unique_name: string;
+}
+
+export interface AudioParams extends PageParams, Partial<AudioType> {}

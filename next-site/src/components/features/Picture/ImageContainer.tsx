@@ -3,8 +3,6 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import type { FC } from "react";
 
-import Img from "next/image";
-
 import { PictureContext } from "./index";
 
 import styles from "./ImageContainer.module.scss";
@@ -83,10 +81,13 @@ const ImageContainer: FC<ImageProps> = ({ src, alt, data }) => {
 					{error ? (
 						<ErrorImage description={"图片加载错误"} />
 					) : (
+						// eslint-disable-next-line @next/next/no-img-element
 						<img
 							onClick={serPicture}
 							className={styles.image}
 							src={src}
+							width={data.width}
+							height={data.height}
 							alt={alt || ""}
 						/>
 					)}

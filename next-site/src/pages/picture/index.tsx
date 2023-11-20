@@ -50,7 +50,7 @@ const Picture: NextPageWithLayout = ({
 	const [size, setSize] = useState(initialState.size);
 	const [total, setTotal] = useState(initialState.total);
 
-	const container = useRef(null);
+	const scrollContainer = useRef<any>();
 
 	const getPictures = async (query: PicturesParams) => {
 		setLoading(true);
@@ -58,8 +58,6 @@ const Picture: NextPageWithLayout = ({
 		setLoading(false);
 		setSize(response.size);
 		setTotal(response.count);
-		console.log(response);
-
 		return response.data;
 	};
 
@@ -80,6 +78,7 @@ const Picture: NextPageWithLayout = ({
 				value={{ visiable, setVisiable, select, setSelect }}
 			>
 				<VirtualScroll
+					ref={scrollContainer}
 					loadMoreData={loadMore}
 					hasNext={total > page.current * size}
 					preSetCellHeight={60}
@@ -87,7 +86,7 @@ const Picture: NextPageWithLayout = ({
 					// ! to do
 					// 宽度应该根据容器设置的值算出来
 					getCellHeight={(row) => {
-						const containerW = 992;
+						const containerW = scrollContainer.current.clientWidth;
 						const imgaeW = row.width || 0;
 						if (imgaeW > containerW) {
 							return (row.height * containerW) / imgaeW + gutter;
