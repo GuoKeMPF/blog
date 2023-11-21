@@ -13,110 +13,97 @@ env = environ.Env()
 PROJECT_ENV=production python manage.py crontab add
 默认场景下可不指定，则加载local文件
 """
-env_name = env.str('PROJECT_ENV', 'develop')
+env_name = env.str("PROJECT_ENV", "develop")
 # reading .env file
-
-file_path =f"./envs/{env_name}.env"
-file_path = file_path.replace('\r', '').replace('\n', '')
-
-print(env_name)
-print(file_path)
-
-with open(file_path, 'r') as file:
-    content = file.read()
-
-print(content)
-
-
+file_path = f"./envs/{env_name}.env"
+file_path = file_path.replace("\r", "").replace("\n", "")
 environ.Env.read_env(file_path)
 
 
-SECRET_KEY = env('SECRET_KEY')
-DEBUG =ast.literal_eval(env('DEBUG'))
-SESSION_COOKIE_SECURE =ast.literal_eval(env('SESSION_COOKIE_SECURE'))
-ALLOWED_HOSTS = ast.literal_eval(env('ALLOWED_HOSTS'))
-CSRF_TRUSTED_ORIGINS = ast.literal_eval(env('CSRF_TRUSTED_ORIGINS'))
-DOMAIN = env('DOMAIN')
-STATIC_DOAMIN = env('STATIC_DOAMIN')
-IMAGE_PATH = env('IMAGE_PATH')
-AUDIO_PATH = env('AUDIO_PATH')
-JWT_AUTH_HEADER_PREFIX = env('JWT_AUTH_HEADER_PREFIX')
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r'^https?:\/\/([a-zA-Z\.]?)+(mapanfeng\.com)'
-]
+SECRET_KEY = env("SECRET_KEY")
+DEBUG = ast.literal_eval(env("DEBUG"))
+SESSION_COOKIE_SECURE = ast.literal_eval(env("SESSION_COOKIE_SECURE"))
+# ALLOWED_HOSTS = ast.literal_eval(env("ALLOWED_HOSTS"))
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]',
+                 'api.mapanfeng.com', 'admin.mapanfeng.com']
+DOMAIN = env("DOMAIN")
+STATIC_DOAMIN = env("STATIC_DOAMIN")
+IMAGE_PATH = env("IMAGE_PATH")
+AUDIO_PATH = env("AUDIO_PATH")
+JWT_AUTH_HEADER_PREFIX = env("JWT_AUTH_HEADER_PREFIX")
+CORS_ALLOWED_ORIGIN_REGEXES = [r"^https?:\/\/([a-zA-Z\.]?)+(mapanfeng\.com)"]
 CORS_ALLOW_CREDENTIALS = True
 
 
 # path
 # 是否自动忽略url末尾 /
-APPEND_SLASH = True
+APPEND_SLASH = False
 
 
 # Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    
-
-    'rest_framework',
-    'rest_framework_simplejwt',
-    'django_filters',
-
-
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "django_filters",
+    "home.apps.HomeConfig",
     "user.apps.UserConfig",
     "draft.apps.DraftConfig",
     "text.apps.TextConfig",
     "picture.apps.PictureConfig",
-    "audio.apps.AudioConfig"
+    "audio.apps.AudioConfig",
 ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 
-
-
-ROOT_URLCONF = 'blog_server.urls'
+ROOT_URLCONF = "blog_server.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'blog_server.wsgi.application'
+WSGI_APPLICATION = "blog_server.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'test': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'NAME': BASE_DIR / 'test_db.sqlite3',
+    },
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    },
 }
 
 
@@ -125,16 +112,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -142,9 +129,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-ANGUAGE_CODE = 'zh-hans'
+ANGUAGE_CODE = "zh-hans"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -155,17 +142,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATIC_URL = '/server_static/'
-STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'server_static')
+STATIC_URL = "/server_static/"
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), "server_static")
 # 设置图片等静态文件的路径
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'server_static')
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "server_static")]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # REST 分页
@@ -174,8 +159,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "utils.pagination.Pagination",
     "PAGE_SIZE": 10000,
     "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
     ],
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
@@ -194,13 +179,13 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
     ]
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME':  datetime.timedelta(days=7),
-    'REFRESH_TOKEN_LIFETIME':  datetime.timedelta(days=10),
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=7),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=10),
 }

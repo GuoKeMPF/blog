@@ -13,6 +13,7 @@ from utils.token.getUserToken import get_tokens_for_user
 
 # Create your views here.
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginView(View):
     def post(sele, request):
@@ -30,8 +31,6 @@ class LoginView(View):
                 refresh = access.get('refresh')
                 token = access.get('token')
                 HEADER_AUTH_PREFIX = settings.JWT_AUTH_HEADER_PREFIX
-                login(request, user)
-                print("token", token)
                 return JsonResponse({
                     "username": user.get_username(),
                     "message": "login success",
