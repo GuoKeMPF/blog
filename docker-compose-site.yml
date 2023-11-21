@@ -2,13 +2,13 @@ version: "3"
 
 
 services:
-  blog_ssr:
+  blog_site:
     build:
-      context: ./blog_ssr
+      context: ./blog_site
     ports:
-      - "8001:8001"
-    image: blog_ssr
-    container_name: blog_ssr
+      - "8000:8000"
+    image: blog_site
+    container_name: blog_site
     networks:
       - blogs
 

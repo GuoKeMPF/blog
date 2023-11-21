@@ -1,10 +1,10 @@
 
 echo "start ssr"
 
-usage="./start_ssr.sh [-b|--build]"
+usage="./start_site.sh [-b|--build]"
 
-run_cmd="docker-compose "
-compose_file="docker-compose-ssr.yml"
+run_cmd="docker-compose"
+compose_file="docker-compose-site.yml"
 cmd=""
 
 if [[ $# -gt 0 ]]; then
@@ -32,5 +32,5 @@ if [[ "$build" == true ]]; then
 else
     cmd="${run_cmd} -f ${compose_file} up"
 fi
-
+echo "$cmd"
 eval "$cmd"
