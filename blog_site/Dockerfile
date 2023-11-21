@@ -61,6 +61,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Note: Don't expose ports here, Compose will handle that for us
 
 
-EXPOSE 8000
-ENV PORT 8000
+EXPOSE 8001
+ENV PORT 8001
 CMD ["node", "server.js"]
