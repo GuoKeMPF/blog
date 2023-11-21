@@ -14,10 +14,6 @@ if [[ $# -gt 0 ]]; then
         -b | --build)
             build=true
             ;;
-
-        -l | --local)
-            local=true
-            ;;
         *)
             echo "$usage"
             exit
