@@ -36,16 +36,7 @@ const maxSpan = (tree) => {
         max = 1
     }
 
-    while (list.length) {
-        let nextList = []
-        list.forEach(node => {
-            if (node.left) {
-                nextList.push(node.left)
-            }
-            if (node.right) {
-                nextList.push(node.right)
-            }
-        });
+    while (list.length) {         
         list = nextList
         max = Math.max(max, list.length)
     }
