@@ -10,5 +10,3 @@ COPY ./ /etc/nginx/
 COPY ./blog_static /blog_static
 COPY ./ssl /etc/nginx/ssl
 
-HEALTHCHECK --interval=30s --timeout=5s --retries=10 \
-    CMD (curl --fail http://blog_server:8000/ && curl --fail http://blog_ssr:8001/) || exit 1
