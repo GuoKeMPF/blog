@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 
 import type { FC } from "react";
 
-import Img from "next/image";
+// import Img from "next/image";
 
 import { PictureContext } from "./index";
 
@@ -25,7 +25,8 @@ const ImageModal: FC = () => {
 			className={`${styles.imageModal} ${visiable ? styles.show : styles.hide}`}
 			onClick={clickMask}
 		>
-			<Img className={styles.images} src={select?.src} alt={select?.name} />
+			{/* eslint-disable-next-line @next/next/no-img-element */}
+			<img className={styles.images} src={select?.src} alt={select?.name} />
 		</div>
 	);
 };
