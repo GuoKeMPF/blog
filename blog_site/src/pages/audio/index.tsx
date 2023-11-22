@@ -1,55 +1,73 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import type { FC } from 'react';
-import { connect } from 'umi';
-import type { AudioStateType, Dispatch } from 'umi';
+/** @format */
 
-import Visualization from './Visualization';
-import Spin from '@/components/Spin';
+import React, { useState, useEffect } from "react";
+import type { FC } from "react";
 
-interface PageProps {
-  dispatch: Dispatch;
-  loadingAudios: boolean;
-  audios: AudioStateType.AudiosType;
-}
-const Audio: FC<PageProps> = ({ dispatch, loadingAudios, audios }) => {
-  const [audio, setAudio] = useState<any>();
+import Visualization from "@/components/features/Audio/Visualization";
+import Spin from "@/components/Spin";
+import { AudioType } from "@/services/API";
+import { queryAudios } from "@/services";
 
-  useEffect(() => {
-    init();
-  }, []);
+import type { NextPageWithLayout } from "../_app";
 
-  const init = async () => {
-    const res = await dispatch({
-      type: 'audio/queryAudios',
-    });
-    setAudio(res[0]);
-  };
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-  const swithcAudio = (step: number) => {
-    const index = audios.findIndex((a) => a.id === audio.id);
-    let nextIndex = index + step;
-    if (index === audios.length - 1) {
-      nextIndex = 0;
-    }
-    if (index < 0) {
-      nextIndex = audios.length - 1;
-    }
-    const nextAudio = audios[nextIndex];
-    setAudio(nextAudio);
-  };
-
-  return (
-    <Spin loading={loadingAudios}>
-      {audio && <Visualization swithcAudio={swithcAudio} config={audio} />}
-    </Spin>
-  );
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const { query } = context;
+	const res = await queryAudios({ ...query });
+	return {
+		props: {
+			initialState: {
+				size: res.size ?? 50,
+				page: res.page ?? 1,
+				loading: false,
+				audios: res.data || [],
+				total: res.count,
+			},
+		},
+	};
 };
 
-const ConnectAudio = connect(
-  ({ loading, audio }: { loading: any; audio: AudioStateType }) => ({
-    loadingAudios: !!loading.effects['audio/queryAudios'],
-    audios: audio.audios,
-  }),
-)(Audio);
+interface PageProps {}
+const Audio: NextPageWithLayout<PageProps> = ({
+	initialState,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+	const [audios, setAudios] = useState<AudioType[]>(initialState.audios ?? []);
+	const [audio, setAudio] = useState<AudioType>(() => {
+		console.log(initialState.audios);
 
-export default ConnectAudio;
+		return initialState.audios && initialState.audios[0];
+	});
+	const [loading, setLoading] = useState<boolean>(initialState.loading);
+
+	// const init = async () => {
+	// 	setLoading(true);
+	// 	const { data = [] } = await queryAudios({});
+	// 	if (data.length) {
+	// 		setAudios(data);
+	// 		setAudio(data[0]);
+	// 	}
+	// 	setLoading(false);
+	// };
+
+	const swithcAudio = (step: number) => {
+		const index = audios.findIndex((a) => a.id === audio?.id);
+		let nextIndex = index + step;
+		if (index === audios.length - 1) {
+			nextIndex = 0;
+		}
+		if (index < 0) {
+			nextIndex = audios.length - 1;
+		}
+		const nextAudio = audios[nextIndex];
+		setAudio(nextAudio);
+	};
+
+	return (
+		<Spin loading={loading}>
+			{audio && <Visualization swithcAudio={swithcAudio} config={audio} />}
+		</Spin>
+	);
+};
+
+export default Audio;

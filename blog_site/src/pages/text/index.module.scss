@@ -1,0 +1,95 @@
+.row {
+	overflow: hidden;
+}
+
+.texts {
+	position: relative;
+
+	&:after {
+		opacity: 1;
+		position: absolute;
+		content: '';
+		width: 100%;
+		max-height: 30px;
+		height: 50%;
+		left: 0;
+		bottom: 0;
+		background: linear-gradient(#00000000, var(--themeColor));
+	}
+}
+
+@media screen and (max-width: 650px) {
+	.row {
+		display: flex;
+
+		.line {
+			width: 1px;
+			background-color: var(--themeLinkColor);
+			margin: 0 var(--margin);
+			flex-shrink: 0;
+
+			.index {
+				width: var(--px16);
+				height: var(--px16);
+				border-radius: 50%;
+				background-color: var(--themeLinkColor);
+				transform: translate(-50%, 0);
+			}
+		}
+
+		.texts {
+			flex: 1;
+			padding: var(--px8) 0;
+		}
+	}
+}
+
+@media screen and (min-width: 650px) {
+	.row {
+		display: flex;
+
+		.line {
+			width: 1px;
+			background-color: var(--themeLinkColor);
+			flex-shrink: 1;
+
+			.index {
+				width: var(--px16);
+				height: var(--px16);
+				border-radius: 50%;
+				background-color: var(--themeLinkColor);
+				transform: translate(-50%, 0);
+			}
+		}
+
+		.texts {
+			flex-shrink: 0;
+			width: calc(50% - var(--margin));
+			padding: var(--px16) 0;
+		}
+	}
+
+	.row.odd {
+		.line {
+			margin: 0 0 0 50%;
+			order: 0;
+		}
+
+		.texts {
+			order: 1;
+			margin: 0 0 0 var(--margin);
+		}
+	}
+
+	.row.even {
+		.line {
+			margin: 0 50% 0 0;
+			order: 1;
+		}
+
+		.texts {
+			margin: 0 var(--margin) 0 0;
+			order: 0;
+		}
+	}
+}

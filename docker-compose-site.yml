@@ -1,0 +1,18 @@
+version: "3"
+
+
+services:
+  blog_site:
+    build:
+      context: ./blog_site
+    ports:
+      - "8001:8001"
+    image: blog_site
+    container_name: blog_site
+    networks:
+      - blogs
+
+
+networks:
+  blogs:
+    driver: bridge

@@ -1,8 +1,12 @@
-import React, { FunctionComponent, ReactNode } from 'react';
+import React, { FunctionComponent, ReactNode } from "react";
 
-import styles from './Border.less';
+import styles from "./Border.module.scss";
 
-export const Border: FunctionComponent<ReactNode> = ({ children }) => {
+interface BorderProps {
+  children?: ReactNode;
+}
+
+export const Border: FunctionComponent<BorderProps> = ({ children }) => {
   return (
     <div className={styles.outer}>
       <div className={styles.inner}>

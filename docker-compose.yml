@@ -13,13 +13,13 @@ services:
     networks:
       - blogs
 
-  blog_ssr:
+  blog_site:
     build:
-      context: ./blog_ssr
+      context: ./blog_site
     ports:
       - "8001:8001"
-    image: blog_ssr
-    container_name: blog_ssr
+    image: blog_site
+    container_name: blog_site
     networks:
       - blogs
   
@@ -32,7 +32,7 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - blog_ssr
+      - blog_site
       - blog_server
     ulimits:
       nproc: 65535

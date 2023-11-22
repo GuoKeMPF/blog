@@ -1,6 +1,10 @@
-import React, { FunctionComponent, ReactNode } from 'react';
-import styles from './index.less';
+import React, { FC, ReactNode, ReactElement } from "react";
+import styles from "./index.module.scss";
 
-export const Body: FunctionComponent<ReactNode> = ({ children }) => {
+interface BodyPropsType {
+  children?: ReactNode | ReactElement;
+}
+
+export const Body: FC<BodyPropsType> = ({ children }) => {
   return <div className={styles.body}>{children}</div>;
 };

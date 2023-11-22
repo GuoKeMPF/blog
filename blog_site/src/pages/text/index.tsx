@@ -1,56 +1,112 @@
-import React, { FC, Fragment, useEffect } from 'react';
-import Spin from '@/components/Spin';
-import { connect } from 'dva';
-import { useRouteMatch } from 'umi';
-import { Dispatch, InitTextStateType, TextsType } from 'umi';
-import Breadcrumb from '@/components/Breadcrumb';
-import Content from './Content';
-import styles from './index.less';
+/** @format */
 
-interface PageProps {
-  dispatch: Dispatch;
-  loading: boolean;
-  text: TextsType;
-}
+import React, {
+	Fragment,
+	useState,
+	useCallback,
+	useRef,
+	useEffect,
+} from "react";
 
-const Index: FC<PageProps> = ({ dispatch, loading, text }) => {
-  const match = useRouteMatch();
-  useEffect(() => {
-    const { params }: { params: any } = match;
-    const id = params.id ?? '';
-    if (id !== '') {
-      dispatch({
-        type: 'texts/queryText',
-        payload: {
-          id,
-        },
-      });
-    }
-  }, []);
+import type { NextPageWithLayout } from "../_app";
 
-  const breadcrumb = {
-    title: '主页',
-    path: '/',
-    children: {
-      title: '日志',
-      path: '/texts',
-      children: {
-        title: `${text.title || ''}`,
-      },
-    },
-  };
-  return (
-    <div id="text" className={styles.text}>
-      <Breadcrumb routers={breadcrumb} />
-      <Spin loading={loading}>
-        <Content {...text} />
-      </Spin>
-    </div>
-  );
+import Spin from "@/components/Spin";
+import VirtualScroll from "@/components/VirtualScroll";
+import { TextItem } from "@/components/features/Text";
+
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { queryTexts } from "@/services";
+
+import styles from "./index.module.scss";
+import { TextParams } from "@/services/API";
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const { query } = context;
+	const res = await queryTexts({ ...query });
+	return {
+		props: {
+			initialState: {
+				size: res.size ?? 50,
+				page: res.page ?? 1,
+				loading: false,
+				texts: res.data || [],
+				total: res.count,
+			},
+		},
+	};
 };
-export default connect(
-  ({ loading, texts }: { loading: any; texts: InitTextStateType }) => ({
-    loading: !!loading.effects['texts/queryTexts'],
-    text: texts.text,
-  }),
-)(Index);
+
+const Home: NextPageWithLayout = ({
+	initialState,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+	const [loading, setLoading] = useState(initialState.loading);
+	const [total, setTotal] = useState(initialState.total);
+	// const [page, setPage] = useState(initialState.page);
+	const page = useRef<number>(1);
+	const [size, setSize] = useState(initialState.size);
+
+	const getTexts = async (query: TextParams) => {
+		setLoading(true);
+		const response = await queryTexts({ ...query });
+		setLoading(false);
+		setSize(response.size);
+		setTotal(response.count);
+		return response.data;
+	};
+
+	const loadMore = useCallback(async () => {
+		const nextPage = page.current + 1;
+		const query = {
+			size: size,
+			page: nextPage,
+		};
+		page.current = nextPage;
+
+		return await getTexts(query);
+	}, [page]);
+
+	const loadPre = async () => {
+		if (page.current <= 1) {
+			return [];
+		}
+
+		const query = {
+			size: size,
+			page: page.current - 1,
+		};
+		return await getTexts(query);
+	};
+
+	return (
+		<Spin loading={loading}>
+			<div className={styles.container} id='texts'>
+				<VirtualScroll
+					loadMoreData={loadMore}
+					initList={initialState.texts}
+					hasNext={total > page.current * size}
+					preSetCellHeight={60}
+					cellClassName={(data) => {
+						const { index } = data;
+						const otherClassName = index % 2 === 0 ? styles.odd : styles.even;
+						return `${styles.row} ${otherClassName}`;
+					}}
+					onRenderCell={(data: any) => (
+						<Fragment>
+							<div className={styles.line}>
+								<div className={styles.index}></div>
+							</div>
+							<div
+								id={`text_summary_${data.id}`}
+								className={`${styles.texts || ""} text_summary`}
+							>
+								<TextItem text={data} />
+							</div>
+						</Fragment>
+					)}
+				/>
+			</div>
+		</Spin>
+	);
+};
+
+export default Home;

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<style>
+		canvas {
+			border: 1px solid #000;
+		}
+	</style>
+</head>
+
+<body>
+	<div><button id="export">导出</button>
+		<button id="back">回退</button>
+	</div>
+	<br>
+	<canvas id="canvas" width="400" height="200"></canvas>
+</body>
+<script>
+	const canvas = document.getElementById('canvas');
+	const ctx = canvas.getContext('2d');
+
+	const unit = 32;
+	const num = 11
+
+	canvas.width = unit * num;
+	canvas.height = unit * num;
+
+	const points = [
+		{
+			"x": 0,
+			"y": 5
+		},
+		{
+			"x": 0,
+			"y": 6
+		},
+		{
+			"x": 0,
+			"y": 7
+		},
+		{
+			"x": 1,
+			"y": 7
+		},
+		{
+			"x": 1,
+			"y": 6
+		},
+		{
+			"x": 1,
+			"y": 5
+		},
+		{
+			"x": 2,
+			"y": 5
+		},
+		{
+			"x": 2,
+			"y": 6
+		},
+		{
+			"x": 2,
+			"y": 7
+		},
+		{
+			"x": 3,
+			"y": 7
+		},
+		{
+			"x": 3,
+			"y": 8
+		},
+		{
+			"x": 2,
+			"y": 8
+		},
+		{
+			"x": 2,
+			"y": 9
+		},
+		{
+			"x": 2,
+			"y": 10
+		},
+		{
+			"x": 2,
+			"y": 11
+		},
+		{
+			"x": 3,
+			"y": 11
+		},
+		{
+			"x": 4,
+			"y": 11
+		},
+		{
+			"x": 4,
+			"y": 10
+		},
+		{
+			"x": 4,
+			"y": 9
+		},
+		{
+			"x": 4,
+			"y": 8
+		},
+		{
+			"x": 5,
+			"y": 8
+		},
+		{
+			"x": 5,
+			"y": 7
+		},
+		{
+			"x": 6,
+			"y": 7
+		},
+		{
+			"x": 6,
+			"y": 8
+		},
+		{
+			"x": 7,
+			"y": 8
+		},
+		{
+			"x": 7,
+			"y": 9
+		},
+		{
+			"x": 7,
+			"y": 10
+		},
+		{
+			"x": 7,
+			"y": 11
+		},
+		{
+			"x": 8,
+			"y": 11
+		},
+		{
+			"x": 9,
+			"y": 11
+		},
+		{
+			"x": 9,
+			"y": 10
+		},
+		{
+			"x": 9,
+			"y": 9
+		},
+		{
+			"x": 9,
+			"y": 8
+		},
+		{
+			"x": 8,
+			"y": 8
+		},
+		{
+			"x": 8,
+			"y": 7
+		},
+		{
+			"x": 9,
+			"y": 7
+		},
+		{
+			"x": 9,
+			"y": 6
+		},
+		{
+			"x": 9,
+			"y": 5
+		},
+		{
+			"x": 10,
+			"y": 5
+		},
+		{
+			"x": 10,
+			"y": 6
+		},
+		{
+			"x": 10,
+			"y": 7
+		},
+		{
+			"x": 11,
+			"y": 7
+		},
+		{
+			"x": 11,
+			"y": 6
+		},
+		{
+			"x": 11,
+			"y": 5
+		},
+		{
+			"x": 10,
+			"y": 5
+		},
+		{
+			"x": 10,
+			"y": 4
+		},
+		{
+			"x": 9,
+			"y": 4
+		},
+		{
+			"x": 9,
+			"y": 3
+		},
+		{
+			"x": 8,
+			"y": 3
+		},
+		{
+			"x": 8,
+			"y": 2
+		},
+		{
+			"x": 9,
+			"y": 2
+		},
+		{
+			"x": 9,
+			"y": 1
+		},
+		{
+			"x": 10,
+			"y": 1
+		},
+		{
+			"x": 10,
+			"y": 0
+		},
+		{
+			"x": 9,
+			"y": 0
+		},
+		{
+			"x": 9,
+			"y": 1
+		},
+		{
+			"x": 8,
+			"y": 1
+		},
+		{
+			"x": 8,
+			"y": 2
+		},
+		{
+			"x": 7,
+			"y": 2
+		},
+		{
+			"x": 7,
+			"y": 3
+		},
+		{
+			"x": 6,
+			"y": 3
+		},
+		{
+			"x": 5,
+			"y": 3
+		},
+		{
+			"x": 4,
+			"y": 3
+		},
+		{
+			"x": 4,
+			"y": 2
+		},
+		{
+			"x": 3,
+			"y": 2
+		},
+		{
+			"x": 3,
+			"y": 1
+		},
+		{
+			"x": 2,
+			"y": 1
+		},
+		{
+			"x": 2,
+			"y": 0
+		},
+		{
+			"x": 1,
+			"y": 0
+		},
+		{
+			"x": 1,
+			"y": 1
+		},
+		{
+			"x": 2,
+			"y": 1
+		},
+		{
+			"x": 2,
+			"y": 2
+		},
+		{
+			"x": 3,
+			"y": 2
+		},
+		{
+			"x": 3,
+			"y": 3
+		},
+		{
+			"x": 2,
+			"y": 3
+		},
+		{
+			"x": 2,
+			"y": 4
+		},
+		{
+			"x": 1,
+			"y": 4
+		},
+		{
+			"x": 1,
+			"y": 5
+		}
+	];
+
+	const exportBtn = document.getElementById('export')
+	exportBtn.addEventListener('click', () => {
+		console.log(points)
+	})
+
+	const backBtn = document.getElementById('back')
+	backBtn.addEventListener('click', () => {
+		if (points.length > 1) {
+			points.pop()
+			draw()
+		}
+	})
+
+	document.addEventListener('keydown', function (event) {
+		const code = event.code
+		let nextCode = {}
+		const preCode = points[points.length - 1]
+		const { x, y } = preCode
+		switch (code) {
+			case 'ArrowUp':
+				nextCode = {
+					x,
+					y: y - 1
+				}
+				break;
+			case 'ArrowRight':
+				// ->
+				nextCode = {
+					x: x + 1,
+					y,
+				}
+				break;
+			case 'ArrowDown':
+				nextCode = {
+					x,
+					y: y + 1
+				}
+				break;
+			case 'ArrowLeft':
+				// <-
+				nextCode = {
+					x: x - 1,
+					y,
+				}
+				break;
+			default:
+				break;
+		}
+		points.push(nextCode)
+		draw()
+	});
+
+
+	const init = () => {
+
+		ctx.clearRect(0, 0, canvas.width, canvas.height)
+		console.log('points', points);
+		ctx.beginPath();
+
+
+		for (let i = 0; i < num; i++) {
+			ctx.moveTo(0, i * unit)
+			ctx.lineTo(num * unit, i * unit);
+			ctx.stroke()
+		}
+		for (let i = 0; i < num; i++) {
+			ctx.moveTo(i * unit, 0)
+			ctx.lineTo(i * unit, num * unit);
+			ctx.stroke()
+		}
+	}
+
+
+	const draw = () => {
+		init()
+		ctx.fillStyle = "black";
+		ctx.strokeStyle = "black";
+
+		points.forEach((item, index, arr) => {
+			if (index === 0) {
+				ctx.moveTo(item.x * unit, item.y * unit);
+			} else {
+				ctx.lineTo(item.x * unit, item.y * unit);
+			}
+			if (index === arr.length - 1) {
+				ctx.arc(item.x * unit, item.y * unit, 5, 0, 2 * Math.PI);
+			}
+		})
+		ctx.stroke()
+		ctx.fill();
+	}
+
+
+	draw()
+
+
+</script>
+
+</html>

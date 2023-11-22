@@ -1,9 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 
-import styles from './index.less';
-import textConfig from '@/utils/textConfig';
-import { getLocale, useIntl } from 'umi';
-import RequestAnimation from '@/utils/requestAnimation';
+import styles from "./index.module.scss";
+import textConfig from "@/utils/textConfig";
+import RequestAnimation from "@/utils/requestAnimation";
 
 const canvasW = 600,
   density = 10,
@@ -32,15 +31,6 @@ const Background = () => {
 
   const [image, setImage] = useState<HTMLCanvasElement | null>();
 
-  const intl = useIntl();
-  const locale = intl.formatMessage(
-    {
-      id: 'language',
-      defaultMessage: '中文'
-    },
-  );
-
-
   const canvas = useRef<HTMLCanvasElement>(null);
   const bg = useRef<HTMLCanvasElement>(null);
 
@@ -54,14 +44,14 @@ const Background = () => {
   useEffect(() => {
     setImage(null);
     createBG();
-  }, [locale]);
+  }, []);
 
   useEffect(() => {
     if (image) {
       loadImage();
       setupParticles();
     }
-  }, [image, locale]);
+  }, [image]);
 
   useEffect(() => {
     if (particles && particles.length > 0 && animFrame) {
@@ -80,16 +70,16 @@ const Background = () => {
     if (bg.current) {
       const { width, height, texts } = textConfig;
       const { zh, en } = texts;
-      const ifenglish = getLocale().includes('en');
-      const info = ifenglish ? en : zh;
+      const ifEnglish = false;
+      const info = ifEnglish ? en : zh;
       const { current } = bg;
       current.height = height;
       current.width = width;
-      const ctx = current.getContext('2d');
+      const ctx = current.getContext("2d");
       if (ctx) {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0)';
-        ctx.textAlign = 'center';
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = "rgba(255, 255, 255, 0)";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#fff";
         info.forEach((item) => {
           ctx.font = item.font;
           ctx.fillText(item.text, item.x, item.y, item.width);
@@ -101,11 +91,11 @@ const Background = () => {
 
   const init = async () => {
     windoW = window.innerWidth;
-    window.addEventListener('mousemove', mousemove);
+    window.addEventListener("mousemove", mousemove);
   };
 
   const destroy = () => {
-    window.removeEventListener('mousemove', mousemove);
+    window.removeEventListener("mousemove", mousemove);
     requestAnimation?.stop();
   };
 
@@ -125,7 +115,7 @@ const Background = () => {
 
   const setupParticles = () => {
     const current: any = canvas.current;
-    const ctx = current.getContext('2d');
+    const ctx = current.getContext("2d");
     if (ctx && image) {
       const particles = [];
       let f, d, b;
@@ -156,14 +146,14 @@ const Background = () => {
   const draw_bg = () => {
     if (image) {
       const current: any = canvas.current;
-      const ctx = current.getContext('2d');
+      const ctx = current.getContext("2d");
       ctx.drawImage(image, 0, 0, imageW, imageH, 0, 0, canvasW, canvasH);
     }
   };
 
   const animFrame = () => {
     const current: any = canvas.current;
-    const ctx = current?.getContext('2d');
+    const ctx = current?.getContext("2d");
     if (windoW > 400 && ctx && image) {
       ctx.clearRect(0, 0, canvasW, canvasH);
       draw_bg();
@@ -174,11 +164,11 @@ const Background = () => {
 
   const draw_roundy = () => {
     const current: any = canvas.current;
-    const ctx = current.getContext('2d');
+    const ctx = current.getContext("2d");
     if (windoW > 400 && current) {
       const ctxP = current?.getClientRects()[0];
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0)';
+      ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+      ctx.strokeStyle = "rgba(0, 0, 0, 0)";
       for (var b = 0; b <= drow_round.circles; b++) {
         var d = drow_round.r + (drow_round.r * b) / 10;
         var x = mouseX - ctxP.x;
@@ -195,11 +185,11 @@ const Background = () => {
 
   const draw_line = () => {
     const current: any = canvas.current;
-    const ctx = current.getContext('2d');
+    const ctx = current.getContext("2d");
     if (!current) {
       return;
     }
-    ctx.globalCompositeOperation = 'destination-out';
+    ctx.globalCompositeOperation = "destination-out";
 
     const ctxP = current.getClientRects()[0];
     var x = mouseX - ctxP.x;
@@ -208,12 +198,12 @@ const Background = () => {
       var j = 1 - g / 10;
       var b = 80 + g * 3;
       ctx.beginPath();
-      ctx.fillStyle = 'rgba(255,255,255,' + j + ')';
+      ctx.fillStyle = "rgba(255,255,255," + j + ")";
       ctx.arc(x, y, b, 0, Math.PI * 2, true);
       ctx.closePath();
       ctx.fill();
     }
-    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalCompositeOperation = "source-over";
     for (var g = 0, l = particles.length; g < l; ++g) {
       var d = particles[g],
         dx = x - d.x,
@@ -235,14 +225,14 @@ const Background = () => {
           if (a < stroke_megane) {
             ctx.beginPath();
             ctx.lineWidth = 0.3;
-            ctx.strokeStyle = 'rgba(255,255,255,1)';
+            ctx.strokeStyle = "rgba(255,255,255,1)";
             ctx.lineTo(
               d.x + (Math.random() * jimble - jimble / 2),
-              d.y + (Math.random() * jimble - jimble / 2),
+              d.y + (Math.random() * jimble - jimble / 2)
             );
             ctx.lineTo(
               f.x + (Math.random() * jimble - jimble / 2),
-              f.y + (Math.random() * jimble - jimble / 2),
+              f.y + (Math.random() * jimble - jimble / 2)
             );
             ctx.lineTo(d.x0, d.y0);
             ctx.lineTo(f.x0, f.y0);

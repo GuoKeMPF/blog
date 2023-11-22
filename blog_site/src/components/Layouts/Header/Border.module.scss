@@ -1,0 +1,91 @@
+.outer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.inner {
+  width: 100%;
+  height: 100%;
+  padding: var(--padding);
+  position: relative;
+  transition: all var(--step_time4);
+  box-sizing: border-box;
+}
+
+.inner::after,
+.inner::before,
+.outer::after,
+.outer::before {
+  content: "";
+  display: block;
+  position: absolute;
+  background-color: var(--themeBackground);
+  width: 0px;
+  height: 0px;
+}
+
+.outer::before {
+  top: 0;
+  left: 0;
+  height: 1px;
+  transition: all var(--step_time1);
+  transition-delay: var(--step_time3);
+}
+
+.inner::before {
+  top: 0;
+  right: 0;
+  width: 1px;
+  transition: all var(--step_time1);
+  transition-delay: var(--step_time2);
+}
+
+.inner::after {
+  bottom: 0;
+  right: 0;
+  height: 1px;
+  transition: all var(--step_time1);
+  transition-delay: var(--step_time1);
+}
+
+.outer::after {
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  transition: all var(--step_time1);
+  transition-delay: 0s;
+}
+
+.outer:hover .inner::after,
+.outer:hover::before {
+  width: 100%;
+}
+
+.outer:hover::after,
+.outer:hover .inner::before {
+  height: 100%;
+}
+
+.outer:hover::after {
+  transition-delay: var(--step_time3);
+}
+
+.outer:hover .inner::after {
+  transition-delay: var(--step_time2);
+}
+
+.outer:hover .inner::before {
+  transition-delay: var(--step_time1);
+}
+
+.outer:hover::before {
+  transition-delay: 0s;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  color: inherit;
+}

@@ -1,0 +1,18 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "import/no-anonymous-default-export": [
+      2,
+      {
+        "allowArray": true,
+        "allowArrowFunction": true,
+        "allowAnonymousClass": true,
+        "allowAnonymousFunction": true,
+        "allowCallExpression": true, // The true value here is for backward compatibility
+        "allowNew": true,
+        "allowLiteral": true,
+        "allowObject": true
+      }
+    ]
+  }
+}

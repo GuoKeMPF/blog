@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import { Link } from 'umi';
+import React, { Fragment } from "react";
+import Link from "next/link";
 
 interface RoutersType {
   title: string;
@@ -9,9 +9,9 @@ interface RoutersType {
 }
 
 const Breadcrumb = ({ routers }: { routers: RoutersType }) => {
-  const { title = '', path = '', children, notToot = false } = routers;
+  const { title = "", path = "", children, notToot = false } = routers;
   const breadNode = path ? (
-    <Link to={path}>{title}</Link>
+    <Link href={path}>{title}</Link>
   ) : (
     <span>{title}</span>
   );

@@ -1,6 +1,6 @@
-import { useEffect, useState, useMemo, useRef, Fragment } from 'react';
-import type { FC, ChangeEvent } from 'react';
-import styles from './index.less';
+import { useEffect, useState, useMemo, useRef, Fragment } from "react";
+import type { FC, ChangeEvent } from "react";
+import styles from "./index.module.scss";
 
 interface Props {
   page: string;
@@ -8,15 +8,15 @@ interface Props {
   size?: number;
   onChange: (page: string) => void;
   disable?: boolean;
-  position?: 'left' | 'center' | 'right';
+  position?: "left" | "center" | "right";
 }
 const Pagination: FC<Props> = ({
-  page = '1',
+  page = "1",
   total = 0,
   size = 10,
   onChange,
   disable,
-  position = 'left',
+  position = "left",
 }) => {
   const max = useMemo(() => Math.ceil(total / size), [total, size]);
   const [focus, setFocus] = useState(false);
@@ -49,12 +49,12 @@ const Pagination: FC<Props> = ({
 
   const onBlur = (e: ChangeEvent<HTMLInputElement>) => {
     setFocus(false);
-    const value = e?.target?.value || '1';
+    const value = e?.target?.value || "1";
     change(value);
   };
 
   const change = (value: string | number) => {
-    if (value + '' === page + '') {
+    if (value + "" === page + "") {
       return;
     }
     let num = Number(value);
@@ -73,7 +73,7 @@ const Pagination: FC<Props> = ({
   return max > 0 ? (
     <ul className={`${styles.pagination} ${styles[position]}`}>
       <li className={styles.item}>
-        {page !== '1' && (
+        {page !== "1" && (
           <button disabled={disable} className={styles.pre} onClick={pre}>
             <span className={styles.arrow}></span>
           </button>

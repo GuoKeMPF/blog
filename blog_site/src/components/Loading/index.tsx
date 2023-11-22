@@ -1,7 +1,8 @@
-import React from 'react';
-import styles from './index.less';
+import React from "react";
+import type { FC } from "react";
+import styles from "./index.module.scss";
 
-export default () => {
+const Loading: FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.nucleus}></div>
@@ -20,3 +21,4 @@ export default () => {
     </div>
   );
 };
+export default Loading;

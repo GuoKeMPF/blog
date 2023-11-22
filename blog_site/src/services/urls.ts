@@ -1,5 +1,7 @@
-export const text = '/text/';
+/** @format */
 
-export const picture = '/picture/';
+export const text = "/text";
 
-export const audio = '/audio/';
+export const picture = "/picture";
+
+export const audio = "/audio";

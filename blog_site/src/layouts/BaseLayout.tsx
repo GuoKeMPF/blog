@@ -1,16 +1,17 @@
-import React, { FunctionComponent, ReactNode } from 'react';
-import { Header } from '@/components/Layouts/Header';
-import { Main } from '@/components/Layouts/Main';
-import { Body } from '@/components/Layouts/Body';
-import Footer from '@/components/Layouts/Footer';
-import { HtmlTitle } from '@/components/HtmlTitle';
-import styles from './BaseLayout.less';
+import React, { FunctionComponent, ReactElement, ReactNode } from "react";
+import { Header } from "@/components/Layouts/Header";
+import { Main } from "@/components/Layouts/Main";
+import { Body } from "@/components/Layouts/Body";
+import Footer from "@/components/Layouts/Footer";
+import styles from "./BaseLayout.module.scss";
+interface BaseLayoutPropsType {
+  children?: ReactNode | ReactElement;
+}
 
-const BaseLayout: FunctionComponent<ReactNode> = ({ children }) => {
+const BaseLayout: FunctionComponent<BaseLayoutPropsType> = ({ children }) => {
   return (
     <div className={styles.context}>
-      <HtmlTitle />
-      <Header />
+      <Header></Header>
       <Main>
         <Body>{children}</Body>
       </Main>
@@ -18,5 +19,4 @@ const BaseLayout: FunctionComponent<ReactNode> = ({ children }) => {
     </div>
   );
 };
-
 export default BaseLayout;

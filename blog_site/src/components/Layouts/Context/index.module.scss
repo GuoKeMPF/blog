@@ -1,0 +1,4 @@
+.context {
+  padding: var(--padding);
+  min-height: calc(100vh - var(--footerHight - $headerHight));
+}

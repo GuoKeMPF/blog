@@ -1,0 +1,27 @@
+.container {
+	background-color: var(--maskColor);
+	border-radius: var(--radius);
+	color: var(--themeFontColorGrey);
+
+	img {
+		max-width: 100%;
+	}
+
+	.title {
+		text-align: center;
+		font-size: 24px;
+		line-height: 40px;
+		font-weight: 500;
+	}
+
+	.description {
+		font-size: 18px;
+		line-height: 28px;
+		font-weight: 400;
+		margin: 0 0 8px 0;
+	}
+
+	.content {
+		margin-top: 16px;
+	}
+}

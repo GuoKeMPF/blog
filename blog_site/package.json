@@ -1,46 +1,32 @@
 {
+  "name": "next-site",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env UMI_ENV=dev umi dev",
-    "start": "cross-env UMI_ENV=start umi dev",
-    "preview": "cross-env umi dev",
-    "build": "cross-env umi build",
-    "postinstall": "umi generate tmp",
-    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
-    "test": "umi-test",
-    "test:coverage": "umi-test --coverage"
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,jsx,less,md,json}": [
-      "prettier --write"
-    ],
-    "*.ts?(x)": [
-      "prettier --parser=typescript --write"
-    ]
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "mock": "nodemon mock-server/src/app.ts",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@ant-design/pro-layout": "^6.5.0",
-    "react": "17.x",
-    "react-dom": "17.x",
-    "umi": "^3.5.20"
+    "axios": "^1.6.1",
+    "next": "13.5.4",
+    "react": "^18",
+    "react-dom": "^18",
+    "sass": "^1.69.2",
+    "zustand": "^4.4.6"
   },
   "devDependencies": {
-    "@types/express": "^4.17.13",
-    "@types/mockjs": "^1.0.4",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@umijs/preset-react": "1.x",
-    "@umijs/test": "^3.5.20",
-    "cross-env": "^7.0.3",
-    "express": "^4.17.1",
-    "file-loader": "^6.2.0",
-    "lint-staged": "^10.0.7",
+    "@types/mockjs": "^1.0.8",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "13.5.4",
     "mockjs": "^1.1.0",
-    "prettier": "^2.2.0",
-    "typescript": "^4.1.2",
-    "yorkie": "^2.0.0"
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5"
   }
 }

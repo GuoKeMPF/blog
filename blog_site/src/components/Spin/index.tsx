@@ -1,11 +1,13 @@
-import { ReactChild } from 'react';
-import Loading from '@/components/Loading';
-import styles from './index.less';
+import { FC, ReactNode } from "react";
+import Loading from "@/components/Loading";
+import styles from "./index.module.scss";
 
-export default (props: {
+interface SpinPropsType {
   loading: boolean;
-  children: ReactChild | ReactChild[];
-}) => {
+  children: ReactNode | ReactNode[];
+}
+
+const Spin: FC<SpinPropsType> = (props) => {
   const { loading, children } = props;
   return (
     <div className={styles.container}>
@@ -18,3 +20,4 @@ export default (props: {
     </div>
   );
 };
+export default Spin;
