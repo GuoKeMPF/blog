@@ -1,12 +1,10 @@
 ---
-title: A site for note
+title: 笔记本
 hero:
-  title: Site
-  description: A site for note
+  title: 笔记
+  description: 笔记本
   actions:
-    - text: Hello
-      link: /
-    - text: World
+    - text: 目录
       link: /
 features:
   - title: Hello
