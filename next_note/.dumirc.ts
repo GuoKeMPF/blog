@@ -1,5 +1,7 @@
 import { defineConfig } from 'dumi';
 
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+
 export default defineConfig({
   themeConfig: {
     name: 'note',
@@ -15,4 +17,14 @@ export default defineConfig({
     { name: 'keywords', content: 'note' },
     { name: 'description', content: 'note' },
   ],
+  lessLoader: { javascriptEnabled: true },
+
+  chainWebpack(memo) {
+    memo
+      .plugin('monaco-editor-webpack-plugin')
+      .use(MonacoWebpackPlugin, [
+        { languages: ['javascript', 'typescript', 'html', 'less', 'css'] },
+      ]);
+    memo.output.globalObject('self');
+  },
 });
