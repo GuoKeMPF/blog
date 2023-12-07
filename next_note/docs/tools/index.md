@@ -4,4 +4,6 @@ nav:
   order: 3
 ---
 
-工具
+- [代码编辑器](./code/index.md '代码编辑器')
+
+- [正则可视化](./reg-exp/index.md 'RegExp')

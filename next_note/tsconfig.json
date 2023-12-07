@@ -5,8 +5,13 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "@@/*": [".dumi/tmp/*"]
-    }
+      "@@/*": [
+        ".dumi/tmp/*"
+      ]
+    },
+    "jsx": "react-jsx"
   },
-  "include": [".dumirc.ts"]
+  "include": [
+    ".dumirc.ts"
+  ]
 }

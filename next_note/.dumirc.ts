@@ -3,6 +3,7 @@ import { defineConfig } from 'dumi';
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 export default defineConfig({
+  mfsu: false,
   themeConfig: {
     name: 'note',
     showLineNum: true,
@@ -10,7 +11,7 @@ export default defineConfig({
       github: 'https://github.com/GuoKeMPF',
     },
   },
-  ssr: {},
+  // ssr: {},
   exportStatic: { ignorePreRenderError: true },
   favicons: ['/favicon.ico'],
   metas: [

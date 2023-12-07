@@ -5,4 +5,4 @@ nav:
 title: 组件
 ---
 
-- [正则可视化](./reg-exp/index.md 'RegExp')
+- [康威生命游戏](./game-of-life/index.md '康威生命游戏')
