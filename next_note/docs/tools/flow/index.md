@@ -1,6 +1,7 @@
 ---
-title: 流程图
-toc: menu
+title: 流程图 解决方案
 ---
 
-<code src="./index.tsx" title="流程图"></code>
+# 流程图
+
+<code src="./demos/index.tsx" compact transform ></code>

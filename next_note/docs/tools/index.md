@@ -4,6 +4,8 @@ nav:
   order: 3
 ---
 
+- [流程图](./flow/index.md '流程图')
+
 - [代码编辑器](./code/index.md '代码编辑器')
 
 - [正则可视化](./reg-exp/index.md 'RegExp')
