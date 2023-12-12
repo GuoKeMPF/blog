@@ -71,6 +71,8 @@
   },
   "dependencies": {
     "antd": "^5.12.2",
-    "antd-style": "^3.6.1"
+    "antd-style": "^3.6.1",
+    "phenomenon": "^1.6.0",
+    "react-spring": "^9.7.3"
   }
 }

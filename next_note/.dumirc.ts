@@ -5,8 +5,9 @@ export default defineConfig({
   themeConfig: {
     name: 'note',
     logo: '/favicon.ico',
+    footer: `Copyright © ${new Date().getFullYear()}`,
   },
   resolve: {
-    forceKebabCaseRouting: false
-  }
+    forceKebabCaseRouting: false,
+  },
 });
