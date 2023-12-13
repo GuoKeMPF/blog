@@ -12,6 +12,7 @@
     "docs:build": "dumi build",
     "prepare": "husky install && dumi setup",
     "doctor": "father doctor",
+    "lessTojs": "npx @chenshuai2144/less2cssinjs less2js -i ./docs",
     "lint": "npm run lint:es && npm run lint:css",
     "lint:css": "stylelint \"{src,test}/**/*.{css,less}\"",
     "lint:es": "eslint \"{src,test}/**/*.{js,jsx,ts,tsx}\"",

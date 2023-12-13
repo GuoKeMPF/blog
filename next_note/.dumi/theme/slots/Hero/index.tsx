@@ -10,9 +10,10 @@ import { Button, Flex, Space } from 'antd';
 function Hero() {
   const { frontmatter } = useRouteMeta();
   return (
-    <div className="custom-hore-container">
-      <Cobe />
-      {'hero' in frontmatter && (
+
+    ('hero') in frontmatter && (
+      <div className="custom-hore-container">
+        <Cobe />
         <Flex gap="middle" align="center" justify="center" vertical>
           {frontmatter.hero!.title && (
             <HeroTitle>{frontmatter.hero!.title}</HeroTitle>
@@ -46,8 +47,9 @@ function Hero() {
             </Space>
           )}
         </Flex>
-      )}
-    </div>
+      </div>
+    )
+
   );
 }
 
