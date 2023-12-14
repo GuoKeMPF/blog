@@ -1,5 +1,6 @@
 ---
 title: useReducer
+toc: menu
 order: 7
 ---
 

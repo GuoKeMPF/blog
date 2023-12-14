@@ -1,8 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import styles from './index.less';
 import * as monaco from 'monaco-editor';
-
-import { isBrowser } from 'umi';
+import React, { FC, useEffect, useRef } from 'react';
+import useStyles from './index.style';
 
 interface PropsType {
   defaultValue?: string;
@@ -12,7 +10,7 @@ interface PropsType {
   theme?: string;
 }
 
-const Code = (props: PropsType) => {
+const Code: FC<PropsType> = (props: PropsType) => {
   const {
     className = '',
     defaultValue = '',
@@ -21,6 +19,9 @@ const Code = (props: PropsType) => {
     theme = 'vs-dark',
     ...config
   } = props;
+
+  const { styles } = useStyles();
+
   const container = useRef(null);
   useEffect(() => {
     const node = container.current;
@@ -58,7 +59,4 @@ const Code = (props: PropsType) => {
   );
 };
 // export default Code;
-export default () => {
-  if (isBrowser()) return <Code />;
-  return <p>组件动态加载中...</p>;
-};
+export default Code;

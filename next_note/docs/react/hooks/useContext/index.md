@@ -1,5 +1,6 @@
 ---
 title: useContext
+toc: menu
 order: 3
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: useImperativeHandle
+toc: menu
 order: 5
 ---
 

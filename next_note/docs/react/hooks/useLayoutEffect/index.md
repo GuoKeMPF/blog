@@ -1,5 +1,6 @@
 ---
 title: useLayoutEffect
+toc: menu
 order: 9
 ---
 

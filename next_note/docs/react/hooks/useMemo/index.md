@@ -1,5 +1,6 @@
 ---
 title: useMemo
+toc: menu
 order: 6
 ---
 

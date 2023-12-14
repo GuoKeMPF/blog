@@ -1,5 +1,6 @@
 ---
 title: useEffect
+toc: menu
 order: 2
 ---
 
