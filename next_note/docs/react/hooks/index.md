@@ -1,3 +1,7 @@
+---
+title: Hooks
+order: 0
+---
 
 # Hooks
 
@@ -8,7 +12,7 @@ Hook 是 React 16.8 的新增特性。它可以让你在不编写 **class** 的�
 
 如果你在编写函数组件并意识到需要向其添加一些 state，以前的做法是必须将其转化为 class。现在你可以在现有的函数组件中使用 Hook。
 
-```jsx
+```jsx | pure
 import React, { useState } from 'react';
 
 function Example() {
@@ -26,7 +30,7 @@ function Example() {
 
 效果上等价与
 
-```jsx
+```jsx  | pure
 class Example extends React.Component {
   constructor(props) {
     super(props);

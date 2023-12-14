@@ -1,6 +1,6 @@
 ---
 title: useLayoutEffect
-toc: menu
+order: 9
 ---
 
 # useLayoutEffect 所有的 DOM 变更之后同步调用 effect

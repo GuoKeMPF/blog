@@ -1,6 +1,6 @@
 ---
 title: useImperativeHandle
-toc: menu
+order: 5
 ---
 
 # useImperativeHandle 函数组件中执行副作用操作

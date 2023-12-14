@@ -1,6 +1,6 @@
 ---
 title: useReducer
-toc: menu
+order: 7
 ---
 
 # useReducer Redux,useState 的替代方案

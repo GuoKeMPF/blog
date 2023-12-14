@@ -1,3 +1,8 @@
+---
+title: useState
+order: 1
+---
+
 # useState 组建状态以及更新
 
 在 class 中，我们通过在构造函数中设置 this.state 为 `{ count: 0 }` 来初始化 count state 为 0：

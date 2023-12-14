@@ -1,6 +1,6 @@
 ---
 title: useEffect
-toc: menu
+order: 2
 ---
 
 # useEffect 函数组件中执行副作用操作

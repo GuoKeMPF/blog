@@ -1,6 +1,6 @@
 ---
 title: useMemo
-toc: menu
+order: 6
 ---
 
 # useMemo 优化渲染
