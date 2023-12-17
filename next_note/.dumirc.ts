@@ -1,6 +1,5 @@
 import { defineConfig } from 'dumi';
 
-
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 export default defineConfig({
@@ -18,9 +17,11 @@ export default defineConfig({
       value: [{ title: '目录', link: '/directory' }],
     },
   },
+  exportStatic: {},
   resolve: {
     forceKebabCaseRouting: false,
   },
+  mfsu: false,
   chainWebpack(memo) {
     memo
       .plugin('monaco-editor-webpack-plugin')

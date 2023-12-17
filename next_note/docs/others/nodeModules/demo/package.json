@@ -1,0 +1,15 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "demo start",
+    "dev": "demo dev -development"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "demo_modules": "file:demo_modules"
+  }
+}
