@@ -103,3 +103,9 @@ const splitArr = str.split(/\s/g);
 console.log('splitArr', splitArr); // [ 'abcdefghijklm', 'n' ]
 console.log('str', str); // abcdefghijklm n
 ```
+
+:::info{title='字符串大小比较'}
+字符串比较会逐个对比码点大小，既比较码点位数，位数一样则逐个比较码点对应的值。
+:::
+
+[码元](/javascript/chart/code_unit '码元')

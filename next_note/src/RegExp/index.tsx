@@ -1,19 +1,13 @@
 import { Button, Checkbox, Form, Input, Space, Typography } from 'antd';
-import React, {
-  Fragment,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Raphael, parse, visualize } from 'regulex_common';
 
 import useStyles from './index.style';
 
-const { Text, Paragraph } = Typography;
+import RegForm from './regForm';
+
+const { Paragraph } = Typography;
 
 const getRegexFlags = (re: {
   global: boolean;
@@ -32,13 +26,7 @@ const RegExpFC = () => {
   const regVisualizeContainer = useRef<HTMLDivElement>(null);
   const [reg, setReg] = useState<RegExp>();
   const [form] = Form.useForm();
-  const [testForm] = Form.useForm();
   const [paper, setPaper] = useState<any>();
-
-  const [validateStatus, setValidateStatus] = useState<
-    undefined | 'error' | 'success'
-  >(undefined);
-  const [helpStr, setHelpStr] = useState<ReactNode>(null);
 
   useEffect(() => {
     if (regVisualizeContainer.current) {
@@ -63,37 +51,6 @@ const RegExpFC = () => {
       console.log(e);
     }
   };
-
-  const onChangeTestStr = useMemo(
-    () => async () => {
-      const values = await testForm.getFieldsValue();
-      const { testString } = values;
-      if (!testString || !reg) {
-        setValidateStatus(undefined);
-        setHelpStr(null);
-        return;
-      }
-      if (reg.test(testString)) {
-        setValidateStatus('success');
-        setHelpStr(
-          <Text type="success">
-            <CheckCircleOutlined />
-            通过
-          </Text>,
-        );
-      }
-      if (!reg.test(testString)) {
-        setValidateStatus('error');
-        setHelpStr(
-          <Text type="danger">
-            <CloseCircleOutlined />
-            不通过
-          </Text>,
-        );
-      }
-    },
-    [reg],
-  );
 
   return (
     <Fragment>
@@ -141,23 +98,7 @@ const RegExpFC = () => {
         ref={regVisualizeContainer}
         className={styles.regVisualizeContainer}
       ></div>
-
-      <Form
-        name="test"
-        form={testForm}
-        onValuesChange={onChangeTestStr}
-        wrapperCol={{ span: 24 }}
-        autoComplete="off"
-      >
-        <Form.Item
-          name="testString"
-          extra={helpStr}
-          validateStatus={validateStatus}
-          shouldUpdate
-        >
-          <Input.TextArea allowClear placeholder="请输入需要验证的字符串" />
-        </Form.Item>
-      </Form>
+      <RegForm regexp={reg} />
     </Fragment>
   );
 };
