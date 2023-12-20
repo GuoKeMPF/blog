@@ -18,6 +18,8 @@ export default defineConfig({
     },
   },
   exportStatic: {},
+  extraRemarkPlugins: ['remark-math'],
+  extraRehypePlugins: ['rehype-katex'],
   resolve: {
     forceKebabCaseRouting: false,
   },
