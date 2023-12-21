@@ -5,7 +5,7 @@ import { Raphael, parse, visualize } from 'regulex_common';
 
 import useStyles from './index.style';
 
-import RegForm from './regForm';
+import RegForm from './FegForm';
 
 const { Paragraph } = Typography;
 
