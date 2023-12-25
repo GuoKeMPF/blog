@@ -14,4 +14,4 @@ import * as THREE from 'three';
 // import { Scene, PerspectiveCamera } from 'three';
 ```
 
-<code src="./index.tsx" title="threejs"></code>
+<code src="./index.tsx" title="install"></code>

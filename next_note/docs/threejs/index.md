@@ -2,4 +2,8 @@
 
 [threejs](https://threejs.org/ 'threejs')
 
-- [threejs-1](/threejs/install 'threejs-1')
+
+
+- [threejs-introduce](/threejs/introduce 'threejs-introduce')
+- [threejs-install](/threejs/install 'threejs-install')
+- [threejs-scene](/threejs/scene 'threejs-scene')

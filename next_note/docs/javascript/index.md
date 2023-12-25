@@ -20,8 +20,8 @@
 ### 对象
 
 - Object
-  - Object
-  - [Array](/javascript/array)
+  - [Object](/javascript/object 'Object')
+  - [Array](/javascript/array 'Array')
 
 
 ## TypeScript
