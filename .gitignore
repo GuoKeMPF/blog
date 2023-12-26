@@ -8,5 +8,6 @@
 **/node_modules/**
 **/.umi/**
 **/dist/**
+**/docs-dist/**
 blog_server/db.sqlite3
 **/node_modules
