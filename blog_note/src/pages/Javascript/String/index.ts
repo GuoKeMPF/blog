@@ -1,1 +1,0 @@
-const str = 'abcdefghijklm n';
