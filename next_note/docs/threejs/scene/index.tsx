@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { usePrefersColor } from 'dumi';
 
 const ThreeDemo = () => {
+  const [, theme] = usePrefersColor();
   const container = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<THREE.Scene>()
 
   useEffect(() => {
     let animationId = 0;
@@ -10,10 +13,14 @@ const ThreeDemo = () => {
       const { width, height } = container.current.getBoundingClientRect();
       // 创建场景
       const scene = new THREE.Scene();
+      sceneRef.current = scene
+      scene.fog = new THREE.FogExp2(0x000000, 0.00000025);
       // 创建摄像头
       const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+      // 设置相相对相机 z 位置 数值越大，相机越远
+      camera.position.z = 3;
       // 创建渲染器
-      const renderer = new THREE.WebGLRenderer();
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
       // 设置渲染器尺寸
       renderer.setSize(width, height);
       // 将渲染器添加到页面
@@ -21,15 +28,13 @@ const ThreeDemo = () => {
       // 创建一个几何物体
       const geometry = new THREE.BoxGeometry(1, 1, 1);
       // 设置集合物体表面材质
-      const material = new THREE.MeshBasicMaterial({ color: 0x8f0000 });
+      const material = new THREE.MeshBasicMaterial({ color: 0x156289, side: THREE.DoubleSide, });
+
 
       // 该函数创建一个三维物体，将其放置在场景中，并使用给定的几何形状和材质对其进行渲染。
       const cube = new THREE.Mesh(geometry, material);
-      // 设置相相对相机 z 位置 数值越大，相机越远
-      camera.position.z = 2;
       scene.add(cube);
       function animate() {
-        console.log('animate');
         // 设置旋转角度
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
@@ -48,6 +53,14 @@ const ThreeDemo = () => {
       }
     };
   }, []);
+  useEffect(() => {
+    if (sceneRef.current) {
+      const background = new THREE.Color(theme === 'dark' ? 0x00000 : 0xffffff)
+      sceneRef.current.background = background;
+    }
+  }, [theme])
+
+
 
   return (
     <div

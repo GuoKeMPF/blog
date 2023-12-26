@@ -5,5 +5,7 @@
 
 
 - [threejs-introduce](/threejs/introduce 'threejs-introduce')
-- [threejs-install](/threejs/install 'threejs-install')
-- [threejs-scene](/threejs/scene 'threejs-scene')
+- [兼容性](/threejs/compatibilit '兼容性')
+- [threejs-安装](/threejs/install 'threejs-install')
+- [threejs-场景](/threejs/scene 'threejs-scene')
+- [threejs-画线](/threejs/line 'threejs-line')

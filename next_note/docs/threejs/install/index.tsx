@@ -29,7 +29,6 @@ const ThreeDemo = () => {
       camera.position.z = 2;
       scene.add(cube);
       function animate() {
-        console.log('animate');
         // 设置旋转角度
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
