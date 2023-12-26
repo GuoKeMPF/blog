@@ -9,6 +9,7 @@ export default defineConfig({
   antd: {},
   dva: {},
   request: {},
+  favicons: ['/favicon.ico'],
   initialState: {},
   model: {},
   layout: {

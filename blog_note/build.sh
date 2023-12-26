@@ -5,7 +5,6 @@ echo "install first"
 eval "tyarn"
 
 echo "build note"
-eval "npm run docs"
-
+eval "npm run docs:build"
 
 eval "cd ../"

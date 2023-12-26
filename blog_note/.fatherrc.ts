@@ -1,5 +1,6 @@
-export default {
-  target: 'node',
-  disableTypeCheck: true,
-  cjs: { type: 'babel', lazy: true },
-};
+import { defineConfig } from 'father';
+
+export default defineConfig({
+  esm: { output: 'dist' },
+  cjs: {},
+});

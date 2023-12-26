@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Object</title>
+</head>
+
+<body>
+
+  <script>
+
+    function Person(name, age) {
+      this.age = age
+      this.name = name
+    }
+    const person = new Person('张三', 18);
+
+    console.log(Person.__proto__ === Function.prototype);
+
+    console.log(Function.prototype === Object.__proto__)
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>
