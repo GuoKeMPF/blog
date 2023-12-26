@@ -27,7 +27,7 @@ eval 'cp -r ./blog_admin/dist/* ./blog_nginx/blog_static/admin/'
 source ./blog_note/build.sh
 
 eval 'mkdir -p ./blog_nginx/blog_static/note/'
-eval 'cp -r ./blog_note/dist/* ./blog_nginx/blog_static/note/'
+eval 'cp -r ./blog_note/docs-dist/* ./blog_nginx/blog_static/note/'
 
 # 检查打包结果
 if [ $? -eq 0 ]; then
