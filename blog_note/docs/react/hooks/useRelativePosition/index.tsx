@@ -1,9 +1,8 @@
-import React, { Fragment, useRef, useEffect } from "react";
-import { useRelativePosition } from "./useRelativePosition";
-
+import { Divider } from 'antd';
+import React, { Fragment, useEffect, useRef } from 'react';
+import { useRelativePosition } from './useRelativePosition';
 
 export default () => {
-
   const container = useRef<HTMLDivElement>(null);
 
   const onPositionChange = (position) => {
@@ -12,9 +11,8 @@ export default () => {
 
   const position = useRelativePosition({
     target: container.current,
-    onChange: onPositionChange
+    onChange: onPositionChange,
   });
-
 
   useEffect(() => {
     console.log('useEffect container', container);
@@ -24,9 +22,17 @@ export default () => {
     console.log('useEffect position', position);
   }, [position]);
 
-  return <Fragment>
-    <div ref={container} style={{ width: '100%', minHeight: '300px' }}>
-
-    </div>
-  </Fragment>;
+  return (
+    <Fragment>
+      <div
+        ref={container}
+        style={{ width: '100%', minHeight: '300px', border: '1px solid #ccc' }}
+      ></div>
+      <Divider />
+      <p>top: {position.top}</p>
+      <p>bottom: {position.bottom}</p>
+      <p>right: {position.right}</p>
+      <p>left: {position.left}</p>
+    </Fragment>
+  );
 };

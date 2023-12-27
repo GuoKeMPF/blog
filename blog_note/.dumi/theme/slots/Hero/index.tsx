@@ -5,13 +5,13 @@ import HeroTitle from '../HeroTitle';
 import Cobe from './cobe';
 import './index.less';
 
+import { ExportOutlined } from '@ant-design/icons';
 import { Button, Flex, Space } from 'antd';
 
 function Hero() {
   const { frontmatter } = useRouteMeta();
   return (
-
-    ('hero') in frontmatter && (
+    'hero' in frontmatter && (
       <div className="custom-hore-container">
         <Cobe />
         <Flex gap="middle" align="center" justify="center" vertical>
@@ -29,14 +29,16 @@ function Hero() {
             <Space>
               {frontmatter.hero!.actions!.map(({ text, link }) =>
                 /^(\w+:)\/\/|^(mailto|tel):/.test(link) ? (
+                  // <ExportOutlined />
                   <Button
-                    type="primary"
+                    type="link"
                     href={link}
                     target="_blank"
                     rel="noreferrer"
                     key={text}
                   >
                     {text}
+                    <ExportOutlined />
                   </Button>
                 ) : (
                   <Link key={text} to={link}>
@@ -49,7 +51,6 @@ function Hero() {
         </Flex>
       </div>
     )
-
   );
 }
 
