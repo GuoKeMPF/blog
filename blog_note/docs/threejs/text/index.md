@@ -28,4 +28,4 @@
 2. 将文字绘制到画布中，并将其用作Texture（纹理）
 
 
-
+<code src="./Texture.tsx"></code>

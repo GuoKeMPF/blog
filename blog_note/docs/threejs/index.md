@@ -9,3 +9,4 @@
 - [threejs-安装](/threejs/install 'threejs-install')
 - [threejs-场景](/threejs/scene 'threejs-scene')
 - [threejs-画线](/threejs/line 'threejs-line')
+- [threejs-文字](/threejs/text 'threejs-text')
