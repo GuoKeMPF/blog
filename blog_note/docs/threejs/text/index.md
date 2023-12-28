@@ -27,5 +27,8 @@
 
 2. 将文字绘制到画布中，并将其用作Texture（纹理）
 
-
 <code src="./Texture.tsx"></code>
+
+3. 使用原生 dom 插入到场景中
+
+<code src="./CSS2d.tsx"></code>
