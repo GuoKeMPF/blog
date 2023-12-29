@@ -385,3 +385,64 @@ const c: C = {
   b: false,
 };
 ```
+
+### keyof
+
+```ts
+type StatusMap = {
+  success: 'Success',
+  error: 'Error',
+}
+
+type StatusKey = keyof StatusMap
+type StatusValue = StatusMap[StatusKey]
+
+const status: StatusKey = 'error'
+const statusValue: StatusValue = 'Error'
+```
+
+
+### Partial
+
+```ts
+type T = {
+  a: string;
+  b: number;
+};
+
+type T1 = Partial<T>;
+
+// 
+const t1: T1 = {
+  a: '123',
+};
+```
+
+
+### 类型断言
+
+```ts
+const a = '123' as unknown as string;
+const b = 123 as unknown as string;
+```
+
+
+### 类型保护
+
+```ts
+type T = string | number;
+
+function foo(x: T) {
+  if (typeof x ==='string') {
+    console.log(x.length);
+  } else {
+    console.log(x * 2);
+  }
+}
+
+foo('123');
+foo(123);
+```
+
+
+

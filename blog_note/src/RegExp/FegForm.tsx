@@ -6,6 +6,21 @@ type RegFormProps = {
   regexp?: RegExp;
 };
 
+interface ValidateStatueMap {
+  empty: 'empty',
+  pass: 'pass',
+  failed: 'failed'
+}
+
+const validateStatueMap: ValidateStatueMap = {
+  empty: 'empty',
+  pass: 'pass',
+  failed: 'failed'
+}
+
+type ValidateStatue = ValidateStatueMap[keyof ValidateStatueMap];
+
+
 export default function RegForm({ regexp = /[\s\S]/ }: RegFormProps) {
   const [form] = Form.useForm();
 
@@ -22,6 +37,24 @@ export default function RegForm({ regexp = /[\s\S]/ }: RegFormProps) {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+
+  const validateFields = (value: string) => {
+    let status: ValidateStatue = validateStatueMap.empty
+    if (value === '') {
+      return validateStatueMap.empty;
+    } else if (regexp.test(value)) {
+      status = validateStatueMap.pass;
+    } else {
+      status = validateStatueMap.failed;
+    }
+
+  
+
+
+
+  }
+
+
   return (
     <Form
       form={form}
@@ -32,10 +65,7 @@ export default function RegForm({ regexp = /[\s\S]/ }: RegFormProps) {
       initialValues={{ strings: [''] }}
     >
       <Form.List name="strings">
-        {(fields, { add, remove }, { errors }) => {
-          console.log('errors', errors);
-
-          console.log('fields', fields);
+        {(fields, { add, remove }, mate) => {
 
           return (
             <>
@@ -72,14 +102,14 @@ export default function RegForm({ regexp = /[\s\S]/ }: RegFormProps) {
               ))}
               <Form.Item>
                 <Space>
-                  <Button onClick={() => add('')} icon={<PlusOutlined />}>
+                  <Button className='addTestString' id='addTestString' onClick={() => add('')} icon={<PlusOutlined />}>
                     添加一个待测试字符串
                   </Button>
-                  <Button type="primary" htmlType="submit">
+                  <Button className='checkString' id='checkString' type="primary" htmlType="submit">
                     测试
                   </Button>
                 </Space>
-                <Form.ErrorList errors={errors} />
+                {/* <Form.ErrorList errors={errors} /> */}
               </Form.Item>
             </>
           );
