@@ -44,7 +44,7 @@ const RegExpFC = () => {
     }
     try {
       const flags = getRegexFlags(others);
-      const regexp = new RegExp(regStr, flags);
+      const regexp = new RegExp(String.raw`${regStr}`, flags);
       setReg(regexp);
       visualize(parse(regexp.source), flags, paper);
     } catch (e) {

@@ -4,6 +4,7 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 export default defineConfig({
   outputPath: 'docs-dist',
+  favicons: ['/favicon.ico', '/logo.png'],
   themeConfig: {
     name: 'note',
     logo: '/favicon.ico',

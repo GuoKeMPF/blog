@@ -6,6 +6,12 @@ type RegFormProps = {
   regexp?: RegExp;
 };
 
+interface Status {
+  validateStatus: 'error' | 'success' | 'warning' | 'validating' | 'empty';
+  prefix?: React.ReactNode;
+  help?: string;
+}
+
 export default function RegForm({ regexp = /[\s\S]/ }: RegFormProps) {
   const [form] = Form.useForm();
 
@@ -22,6 +28,33 @@ export default function RegForm({ regexp = /[\s\S]/ }: RegFormProps) {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+
+  // const validateFields = (value: string): Status => {
+  //   let status: Status = {
+  //     validateStatus: 'empty',
+  //   };
+  //   if (value === '') {
+  //     status = {
+  //       validateStatus: 'warning',
+  //       prefix: <ExclamationCircleOutlined />,
+  //       help: '请输入需要验证的字符串',
+  //     };
+  //   } else if (regexp.test(value)) {
+  //     status = {
+  //       validateStatus: 'success',
+  //       prefix: <CheckCircleOutlined />,
+  //       help: '验证通过',
+  //     };
+  //   } else {
+  //     status = {
+  //       validateStatus: 'error',
+  //       prefix: <CloseCircleOutlined />,
+  //       help: '验证不通过',
+  //     };
+  //   }
+  //   return status;
+  // };
+
   return (
     <Form
       form={form}
@@ -32,15 +65,14 @@ export default function RegForm({ regexp = /[\s\S]/ }: RegFormProps) {
       initialValues={{ strings: [''] }}
     >
       <Form.List name="strings">
-        {(fields, { add, remove }, { errors }) => {
-          console.log('errors', errors);
-
-          console.log('fields', fields);
+        {(fields, { add, remove }, mate) => {
 
           return (
             <>
-              {fields.map((field) => (
-                <Form.Item shouldUpdate required={false} key={field.key}>
+              {fields.map((field) => {
+                const value = form.getFieldValue(['strings', field.key]);
+                console.log(value);
+                return (
                   <Form.Item
                     validateDebounce={500}
                     {...field}
@@ -51,7 +83,9 @@ export default function RegForm({ regexp = /[\s\S]/ }: RegFormProps) {
                         message: '正则不匹配',
                       },
                     ]}
-                    noStyle
+                    shouldUpdate
+                    required={false}
+                    key={field.key}
                   >
                     <Flex gap={'8px'}>
                       <Input.TextArea
@@ -68,18 +102,28 @@ export default function RegForm({ regexp = /[\s\S]/ }: RegFormProps) {
                       ) : null}
                     </Flex>
                   </Form.Item>
-                </Form.Item>
-              ))}
+                );
+              })}
               <Form.Item>
                 <Space>
-                  <Button onClick={() => add('')} icon={<PlusOutlined />}>
+                  <Button
+                    className="addTestString"
+                    id="addTestString"
+                    onClick={() => add('')}
+                    icon={<PlusOutlined />}
+                  >
                     添加一个待测试字符串
                   </Button>
-                  <Button type="primary" htmlType="submit">
+                  <Button
+                    className="checkString"
+                    id="checkString"
+                    type="primary"
+                    htmlType="submit"
+                  >
                     测试
                   </Button>
                 </Space>
-                <Form.ErrorList errors={errors} />
+                {/* <Form.ErrorList errors={errors} /> */}
               </Form.Item>
             </>
           );
