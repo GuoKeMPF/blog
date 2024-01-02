@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { Fragment, useEffect, useMemo, useRef } from 'react';
 
 import {
   CSS2DObject,
@@ -21,12 +21,14 @@ interface ThreeObject {
   css2DRenderer: CSS2DRenderer;
   gui: GUI;
   clock: THREE.Clock;
+  moon?: THREE.Mesh;
 }
 
 function CSS2d() {
   const container = useRef<HTMLDivElement>(null);
 
   const threeObject = useRef<ThreeObject>();
+  const requestAnimationFrameId = useRef<number>()
 
   const EARTH_RADIUS = useMemo(() => 1, []);
   const MOON_RADIUS = useMemo(() => 0.27, []);
@@ -58,6 +60,7 @@ function CSS2d() {
   function init() {
     if (threeObject.current) {
       const { camera, renderer, scene, css2DRenderer } = threeObject.current;
+      const { width, height } = container.current.getBoundingClientRect();
 
       camera.position.set(10, 5, 20);
       camera.layers.enableAll();
@@ -142,10 +145,10 @@ function CSS2d() {
       moonMassLabel.layers.set(1);
 
       renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(width, height);
       container.current.appendChild(renderer.domElement);
 
-      css2DRenderer.setSize(window.innerWidth, window.innerHeight);
+      css2DRenderer.setSize(width, height);
       css2DRenderer.domElement.style.position = 'absolute';
       css2DRenderer.domElement.style.top = '0px';
       container.current.appendChild(css2DRenderer.domElement);
@@ -153,6 +156,8 @@ function CSS2d() {
       const controls = new OrbitControls(camera, css2DRenderer.domElement);
       controls.minDistance = 5;
       controls.maxDistance = 100;
+
+      threeObject.current.moon = moon
     }
   }
 
@@ -166,9 +171,25 @@ function CSS2d() {
     }
   }
 
+
+  function animate() {
+
+    if (threeObject.current) {
+      const { camera, renderer, css2DRenderer, clock, scene, moon } = threeObject.current;
+      requestAnimationFrameId.current = requestAnimationFrame(animate);
+      const elapsed = clock.getElapsedTime();
+      moon?.position.set(Math.sin(elapsed) * 5, 0, Math.cos(elapsed) * 5);
+      renderer.render(scene, camera);
+      css2DRenderer.render(scene, camera);
+    }
+
+  }
+
   useEffect(() => {
     if (container.current) {
-      const gui = new GUI();
+      const gui = new GUI(
+        { container: container.current, injectStyles: true }
+      );
       const clock = new THREE.Clock();
       const camera = new THREE.PerspectiveCamera(
         45,
@@ -193,9 +214,12 @@ function CSS2d() {
       initGui();
       renderer.render(scene, camera);
 
+      animate();
+
       window.addEventListener('resize', onWindowResize);
     }
     return () => {
+      cancelAnimationFrame(requestAnimationFrameId.current)
       window.removeEventListener('resize', onWindowResize);
     };
   }, []);
@@ -208,6 +232,7 @@ function CSS2d() {
         height: '100%',
         minHeight: '400px',
         minWidth: '400px',
+        // position: 'relative'
       }}
     ></div>
   );
