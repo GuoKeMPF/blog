@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 import {
   CSS2DObject,
@@ -9,10 +9,13 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import * as THREE from 'three';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
 import earth_atmos_2048 from './textures/earth_atmos_2048.jpg';
 import earth_normal_2048 from './textures/earth_normal_2048.jpg';
 import earth_specular_2048 from './textures/earth_specular_2048.jpg';
 import moon_1024 from './textures/moon_1024.jpg';
+
+import useStyles from './CSS2d.styles';
 
 interface ThreeObject {
   camera: THREE.PerspectiveCamera;
@@ -26,12 +29,15 @@ interface ThreeObject {
 
 function CSS2d() {
   const container = useRef<HTMLDivElement>(null);
+  const guiRef = useRef<HTMLDivElement>(null);
 
   const threeObject = useRef<ThreeObject>();
-  const requestAnimationFrameId = useRef<number>()
+  const requestAnimationFrameId = useRef<number>();
 
   const EARTH_RADIUS = useMemo(() => 1, []);
   const MOON_RADIUS = useMemo(() => 0.27, []);
+
+  const { styles } = useStyles();
 
   function initGui() {
     const { gui, camera } = threeObject.current;
@@ -101,7 +107,7 @@ function CSS2d() {
       moon.layers.enableAll();
 
       const earthDiv = document.createElement('div');
-      earthDiv.className = 'label';
+      earthDiv.className = styles.label;
       earthDiv.textContent = 'Earth';
       earthDiv.style.backgroundColor = 'transparent';
 
@@ -112,7 +118,7 @@ function CSS2d() {
       earthLabel.layers.set(0);
 
       const earthMassDiv = document.createElement('div');
-      earthMassDiv.className = 'label';
+      earthMassDiv.className = styles.label;
       earthMassDiv.textContent = '5.97237e24 kg';
       earthMassDiv.style.backgroundColor = 'transparent';
 
@@ -123,7 +129,7 @@ function CSS2d() {
       earthMassLabel.layers.set(1);
 
       const moonDiv = document.createElement('div');
-      moonDiv.className = 'label';
+      moonDiv.className = styles.label;
       moonDiv.textContent = 'Moon';
       moonDiv.style.backgroundColor = 'transparent';
 
@@ -134,7 +140,7 @@ function CSS2d() {
       moonLabel.layers.set(0);
 
       const moonMassDiv = document.createElement('div');
-      moonMassDiv.className = 'label';
+      moonMassDiv.className = styles.label;
       moonMassDiv.textContent = '7.342e22 kg';
       moonMassDiv.style.backgroundColor = 'transparent';
 
@@ -157,39 +163,36 @@ function CSS2d() {
       controls.minDistance = 5;
       controls.maxDistance = 100;
 
-      threeObject.current.moon = moon
+      threeObject.current.moon = moon;
     }
   }
 
   function onWindowResize() {
     if (threeObject.current) {
       const { camera, renderer, css2DRenderer } = threeObject.current;
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const { width, height } = container.current.getBoundingClientRect();
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      css2DRenderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(width, height);
+      css2DRenderer.setSize(width, height);
     }
   }
 
-
   function animate() {
-
     if (threeObject.current) {
-      const { camera, renderer, css2DRenderer, clock, scene, moon } = threeObject.current;
+      const { camera, renderer, css2DRenderer, clock, scene, moon } =
+        threeObject.current;
       requestAnimationFrameId.current = requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
       moon?.position.set(Math.sin(elapsed) * 5, 0, Math.cos(elapsed) * 5);
       renderer.render(scene, camera);
       css2DRenderer.render(scene, camera);
     }
-
   }
 
   useEffect(() => {
     if (container.current) {
-      const gui = new GUI(
-        { container: container.current, injectStyles: true }
-      );
+      const gui = new GUI({ container: guiRef.current, injectStyles: true });
       const clock = new THREE.Clock();
       const camera = new THREE.PerspectiveCamera(
         45,
@@ -219,22 +222,28 @@ function CSS2d() {
       window.addEventListener('resize', onWindowResize);
     }
     return () => {
-      cancelAnimationFrame(requestAnimationFrameId.current)
+      cancelAnimationFrame(requestAnimationFrameId.current);
       window.removeEventListener('resize', onWindowResize);
     };
   }, []);
 
   return (
     <div
-      ref={container}
       style={{
-        width: '100%',
-        height: '100%',
-        minHeight: '400px',
-        minWidth: '400px',
-        // position: 'relative'
+        position: 'relative',
       }}
-    ></div>
+    >
+      <div
+        ref={container}
+        style={{
+          width: '100%',
+          height: '100%',
+          minHeight: '400px',
+          minWidth: '400px',
+        }}
+      ></div>
+      <div ref={guiRef} style={{ position: 'absolute', top: '0px' }}></div>
+    </div>
   );
 }
 
