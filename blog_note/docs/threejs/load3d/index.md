@@ -13,4 +13,11 @@ loader.load( 'path/to/model.glb', function ( gltf ) {
 });
 ```
 
-<code src="./index.tsx" title="3d loader"></code>
+<code src="./Load3DDog.tsx" title="3d loader dogs"></code>
+
+
+
+<code src="./Load3DDragon.tsx" title="3d loader dragon"></code>
+
+
+
