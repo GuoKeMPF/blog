@@ -1,3 +1,5 @@
+
+
 # Web Component
 
 ## 概念和使用
@@ -11,3 +13,4 @@ Web Components 旨在解决这些问题 — 它由三项主要技术组成，它
 3. HTML template（HTML 模板）： `<template>` 和 `<slot>` 元素使你可以编写不在呈现页面中显示的标记模板。然后它们可以作为自定义元素结构的基础被多次重用。
 
 - [使用自定义元素](/html/webcomponent/customElements '使用自定义元素')
+- [影子 DOM](/html/webcomponent/shadowDOM '影子 DOM')
