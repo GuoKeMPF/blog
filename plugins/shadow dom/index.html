@@ -1,0 +1,46 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+	<img src="./image.jpeg" alt="">
+
+
+
+	<form id="form">
+		<input type="text" name="text">
+		<select name="select" id="select">
+			<option value="">--Please choose an option--</option>
+			<option value="dog">Dog</option>
+			<option value="cat">Cat</option>
+			<option value="hamster">Hamster</option>
+			<option value="parrot">Parrot</option>
+			<option value="spider">Spider</option>
+			<option value="goldfish">Goldfish</option>
+		</select>
+		<button type="submit" id="submit">Submit</button>
+	</form>
+
+</body>
+
+<script>
+
+	const button = document.querySelector("#submit");
+	button.addEventListener("click", function (event) {
+		event.preventDefault();
+		const form = document.querySelector("#form");
+		// console.dir(form);
+		var formData = new FormData(form);
+		for (var pair of formData.entries()) {
+			console.log(pair[0] + ': ' + pair[1]);
+		}
+
+	});
+
+</script>
+
+</html>
