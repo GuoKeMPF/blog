@@ -17,14 +17,13 @@ function Reaload({ children, buttons = [] }: RealoadContainerProps, ref) {
     setLoaded(false);
     setTimeout(() => {
       setLoaded(true);
-    }, 200);
+    }, 500);
   };
 
   const innerRef = useRef<HTMLDivElement>(null);
 
   // 将内部的 ref 暴露给父组件
   useImperativeHandle(ref, () => {
-    console.log(innerRef.current);
     return innerRef.current;
   });
 

@@ -50,6 +50,8 @@ order: 1
 
 影子 DOM 允许将隐藏的 DOM 树附加到常规 DOM 树中的元素上——这个影子 DOM 始于一个影子根，在其之下你可以用与普通 DOM 相同的方式附加任何元素。
 
+## 创建影子元素
+
 ![影子 DOM](./shadowdom.svg '影子 DOM')
 
 **影子宿主（Shadow host）**: 影子 DOM 附加到的常规 DOM 节点。
@@ -61,4 +63,34 @@ order: 1
 
 在影子 DOM 向 web 开发者提供之前，浏览器已经使用它来封装元素的内部结构。以 `<video>` 元素举例，它暴露了默认浏览器控件。在 DOM 中你只能看到 `<video>` 元素，但其影子 DOM 中包含了一系列按钮和其它控件。影子 DOM 规范使你能够操纵自定义元素的影子 DOM。
 
-<code src="./CreateShadow/index.tsx" title="创建影子元素"></code>
+<code src="./CreateShadow/shadowDOM.tsx" title="创建影子元素"></code>
+
+使用正常的 `querySelectorAll` 无法获取影子元素内部的`dom`结构，例如上面点击将span内容替换成大写，两个影子元素不会受到影响
+
+对于 `attachShadow({ mode: 'open' })` 创建的影子元素，可以通过 `dom.shadowRoot` 访问影子元素内部结构
+
+对于`attachShadow({ mode: 'closed' })` ，此时 shadowRoot 返回 null。
+
+:::wroing
+不应将这视为一个强大的安全机制，因为它可以被绕过，比如通过在页面中运行的浏览器扩展。这更多地是一个指示页面不应访问影子 DOM 树内部的一种提示。
+:::
+
+## 样式
+
+1. 编程式，通过构建一个 CSSStyleSheet 对象并将其附加到影子根。
+2. 声明式，通过在一个 `<template>` 元素的声明中添加一个 `<style>` 元素。
+
+在这两种情况下，影子 DOM 树中定义的样式局限在该树内，所以就像页面样式就像不会影响影子 DOM 中的元素一样，影子 DOM 样式也不会影响页面中其它元素的样式。
+
+### 编程式
+
+可构造样式表
+要使用可构造样式表为影子 DOM 中的页面元素设置样式，我们可以：
+
+创建一个空的 CSSStyleSheet 对象
+使用 CSSStyleSheet.replace() 或 CSSStyleSheet.replaceSync() 设置其内容
+通过将其赋给 ShadowRoot.adoptedStyleSheets 来添加到影子根
+在 CSSStyleSheet 中定义的规则将局限在影子 DOM 树的内部，以及我们将其分配到的任何其它 DOM 树。
+
+
+<code code src="./shadowCss/shadowDOMCSS.tsx" title="影子元素 样式"></code>
