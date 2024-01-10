@@ -17,7 +17,7 @@ function Reaload({ children, buttons = [] }: RealoadContainerProps, ref) {
     setLoaded(false);
     setTimeout(() => {
       setLoaded(true);
-    }, 1000);
+    }, 200);
   };
 
   const innerRef = useRef<HTMLDivElement>(null);
