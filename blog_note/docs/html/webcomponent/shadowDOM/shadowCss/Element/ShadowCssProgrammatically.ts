@@ -5,12 +5,12 @@ export class ShadowCssProgrammatically extends HTMLElement {
     wrapper.classList.add('text');
     const children = this.childNodes ?? '';
     const sheet = new CSSStyleSheet();
-    sheet.replaceSync('span { color: red; border: 2px dotted black;}');
+    sheet.replaceSync('span { color: #ff3333 }');
     shadow.adoptedStyleSheets = [sheet];
     wrapper.replaceChildren(...children);
     shadow.appendChild(wrapper);
   }
-  adoptedCallback() {}
-  attributeChangedCallback() {}
-  disconnectedCallback() {}
+  adoptedCallback() { }
+  attributeChangedCallback() { }
+  disconnectedCallback() { }
 }

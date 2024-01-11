@@ -1,16 +1,20 @@
 export class ShadowCssDeclaratively extends HTMLElement {
   connectedCallback() {
+    const id = this.getAttribute('templateId') || '';
+    const template = document.getElementById(id);
+
     const wrapper = document.createElement('span');
     const shadow = this.attachShadow({ mode: 'open' });
     wrapper.classList.add('text');
-    const children = this.childNodes ?? '';
-    const sheet = new CSSStyleSheet();
-    sheet.replaceSync('span { color: red; border: 2px dotted black;}');
-    shadow.adoptedStyleSheets = [sheet];
+    const templateContent = template.content;
+    const children = this.childNodes ?? ''
+
+    shadow.appendChild(templateContent.cloneNode(true));
+
     wrapper.replaceChildren(...children);
-    shadow.appendChild(wrapper);
+    shadow.replaceChildren(templateContent.cloneNode(true), wrapper);
   }
-  adoptedCallback() {}
-  attributeChangedCallback() {}
-  disconnectedCallback() {}
+  adoptedCallback() { }
+  attributeChangedCallback() { }
+  disconnectedCallback() { }
 }

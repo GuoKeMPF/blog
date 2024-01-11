@@ -63,7 +63,7 @@ order: 1
 
 在影子 DOM 向 web 开发者提供之前，浏览器已经使用它来封装元素的内部结构。以 `<video>` 元素举例，它暴露了默认浏览器控件。在 DOM 中你只能看到 `<video>` 元素，但其影子 DOM 中包含了一系列按钮和其它控件。影子 DOM 规范使你能够操纵自定义元素的影子 DOM。
 
-<code src="./CreateShadow/shadowDOM.tsx" title="创建影子元素"></code>
+<code src="./CreateShadow/index.tsx" title="创建影子元素"></code>
 
 使用正常的 `querySelectorAll` 无法获取影子元素内部的`dom`结构，例如上面点击将span内容替换成大写，两个影子元素不会受到影响
 
@@ -93,4 +93,15 @@ order: 1
 在 CSSStyleSheet 中定义的规则将局限在影子 DOM 树的内部，以及我们将其分配到的任何其它 DOM 树。
 
 
-<code code src="./shadowCss/shadowDOMCSS.tsx" title="影子元素 样式"></code>
+<code code src="./shadowCss/index.tsx" title="影子元素 样式"></code>
+
+
+
+## 在编程式和声明式中选择
+使用哪种方式取决于你的应用程序和个人喜好。
+
+创建一个 CSSStyleSheet 并通过 adoptedStyleSheets 将其赋给影子根允许你创建单一样式表并将其与多个 DOM 树共享。例如，一个组件库可以创建单个样式表，然后将其与该库的所有自定义元素共享。浏览器将仅解析该样式表。此外，你可以对样式表进行动态更改，并将更改传播到使用表的所有组件。
+
+而当你希望是声明式的、需要较少的样式并且不需要在不同组件之间共享样式的时候，附加 `<style>` 元素的方法则非常适合。
+
+
