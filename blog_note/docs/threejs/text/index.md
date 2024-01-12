@@ -1,3 +1,9 @@
+---
+title: Three 创建文字
+order: 6
+---
+
+
 # 创建文字
 
 在 threejs 中创建文字有一下几种方法
