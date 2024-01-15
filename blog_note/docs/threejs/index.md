@@ -10,3 +10,6 @@
 - [threejs-画线](/threejs/line 'threejs-line')
 - [threejs-文字](/threejs/text 'threejs-text')
 - [threejs-加载模型](/threejs/load3d '加载模型')
+
+
+- [使用手册](/threejs/manual '使用手册')
