@@ -6,14 +6,11 @@ Three.js是一个尽可能简化在网页端获取3D 内容的库。
 
 Three.js经常会和WebGL混淆， 但也并不总是，three.js其实是使用WebGL来绘制三维效果的。 WebGL是一个只能画点、线和三角形的非常底层的系统. 想要用WebGL来做一些实用的东西通常需要大量的代码， 这就是Three.js的用武之地。它封装了诸如场景、灯光、阴影、材质、贴图、空间运算等一系列功能，让你不必要再从底层WebGL开始写起。
 
-
 ![threejs 结构图](./images/threejs-structure.svg 'threejs 结构图')
-
 
 1. 首先有一个渲染器(Renderer)。这可以说是three.js的主要对象。你传入一个场景(Scene)和一个摄像机(Camera)到渲染器(Renderer)中，然后它会将摄像机视椎体中的三维场景渲染成一个二维图片显示在画布上。
 
 2. 场景图它是一个树状结构，由很多对象组成，比如图中包含了一个场景(Scene)对象 ，多个网格(Mesh)对象，光源(Light)对象，群组(Group)，三维物体(Object3D)，和摄像机(Camera)对象。一个场景(Scene)对象定义了场景图最基本的要素，并包了含背景色和雾等属性。这些对象通过一个层级关系明确的树状结构来展示出各自的位置和方向。子对象的位置和方向总是相对于父对象而言的。比如说汽车的轮子是汽车的子对象，这样移动和定位汽车时就会自动移动轮子。
-
 
 3. 摄像机(Camera)是一半在场景图中，一半在场景图外的。这表示在three.js中，摄像机(Camera)和其他对象不同的是，它不一定要在场景图中才能起作用。相同的是，摄像机(Camera)作为其他对象的子对象，同样会继承它父对象的位置和朝向。
 
@@ -27,12 +24,9 @@ Three.js经常会和WebGL混淆， 但也并不总是，three.js其实是使用W
 
 7. 光源(Light)对象代表不同种类的光。
 
-
 :::info
 注意图中摄像机(Camera)是一半在场景图中，一半在场景图外的。这表示在three.js中，摄像机(Camera)和其他对象不同的是，它不一定要在场景图中才能起作用。相同的是，摄像机(Camera)作为其他对象的子对象，同样会继承它父对象的位置和朝向。在场景图这篇文章的结尾部分有放置多个摄像机(Camera)在一个场景中的例子。
 :::
-
-
 
 ## 示例
 
@@ -88,17 +82,15 @@ const far = 5;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 ```
 
+- **fov**是视野范围(field of view)的缩写。上述代码中是指垂直方向为75度。 注意three.js中大多数的角用弧度表示，但是因为某些原因透视摄像机使用角度表示。
 
-  - **fov**是视野范围(field of view)的缩写。上述代码中是指垂直方向为75度。 注意three.js中大多数的角用弧度表示，但是因为某些原因透视摄像机使用角度表示。
+- **aspect**指画布的宽高比。我们将在别的文章详细讨论，在默认情况下 画布是300x150像素，所以宽高比为300/150或者说2。
 
-  - **aspect**指画布的宽高比。我们将在别的文章详细讨论，在默认情况下 画布是300x150像素，所以宽高比为300/150或者说2。
-
-  - **near**和**far**代表近平面和远平面，它们限制了摄像机面朝方向的可绘区域。 任何距离小于或超过这个范围的物体都将被裁剪掉(不绘制)。
+- **near**和**far**代表近平面和远平面，它们限制了摄像机面朝方向的可绘区域。 任何距离小于或超过这个范围的物体都将被裁剪掉(不绘制)。
 
 这四个参数定义了一个 "**视椎**(frustum)"。 视椎(frustum)是指一个像被削去顶部的金字塔形状。换句话说，可以把"视椎(frustum)"想象成其他三维形状如球体、立方体、棱柱体、截椎体。
 
 ![视锥](./images/frustum-3d.svg '视锥')
-
 
 近平面和远平面的高度由视野范围决定，宽度由视野范围和宽高比决定。
 
@@ -185,7 +177,6 @@ requestAnimationFrame(render);
 }
 ```
 
-
 平行光有一个位置和目标点。默认值都为(0, 0, 0)。我们这里 将灯光的位置设为(-1, 2, 4)，让它位于摄像机前面稍微左上方一点的地方。目标点还是(0, 0, 0)，让它朝向坐标原点方向。
 
 我们还需要改变下立方体的材质。MeshBasicMaterial材质不会受到灯光的影响。我们将他改成会受灯光影响的MeshPhongMaterial材质。
@@ -199,3 +190,46 @@ requestAnimationFrame(render);
 
 ![项目结构](./images/threejs-1cube-with-directionallight.svg '项目结构')
 
+每个立方体会引用同一个几何体和不同的材质，这样每个立方体将会是不同的颜色。
+
+首先我们创建一个根据指定的颜色生成新材质的函数。它会根据指定的几何体生成对应网格，然后将网格添加进场景并设置其X轴的位置。
+
+```js
+function makeInstance(geometry, color, x) {
+  const material = new THREE.MeshPhongMaterial({color});
+  const cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+  cube.position.x = x;
+  return cube;
+}
+```
+
+然后我们将用三种不同的颜色和X轴位置调用三次函数，将生成的网格实例存在一个数组中。
+
+```js
+const cubes = [
+  makeInstance(geometry, 0x44aa88,  0),
+  makeInstance(geometry, 0x8844aa, -2),
+  makeInstance(geometry, 0xaa8844,  2),
+];
+```
+
+最后我们将在渲染函数中旋转三个立方体。我们给每个立方体设置了稍微不同的旋转角度。
+
+```js
+function render(time) {
+  time *= 0.001;  // 将时间单位变为秒
+  cubes.forEach((cube, ndx) => {
+    const speed = 1 + ndx * .1;
+    const rot = time * speed;
+    cube.rotation.x = rot;
+    cube.rotation.y = rot;
+  });
+}
+```
+
+<code src="./demo/cubes.tsx" title="立方块"></code>
+
+如果你对比上面的示意图可以看到此效果符合我们的预想。位置为X = -2 和 X = +2的立方体有一部分在我们的视椎体外面。他们大部分是被包裹的，因为水平方向的视角非常大。
+
+![立方块](./images/threejs-3cubes-scene.svg '立方块')
