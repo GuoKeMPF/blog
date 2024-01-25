@@ -1,9 +1,9 @@
-from rest_framework.viewsets import ModelViewSet
 from django.shortcuts import get_object_or_404
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from rest_framework.filters import SearchFilter
 from .models import Foods
 from .serializers import FoodSerializer, FoodsSerializer
-from rest_framework.filters import SearchFilter
 
 
 class FoodViewSet(ModelViewSet):
@@ -14,9 +14,17 @@ class FoodViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         print("get list")
-        page = self.paginate_queryset(self.queryset)
-        serializer = FoodsSerializer(page, many=True)
-        return self.get_paginated_response(serializer.data)
+        custom_param = request.query_params
+        filter_conditions = {
+            f"{param}__icontains": value for param, value in custom_param.items()
+        }
+
+        # 使用动态的过滤条件过滤查询集
+        self.queryset = self.queryset.filter(**filter_conditions)
+
+        # 执行默认的列表操作
+        response = super().list(request, *args, **kwargs)
+        return response
 
     def retrieve(self, request, pk=None):
         print("get retrieve")
