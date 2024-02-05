@@ -1,3 +1,9 @@
+---
+title: 基础
+toc: menu
+order: 2
+---
+
 # 基础
 
 ## 介绍

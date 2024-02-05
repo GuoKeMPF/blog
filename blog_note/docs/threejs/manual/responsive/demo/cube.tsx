@@ -48,7 +48,7 @@ export const Cubes: FC = ({ }) => {
       const canvas = canvasRef.current;
       const width = containerRef.current?.clientWidth;
       const height = containerRef.current?.clientHeight;
-      const needResize = canvas.width !== width || canvas.height !== height;
+      const needResize = canvas?.width !== width || canvas?.height !== height;
       if (needResize) {
         // 设置相机宽高比
         const canvas = renderer.domElement;
