@@ -1,80 +1,65 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Color, PerspectiveCamera, Scene, WebGLRenderer, DirectionalLight, BoxGeometry, WireframeGeometry, LineBasicMaterial, Group, MeshPhongMaterial, DoubleSide, LineSegments, Mesh, } from 'three';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { Color, PerspectiveCamera, Scene, WebGLRenderer, DirectionalLight, CircleGeometry, WireframeGeometry, LineBasicMaterial, Group, MeshPhongMaterial, DoubleSide, LineSegments, Mesh, } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import { FormUnit } from "../component"
 
 
-type BoxParams = {
-  width: number;
-  height: number;
-  depth: number;
-  widthSegments: number;
-  heightSegments: number;
-  depthSegments: number;
+type Params = {
+  radius: number;
+  segments: number;
+  thetaStart: number;
+  thetaLength: number;
 }
 
 const formConfig = [
   {
-    label: 'width',
+    label: 'radius',
     defaultValue: 8,
     max: 30,
     min: 1,
     type: 'number',
   },
   {
-    label: 'height',
+    label: 'segments',
     defaultValue: 8,
     max: 30,
     min: 1,
     type: 'number',
   },
   {
-    label: 'depth',
-    defaultValue: 8,
-    max: 30,
-    min: 1,
+    label: 'thetaStart',
+    defaultValue: Math.PI,
+    max: Math.PI * 2.00,
+    min: 0,
     type: 'number',
   },
   {
-    label: 'widthSegments',
-    defaultValue: 1,
-    max: 30,
-    min: 1,
-    type: 'number',
-  },
-  {
-    label: 'heightSegments',
-    defaultValue: 1,
-    max: 30,
-    min: 1,
-    type: 'number',
-  },
-  {
-    label: 'depthSegments',
-    defaultValue: 1,
-    max: 30,
-    min: 1,
+    label: 'thetaLength',
+    defaultValue: Math.PI * 2.00,
+    max: Math.PI * 2.00,
+    min: 0,
     type: 'number',
   },
 ]
 
-const defaultValues: BoxParams = formConfig.reduce((acc, cur) => {
+const defaultValues: Params = formConfig.reduce((acc, cur) => {
   acc[cur.label] = cur?.defaultValue ?? 0;
   return acc;
-}, {} as BoxParams)
+}, {} as Params)
 
 
-const BoxGeometryDemo = () => {
+
+export const CircleGeometryDemo: FC = ({ }) => {
   const container = useRef<HTMLDivElement>(null);
-  const [data, setData] = useState<BoxParams>(defaultValues);
+  const [data, setData] = useState<Params>(defaultValues);
   const groupRef = useRef<Group>(null);
 
 
   useEffect(() => {
     if (groupRef.current) {
-      const geometry = new BoxGeometry(
-        data.width, data.height, data.depth, data.widthSegments, data.heightSegments, data.depthSegments
+      const geometry = new CircleGeometry(
+        data.radius, data.segments, data.thetaStart, data.thetaLength
       )
       groupRef.current.children.forEach((child) => {
         child.geometry.dispose();
@@ -118,7 +103,9 @@ const BoxGeometryDemo = () => {
       scene.add(lights[1]);
       scene.add(lights[2]);
 
-      const geometry = new BoxGeometry(15, 15, 15);
+      const geometry = new CircleGeometry(
+        data.radius, data.segments, data.thetaStart, data.thetaLength
+      );
       const group = new Group();
       const lineMaterial = new LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
       const meshMaterial = new MeshPhongMaterial({ color: 0x156289, emissive: 0x072534, side: DoubleSide, flatShading: true });
@@ -128,10 +115,6 @@ const BoxGeometryDemo = () => {
       groupRef.current = group;
 
       scene.add(group);
-
-      // 该函数创建一个三维物体，将其放置在场景中，并使用给定的几何形状和材质对其进行渲染。
-      // const cube = new Mesh(geometry, material);
-      // scene.add(cube);
       function animate() {
         // 设置旋转角度
         group.rotation.x += 0.01;
@@ -169,4 +152,5 @@ const BoxGeometryDemo = () => {
   );
 };
 
-export default BoxGeometryDemo;
+
+export default CircleGeometryDemo;

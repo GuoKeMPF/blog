@@ -1,81 +1,55 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Color, PerspectiveCamera, Scene, WebGLRenderer, DirectionalLight, BoxGeometry, WireframeGeometry, LineBasicMaterial, Group, MeshPhongMaterial, DoubleSide, LineSegments, Mesh, } from 'three';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { Color, PerspectiveCamera, Scene, WebGLRenderer, DirectionalLight, DodecahedronGeometry, WireframeGeometry, LineBasicMaterial, Group, MeshPhongMaterial, DoubleSide, LineSegments, Mesh, } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-import { FormUnit } from "../component"
+import { FormUnit, FormUnitType } from "../component"
 
 
-type BoxParams = {
-  width: number;
-  height: number;
-  depth: number;
-  widthSegments: number;
-  heightSegments: number;
-  depthSegments: number;
+type Params = {
+  radius: number;
+  detail: number;
 }
 
-const formConfig = [
+const formConfig: FormUnitType[] = [
   {
-    label: 'width',
+    label: 'radius',
     defaultValue: 8,
     max: 30,
     min: 1,
     type: 'number',
   },
   {
-    label: 'height',
-    defaultValue: 8,
+    label: 'detail',
+    defaultValue: 0,
     max: 30,
-    min: 1,
+    min: 0,
     type: 'number',
-  },
-  {
-    label: 'depth',
-    defaultValue: 8,
-    max: 30,
-    min: 1,
-    type: 'number',
-  },
-  {
-    label: 'widthSegments',
-    defaultValue: 1,
-    max: 30,
-    min: 1,
-    type: 'number',
-  },
-  {
-    label: 'heightSegments',
-    defaultValue: 1,
-    max: 30,
-    min: 1,
-    type: 'number',
-  },
-  {
-    label: 'depthSegments',
-    defaultValue: 1,
-    max: 30,
-    min: 1,
-    type: 'number',
-  },
+  }
 ]
 
-const defaultValues: BoxParams = formConfig.reduce((acc, cur) => {
+const defaultValues: Params = formConfig.reduce((acc, cur) => {
   acc[cur.label] = cur?.defaultValue ?? 0;
   return acc;
-}, {} as BoxParams)
+}, {} as Params)
 
+type DodecahedronGeometryDemoProps = {
 
-const BoxGeometryDemo = () => {
+};
+
+export const DodecahedronGeometryDemo: FC<DodecahedronGeometryDemoProps> = ({ }) => {
   const container = useRef<HTMLDivElement>(null);
-  const [data, setData] = useState<BoxParams>(defaultValues);
+  const [data, setData] = useState<Params>(defaultValues);
   const groupRef = useRef<Group>(null);
 
+  const createGeometry = () => {
+    const { radius, detail } = data
+    const geometry = new DodecahedronGeometry(radius, detail)
+    return geometry
+  }
 
   useEffect(() => {
     if (groupRef.current) {
-      const geometry = new BoxGeometry(
-        data.width, data.height, data.depth, data.widthSegments, data.heightSegments, data.depthSegments
-      )
+      const geometry = createGeometry()
       groupRef.current.children.forEach((child) => {
         child.geometry.dispose();
       })
@@ -118,7 +92,7 @@ const BoxGeometryDemo = () => {
       scene.add(lights[1]);
       scene.add(lights[2]);
 
-      const geometry = new BoxGeometry(15, 15, 15);
+      const geometry = createGeometry()
       const group = new Group();
       const lineMaterial = new LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
       const meshMaterial = new MeshPhongMaterial({ color: 0x156289, emissive: 0x072534, side: DoubleSide, flatShading: true });
@@ -128,10 +102,6 @@ const BoxGeometryDemo = () => {
       groupRef.current = group;
 
       scene.add(group);
-
-      // 该函数创建一个三维物体，将其放置在场景中，并使用给定的几何形状和材质对其进行渲染。
-      // const cube = new Mesh(geometry, material);
-      // scene.add(cube);
       function animate() {
         // 设置旋转角度
         group.rotation.x += 0.01;
@@ -169,4 +139,4 @@ const BoxGeometryDemo = () => {
   );
 };
 
-export default BoxGeometryDemo;
+export default DodecahedronGeometryDemo

@@ -1,11 +1,6 @@
-import { Form, Slider } from "antd";
+import { Form } from "antd";
 import React, { type FC, useMemo } from "react";
-
-
-interface FormUnitType {
-  label: string;
-  defaultValue: number;
-};
+import { FormUnitType, FormFiled } from "./index"
 
 
 type FormUnitProps = {
@@ -14,12 +9,13 @@ type FormUnitProps = {
 };
 
 
-
-
 const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
 };
+
+
+
 
 
 export const FormUnit: FC<FormUnitProps> = ({ onFormChange, configs }) => {
@@ -32,12 +28,19 @@ export const FormUnit: FC<FormUnitProps> = ({ onFormChange, configs }) => {
   return <Form
     {...formItemLayout}
     initialValues={initValues}
+    size="small"
     style={{ maxWidth: 600 }}
+    onValuesChange={(_, values) => {
+      onFormChange(values);
+    }}
   >
-
-    <Form.Item name="slider" label="Slider">
-      <Slider />
-    </Form.Item>
+    {
+      configs.map((config) => {
+        return <Form.Item name={config.label} key={config.label} label={config.label}>
+          <FormFiled {...config} />
+        </Form.Item>
+      })
+    }
   </Form>;
 };
 

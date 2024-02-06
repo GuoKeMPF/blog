@@ -1,22 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Color, PerspectiveCamera, Scene, WebGLRenderer, DirectionalLight, BoxGeometry, WireframeGeometry, LineBasicMaterial, Group, MeshPhongMaterial, DoubleSide, LineSegments, Mesh, } from 'three';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { Color, PerspectiveCamera, Scene, WebGLRenderer, DirectionalLight, ConeGeometry, WireframeGeometry, LineBasicMaterial, Group, MeshPhongMaterial, DoubleSide, LineSegments, Mesh, } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-import { FormUnit } from "../component"
+import { FormUnit, FormUnitType } from "../component"
 
 
-type BoxParams = {
-  width: number;
+type Params = {
+  radius: number;
   height: number;
-  depth: number;
-  widthSegments: number;
+  segments: number;
+  thetaStart: number;
+  thetaLength: number;
+  radialSegments: number;
   heightSegments: number;
-  depthSegments: number;
+  openEnded: boolean;
 }
 
-const formConfig = [
+const formConfig: FormUnitType[] = [
   {
-    label: 'width',
+    label: 'radius',
     defaultValue: 8,
     max: 30,
     min: 1,
@@ -30,51 +32,53 @@ const formConfig = [
     type: 'number',
   },
   {
-    label: 'depth',
+    label: 'heightSegments',
     defaultValue: 8,
     max: 30,
     min: 1,
     type: 'number',
   },
   {
-    label: 'widthSegments',
-    defaultValue: 1,
-    max: 30,
-    min: 1,
+    label: 'thetaStart',
+    defaultValue: 0,
+    max: Math.PI * 2.00,
+    min: 0,
     type: 'number',
   },
   {
-    label: 'heightSegments',
-    defaultValue: 1,
-    max: 30,
-    min: 1,
+    label: 'thetaLength',
+    defaultValue: Math.PI * 2.00,
+    max: Math.PI * 2.00,
+    min: 0,
     type: 'number',
   },
   {
-    label: 'depthSegments',
-    defaultValue: 1,
-    max: 30,
-    min: 1,
-    type: 'number',
+    label: 'openEnded',
+    defaultValue: true,
+    type: 'boolean',
   },
 ]
 
-const defaultValues: BoxParams = formConfig.reduce((acc, cur) => {
+const defaultValues: Params = formConfig.reduce((acc, cur) => {
   acc[cur.label] = cur?.defaultValue ?? 0;
   return acc;
-}, {} as BoxParams)
+}, {} as Params)
 
+type ConeGeometryDemoProps = {
 
-const BoxGeometryDemo = () => {
+};
+
+export const ConeGeometryDemo: FC<ConeGeometryDemoProps> = ({ }) => {
+
   const container = useRef<HTMLDivElement>(null);
-  const [data, setData] = useState<BoxParams>(defaultValues);
+  const [data, setData] = useState<Params>(defaultValues);
   const groupRef = useRef<Group>(null);
 
 
   useEffect(() => {
     if (groupRef.current) {
-      const geometry = new BoxGeometry(
-        data.width, data.height, data.depth, data.widthSegments, data.heightSegments, data.depthSegments
+      const geometry = new ConeGeometry(
+        data.radius, data.height, data.radialSegments, data.heightSegments, data.openEnded, data.thetaStart, data.thetaLength
       )
       groupRef.current.children.forEach((child) => {
         child.geometry.dispose();
@@ -118,7 +122,10 @@ const BoxGeometryDemo = () => {
       scene.add(lights[1]);
       scene.add(lights[2]);
 
-      const geometry = new BoxGeometry(15, 15, 15);
+
+      const geometry = new ConeGeometry(
+        data.radius, data.height, data.radialSegments, data.heightSegments, data.openEnded, data.thetaStart, data.thetaLength
+      )
       const group = new Group();
       const lineMaterial = new LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
       const meshMaterial = new MeshPhongMaterial({ color: 0x156289, emissive: 0x072534, side: DoubleSide, flatShading: true });
@@ -128,10 +135,6 @@ const BoxGeometryDemo = () => {
       groupRef.current = group;
 
       scene.add(group);
-
-      // 该函数创建一个三维物体，将其放置在场景中，并使用给定的几何形状和材质对其进行渲染。
-      // const cube = new Mesh(geometry, material);
-      // scene.add(cube);
       function animate() {
         // 设置旋转角度
         group.rotation.x += 0.01;
@@ -169,4 +172,5 @@ const BoxGeometryDemo = () => {
   );
 };
 
-export default BoxGeometryDemo;
+
+export default ConeGeometryDemo;
