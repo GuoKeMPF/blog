@@ -1,9 +1,13 @@
 
 export interface FormUnitType {
   label: string;
-  defaultValue: number | boolean;
+  defaultValue: number | boolean | string;
   min?: number;
   max?: number;
-  type?: 'number' | 'boolean'
+  type?: 'text' | 'number' | 'boolean' | undefined,
+  step?: number,
+  marks?: {
+    [key: string]: any;
+  };
 };
 

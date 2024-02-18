@@ -1,10 +1,10 @@
 
 import { ExtrudeGeometry, Shape } from "three";
-import { CommonGeometryDemo } from "../component";
+import { CommonGeometryDemo, FormUnitType } from "../component";
 
 import React, { type FC } from "react";
 
-const formConfig = [
+const formConfig: FormUnitType[] = [
   {
     label: 'steps',
     defaultValue: 2,

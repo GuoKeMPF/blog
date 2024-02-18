@@ -1,8 +1,10 @@
 
-import { IcosahedronGeometry } from "three";
+import { OctahedronGeometry } from "three";
 import { CommonGeometryDemo, FormUnitType } from "../component";
 
 import React, { type FC } from "react";
+
+
 
 const formConfig: FormUnitType[] = [
   {
@@ -10,29 +12,30 @@ const formConfig: FormUnitType[] = [
     defaultValue: 8,
     max: 30,
     min: 1,
-    type: 'number',
+    type: 'number'
   },
   {
     label: 'detail',
     defaultValue: 0,
-    max: 10,
+    max: 30,
     min: 0,
-    type: 'number',
+    type: 'number'
   },
 ]
 
 const createGeometry = (data) => {
   const { radius, detail } = data
-  const geometry = new IcosahedronGeometry(radius, detail);
+
+  const geometry = new OctahedronGeometry(radius, detail);
   return geometry;
 }
 
-export const IcosahedronGeometryDemo: FC = () => {
+export const OctahedronGeometryDemo: FC = () => {
   return <CommonGeometryDemo formConfig={formConfig} createGeometry={createGeometry} />;
 };
 
 
-export default IcosahedronGeometryDemo;
+export default OctahedronGeometryDemo;
 
 
 

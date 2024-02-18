@@ -1,10 +1,10 @@
 
 import { CubicBezierCurve3, CurvePath, ExtrudeGeometry, Shape, Vector2, Vector3 } from "three";
-import { CommonGeometryDemo } from "../component";
+import { CommonGeometryDemo, FormUnitType } from "../component";
 
 import React, { type FC } from "react";
 
-const formConfig = [
+const formConfig: FormUnitType[] = [
   {
     label: 'steps',
     defaultValue: 50,

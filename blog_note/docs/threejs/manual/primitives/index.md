@@ -202,6 +202,235 @@ const geometry = new THREE.LatheGeometry( points, segments, phiStart, phiLength 
 
 <code src="./demo/LatheGeometry.tsx"></code>
 
+## OctahedronGeometry 八面缓冲几何体
+
+一个用于创建八面体的类。
+
+1. radius — 八面体的半径，默认值为1。
+2. detail — 默认值为0，将这个值设为一个大于0的数将会为它增加一些顶点，使其不再是一个八面体。
+
+```js
+const radius = 7;
+const detail = 2;
+const geometry = new OctahedronGeometry( radius, detail );
+```
+
+<code src="./demo/OctahedronGeometry.tsx"></code>
+
+## ParametricGeometry 参数化缓冲几何体
+
+生成由参数表示其表面的几何体。
+
+
+1. func — 一个函数，它接受 u 和 v 值，每个值都在 0 到 1 之间，并修改第三个参数。 默认是生成曲面的函数。
+2. slices — 用于参数函数的切片计数。 默认为8
+3. stacks — 用于参数函数的堆栈计数。 默认值为8
+
+```js
+const geometry = new THREE.ParametricGeometry( THREE.ParametricGeometries.klein, 25, 25 );
+const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+const klein = new THREE.Mesh( geometry, material );
+scene.add( klein );
+```
+
+<code src="./demo/ParametricGeometry.tsx"></code>
+
+## PlaneGeometry 平面缓冲几何体
+
+```js
+const geometry = new THREE.PlaneGeometry( 1, 1, 1, 1 );
+const material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+const plane = new THREE.Mesh( geometry, material );
+scene.add( plane );
+```
+1. width — 平面沿着 X 轴的宽度。默认值是 1。
+2. height — 平面沿着 Y 轴的高度。默认值是 1。
+3. widthSegments — （可选）平面的宽度分段数，默认值是 1。
+4. heightSegments — （可选）平面的高度分段数，默认值是 1。
+
+<code src="./demo/PlaneGeometry.tsx"></code>
+
+
+## PolyhedronGeometry 多面几何体
+
+
+多面体在三维空间中具有一些平面的立体图形。这个类将一个顶点数组投射到一个球面上，之后将它们细分为所需的细节级别。 这个类由DodecahedronGeometry、IcosahedronGeometry、OctahedronGeometry和TetrahedronGeometry 所使用，以生成它们各自的几何结构。
+
+```js
+const verticesOfCube = [
+    -1,-1,-1,
+    1,-1,-1,
+    1, 1,-1,
+    -1, 1,-1,
+    -1,-1, 1,
+    1,-1, 1,
+    1, 1, 1,
+    -1, 1, 1,
+];
+
+const indicesOfFaces = [
+    2,1,0,    0,3,2,
+    0,4,7,    7,3,0,
+    0,1,5,    5,4,0,
+    1,2,6,    6,5,1,
+    2,3,7,    7,6,2,
+    4,5,6,    6,7,4
+];
+
+const geometry = new THREE.PolyhedronGeometry( verticesOfCube, indicesOfFaces, 6, 2 );
+```
+
+
+1. vertices — 一个顶点Array（数组）：[1,1,1, -1,-1,-1, ... ]。
+2. indices — 一个构成面的索引Array（数组）， [0,1,2, 2,3,0, ... ]。
+3. radius — Float - 最终形状的半径。
+4. detail — Integer - 将对这个几何体细分多少个级别。细节越多，形状就越平滑。
+
+<code src="./demo/PolyhedronGeometry.tsx"></code>
+
+
+## RingGeometry 平面圆环
+
+一个用于生成二维圆环几何体的类。
+
+```js
+const geometry = new THREE.RingGeometry( 1, 5, 32 );
+const material = new THREE.MeshBasicMaterial( { color: 0xffff00, side: THREE.DoubleSide } );
+const mesh = new THREE.Mesh( geometry, material );
+scene.add( mesh );
+```
+
+1. innerRadius — 内部半径，默认值为0.5。
+2. outerRadius — 外部半径，默认值为1。
+3. thetaSegments — 圆环的分段数。这个值越大，圆环就越圆。最小值为3，默认值为32。
+4. phiSegments — 圆环半径的分段数字。最小值为1，默认值为1。
+5. thetaStart — 起始角度，默认值为0。
+6. thetaLength — 圆心角，默认值为Math.PI * 2。
+
+<code src="./demo/RingGeometry.tsx"></code>
+
+
+## ShapeGeometry 形状缓冲几何体
+
+从一个或多个路径形状中创建一个单面多边形几何体。
+
+```js
+
+// 使用贝塞尔曲线绘制路径
+
+const x = 0, y = 0;
+
+const heartShape = new THREE.Shape();
+
+heartShape.moveTo( x + 5, y + 5 );
+heartShape.bezierCurveTo( x + 5, y + 5, x + 4, y, x, y );
+heartShape.bezierCurveTo( x - 6, y, x - 6, y + 7,x - 6, y + 7 );
+heartShape.bezierCurveTo( x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19 );
+heartShape.bezierCurveTo( x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7 );
+heartShape.bezierCurveTo( x + 16, y + 7, x + 16, y, x + 10, y );
+heartShape.bezierCurveTo( x + 7, y, x + 5, y + 5, x + 5, y + 5 );
+
+const geometry = new THREE.ShapeGeometry( heartShape );
+const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+const mesh = new THREE.Mesh( geometry, material ) ;
+scene.add( mesh );
+
+```
+
+1. shapes — 一个单独的shape，或者一个包含形状的Array。Default is a single triangle shape.
+2. curveSegments - Integer - 每一个形状的分段数，默认值为12。
+
+<code src="./demo/ShapeGeometry.tsx"></code>
+
+
+## SphereGeometry 球缓冲几何体
+
+一个用于生成球体的类。
+
+```js
+const geometry = new THREE.SphereGeometry( 15, 32, 16 );
+const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+const sphere = new THREE.Mesh( geometry, material );
+scene.add( sphere );
+```
+
+1. radius — 球体半径，默认为1。
+2. widthSegments — 水平分段数（沿着经线分段），最小值为3，默认值为32。
+3. heightSegments — 垂直分段数（沿着纬线分段），最小值为2，默认值为16。
+4. phiStart — 指定水平（经线）起始角度，默认值为0。。
+5. phiLength — 指定水平（经线）扫描角度的大小，默认值为 Math.PI * 2。
+6. thetaStart — 指定垂直（纬线）起始角度，默认值为0。
+7. thetaLength — 指定垂直（纬线）扫描角度大小，默认值为 Math.PI。
+
+该几何体是通过扫描并计算围绕着Y轴（水平扫描）和X轴（垂直扫描）的顶点来创建的。 因此，不完整的球体（类似球形切片）可以通过为phiStart，phiLength，thetaStart和thetaLength设置不同的值来创建， 以定义我们开始（或结束）计算这些顶点的起点（或终点）。
+
+<code src="./demo/SphereGeometry.tsx"></code>
+
+
+
+## TetrahedronGeometry 四面几何体
+
+一个用于生成四面几何体的类。
+
+```js
+const radius = 7;
+const detail = 2;
+const geometry = new THREE.TetrahedronGeometry( radius, detail );
+```
+
+
+1. radius — 四面体的半径，默认值为1。
+2. detail — 默认值为0。将这个值设为一个大于0的数将会为它增加一些顶点，使其不再是一个四面体。
+
+<code src="./demo/TetrahedronGeometry.tsx"></code>
+
+## TextGeometry 文本缓冲几何体
+
+一个用于将文本生成为单一的几何体的类。
+
+
+```js
+const loader = new FontLoader();
+
+loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+  const geometry = new TextGeometry( 'Hello three.js!', {
+    font: font,
+    size: 80,
+    height: 5,
+    curveSegments: 12,
+    bevelEnabled: true,
+    bevelThickness: 10,
+    bevelSize: 8,
+    bevelSegments: 5
+  } );
+} );
+```
+
+
+1. font — THREE.Font的实例。
+2. size — Float。字体大小，默认值为100。
+3. height — Float。挤出文本的厚度。默认值为50。
+4. curveSegments — Integer。（表示文本的）曲线上点的数量。默认值为12。
+5. bevelEnabled — Boolean。是否开启斜角，默认为false。
+6. bevelThickness — Float。文本上斜角的深度，默认值为20。
+7. bevelSize — Float。斜角与原始文本轮廓之间的延伸距离。默认值为8。
+8. bevelSegments — Integer。斜角的分段数。默认值为3。
+
+<code src="./demo/TextGeometry.tsx"></code>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

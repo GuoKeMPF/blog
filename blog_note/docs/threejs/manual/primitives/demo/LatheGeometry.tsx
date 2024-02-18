@@ -1,16 +1,18 @@
 
 import { LatheGeometry, Vector2 } from "three";
-import { CommonGeometryDemo } from "../component";
+import { CommonGeometryDemo, FormUnitType, piMarks } from "../component";
 
 import React, { type FC } from "react";
 
-const formConfig = [
+
+
+const formConfig: FormUnitType[] = [
   {
     label: 'segments',
     defaultValue: 8,
     max: 30,
     min: 1,
-    type: 'number',
+    type: 'number'
   },
   {
     label: 'phiStart',
@@ -18,6 +20,8 @@ const formConfig = [
     max: 2 * Math.PI,
     min: 0,
     type: 'number',
+    step: 0.01,
+    marks: piMarks
   },
   {
     label: 'phiLength',
@@ -25,6 +29,8 @@ const formConfig = [
     max: 2 * Math.PI,
     min: 0,
     type: 'number',
+    step: 0.01,
+    marks: piMarks
   },
 ]
 
@@ -41,12 +47,12 @@ const createGeometry = (data) => {
   return geometry;
 }
 
-export const ExtrudeGeometryDemo: FC = () => {
+export const LatheGeometryDemo: FC = () => {
   return <CommonGeometryDemo formConfig={formConfig} createGeometry={createGeometry} />;
 };
 
 
-export default ExtrudeGeometryDemo;
+export default LatheGeometryDemo;
 
 
 
