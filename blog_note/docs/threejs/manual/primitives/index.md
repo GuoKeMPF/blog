@@ -13,16 +13,18 @@ order: 4
 
 对大多数 3D 应用来说，更常见的做法是在 3D 建模软件中创建 3D 模型， 像 Blender，Maya 或者 Cinema 4D。
 
+:::info{title=说明}
+由于浏览器对 canvas webgl 的支持有限，因此本页面的示例可能无法全部展示，请打开独立页面查看效果。
+如果需要多个场景可以参考 <a href='https://threejs.org/examples/webgl_multiple_elements.html' target='_blank'>webgl 多个元素</a>
+:::
+
 ## BufferGeometry
 
 可以根据坐标点信息组成几何体面。
 
 是面片、线或点几何体的有效表述。包括顶点位置，面片索引、法相量、颜色值、UV 坐标和自定义缓存属性值。使用 BufferGeometry 可以有效减少向 GPU 传输上述数据所需的开销。
 
-
 <code src="./demo/BufferGeometry.tsx"></code>
-
-
 
 ## BoxGeometry 立方缓冲几何体
 
@@ -49,15 +51,11 @@ const cube = new THREE.Mesh( geometry, material );
 scene.add( cube );
 ```
 
-
 <code src="./demo/BoxGeometry.tsx"></code>
-
-
 
 ## CircleGeometry 圆形缓冲几何体
 
 CircleGeometry是欧式几何的一个简单形状，它由围绕着一个中心点的三角分段的数量所构造，由给定的半径来延展。 同时它也可以用于创建规则多边形，其分段数量取决于该规则多边形的边数。
-
 
 构造器
 CircleGeometry(radius : Float, segments : Integer, thetaStart : Float, thetaLength : Float)
@@ -83,7 +81,6 @@ scene.add( circle );
 
 一个用于生成圆锥几何体的类。
 
-
 radius — 圆锥底部的半径，默认值为1。
 
 height — 圆锥的高度，默认值为1。
@@ -97,7 +94,6 @@ openEnded — 一个Boolean值，指明该圆锥的底面是开放的还是封�
 thetaStart — 第一个分段的起始角度，默认为0。（three o'clock position）
 
 thetaLength — 圆锥底面圆扇区的中心角，通常被称为“θ”（西塔）。默认值是2*Pi，这使其成为一个完整的圆锥。
-
 
 ```js
 const geometry = new THREE.ConeGeometry( 5, 20, 32 );
@@ -118,6 +114,7 @@ const material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 const cylinder = new THREE.Mesh( geometry, material );
 scene.add( cylinder );
 ```
+
 radiusTop — 圆柱的顶部半径，默认值是1。
 
 radiusBottom — 圆柱的底部半径，默认值是1。
@@ -136,8 +133,8 @@ thetaLength — 圆柱底面圆扇区的中心角，通常被称为“θ”（�
 
 <code src="./demo/CylinderGeometry.tsx"></code>
 
-
 ## DodecahedronGeometry 十二面缓冲几何体
+
 一个用于创建十二面几何体的类。
 
 radius — 十二面体的半径，默认值为1。
@@ -146,29 +143,25 @@ detail — 默认值为0。将这个值设为一个大于0的数将会为它增�
 
 <code src="./demo/DodecahedronGeometry.tsx"></code>
 
-
-
 ## ExtrudeGeometry 挤压缓冲几何体
 
 从一个形状路径中，挤压出一个BufferGeometry。
 
-
 * shapes — 形状或者一个包含形状的数组。
 * options — 一个包含有下列参数的对象：
-    * curveSegments — int，曲线上点的数量，默认值是12。
-    * steps — int，用于沿着挤出样条的深度细分的点的数量，默认值为1。
-    * depth — float，挤出的形状的深度，默认值为1。
-    * bevelEnabled — bool，对挤出的形状应用是否斜角，默认值为true。
-    * bevelThickness — float，设置原始形状上斜角的厚度。默认值为0.2。
-    * bevelSize — float。斜角与原始形状轮廓之间的延伸距离，默认值为bevelThickness-0.1。
-    * bevelOffset — float. Distance from the shape outline that the bevel starts. Default is 0.
-    * bevelSegments — int。斜角的分段层数，默认值为3。
-    * extrudePath — THREE.Curve对象。一条沿着被挤出形状的三维样条线。Bevels not supported for path extrusion.
-    * UVGenerator — Object。提供了UV生成器函数的对象。
+  * curveSegments — int，曲线上点的数量，默认值是12。
+  * steps — int，用于沿着挤出样条的深度细分的点的数量，默认值为1。
+  * depth — float，挤出的形状的深度，默认值为1。
+  * bevelEnabled — bool，对挤出的形状应用是否斜角，默认值为true。
+  * bevelThickness — float，设置原始形状上斜角的厚度。默认值为0.2。
+  * bevelSize — float。斜角与原始形状轮廓之间的延伸距离，默认值为bevelThickness-0.1。
+  * bevelOffset — float. Distance from the shape outline that the bevel starts. Default is 0.
+  * bevelSegments — int。斜角的分段层数，默认值为3。
+  * extrudePath — THREE.Curve对象。一条沿着被挤出形状的三维样条线。Bevels not supported for path extrusion.
+  * UVGenerator — Object。提供了UV生成器函数的对象。
 
 <code src="./demo/ExtrudeGeometry.tsx"></code>
 <code src="./demo/ExtrudeGeometry1.tsx"></code>
-
 
 ## IcosahedronGeometry 二十面体
 
@@ -187,11 +180,10 @@ detail — 默认值为0。将这个值设为一个大于0的数将会为它增�
 3. phiStart — 以弧度表示的起始角度，默认值为0。
 4. phiLength — 车削部分的弧度（0-2PI）范围，2PI将是一个完全闭合的、完整的车削几何体，小于2PI是部分的车削。默认值是2PI。
 
-
 ```js
 const points = [];
 for ( let i = 0; i < 10; ++ i ) {
-	points.push( new THREE.Vector2( Math.sin( i * 0.2 ) * 3 + 3, ( i - 5 ) * .8 ) );
+ points.push( new THREE.Vector2( Math.sin( i * 0.2 ) * 3 + 3, ( i - 5 ) * .8 ) );
 }
 
 const segments = 12;  
@@ -221,7 +213,6 @@ const geometry = new OctahedronGeometry( radius, detail );
 
 生成由参数表示其表面的几何体。
 
-
 1. func — 一个函数，它接受 u 和 v 值，每个值都在 0 到 1 之间，并修改第三个参数。 默认是生成曲面的函数。
 2. slices — 用于参数函数的切片计数。 默认为8
 3. stacks — 用于参数函数的堆栈计数。 默认值为8
@@ -243,6 +234,7 @@ const material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.Doub
 const plane = new THREE.Mesh( geometry, material );
 scene.add( plane );
 ```
+
 1. width — 平面沿着 X 轴的宽度。默认值是 1。
 2. height — 平面沿着 Y 轴的高度。默认值是 1。
 3. widthSegments — （可选）平面的宽度分段数，默认值是 1。
@@ -250,9 +242,7 @@ scene.add( plane );
 
 <code src="./demo/PlaneGeometry.tsx"></code>
 
-
 ## PolyhedronGeometry 多面几何体
-
 
 多面体在三维空间中具有一些平面的立体图形。这个类将一个顶点数组投射到一个球面上，之后将它们细分为所需的细节级别。 这个类由DodecahedronGeometry、IcosahedronGeometry、OctahedronGeometry和TetrahedronGeometry 所使用，以生成它们各自的几何结构。
 
@@ -280,14 +270,12 @@ const indicesOfFaces = [
 const geometry = new THREE.PolyhedronGeometry( verticesOfCube, indicesOfFaces, 6, 2 );
 ```
 
-
 1. vertices — 一个顶点Array（数组）：[1,1,1, -1,-1,-1, ... ]。
 2. indices — 一个构成面的索引Array（数组）， [0,1,2, 2,3,0, ... ]。
 3. radius — Float - 最终形状的半径。
 4. detail — Integer - 将对这个几何体细分多少个级别。细节越多，形状就越平滑。
 
 <code src="./demo/PolyhedronGeometry.tsx"></code>
-
 
 ## RingGeometry 平面圆环
 
@@ -308,7 +296,6 @@ scene.add( mesh );
 6. thetaLength — 圆心角，默认值为Math.PI * 2。
 
 <code src="./demo/RingGeometry.tsx"></code>
-
 
 ## ShapeGeometry 形状缓冲几何体
 
@@ -342,7 +329,6 @@ scene.add( mesh );
 
 <code src="./demo/ShapeGeometry.tsx"></code>
 
-
 ## SphereGeometry 球缓冲几何体
 
 一个用于生成球体的类。
@@ -366,8 +352,6 @@ scene.add( sphere );
 
 <code src="./demo/SphereGeometry.tsx"></code>
 
-
-
 ## TetrahedronGeometry 四面几何体
 
 一个用于生成四面几何体的类。
@@ -378,7 +362,6 @@ const detail = 2;
 const geometry = new THREE.TetrahedronGeometry( radius, detail );
 ```
 
-
 1. radius — 四面体的半径，默认值为1。
 2. detail — 默认值为0。将这个值设为一个大于0的数将会为它增加一些顶点，使其不再是一个四面体。
 
@@ -387,7 +370,6 @@ const geometry = new THREE.TetrahedronGeometry( radius, detail );
 ## TextGeometry 文本缓冲几何体
 
 一个用于将文本生成为单一的几何体的类。
-
 
 ```js
 const loader = new FontLoader();
@@ -407,7 +389,6 @@ loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
 } );
 ```
 
-
 1. font — THREE.Font的实例。
 2. size — Float。字体大小，默认值为100。
 3. height — Float。挤出文本的厚度。默认值为50。
@@ -419,19 +400,20 @@ loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
 
 <code src="./demo/TextGeometry.tsx"></code>
 
+## TorusGeometry 圆环体
 
+一个用于生成圆环几何体的类。
 
+```js
+const geometry = new THREE.TorusGeometry( 10, 3, 16, 100 ); 
+const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } ); 
+const torus = new THREE.Mesh( geometry, material ); scene.add( torus );
+```
 
+1. radius - 环面的半径，从环面的中心到管道横截面的中心。默认值是1。
+2. tube — 管道的半径，默认值为0.4。
+3. radialSegments — 管道横截面的分段数，默认值为12。
+4. tubularSegments — 管道的分段数，默认值为48。
+5. arc — 圆环的圆心角（单位是弧度），默认值为Math.PI * 2。
 
-
-
-
-
-
-
-
-
-
-
-
-
+<code src="./demo/TorusGeometry.tsx"></code>
