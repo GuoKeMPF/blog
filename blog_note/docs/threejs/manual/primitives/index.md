@@ -417,3 +417,91 @@ const torus = new THREE.Mesh( geometry, material ); scene.add( torus );
 5. arc — 圆环的圆心角（单位是弧度），默认值为Math.PI * 2。
 
 <code src="./demo/TorusGeometry.tsx"></code>
+
+## TorusKnotGeometry 环形节
+
+创建一个圆环扭结，其特殊形状由一对互质的整数，p和q所定义。如果p和q不互质，创建出来的几何体将是一个环面链接。
+
+1. radius - 圆环的半径，默认值为1。
+2. tube — 管道的半径，默认值为0.4。
+3. tubularSegments — 管道的分段数量，默认值为64。
+4. radialSegments — 横截面分段数量，默认值为8。
+5. p — 这个值决定了几何体将绕着其旋转对称轴旋转多少次，默认值是2。
+6. q — 这个值决定了几何体将绕着其内部圆环旋转多少次，默认值是3。
+
+```js
+const radius = 3.5;  
+const tubeRadius = 1.5;  
+const radialSegments = 8;  
+const tubularSegments = 64;  
+const p = 2;
+const q = 3;
+const geometry = new THREE.TorusKnotGeometry( radius, tubeRadius, tubularSegments, radialSegments, p, q );
+```
+
+<code src="./demo/TorusKnotGeometry.tsx"></code>
+
+## TubeGeometry 管道几何体
+
+1. path — Curve - 一个由基类Curve继承而来的3D路径。 Default is a quadratic bezier curve.
+2. tubularSegments — Integer - 组成这一管道的分段数，默认值为64。
+3. radius — Float - 管道的半径，默认值为1。
+4. radialSegments — Integer - 管道横截面的分段数目，默认值为8。
+5. closed — Boolean 管道的两端是否闭合，默认值为false。
+
+```js
+class CustomSinCurve extends THREE.Curve {
+	constructor( scale = 1 ) {
+		super();
+		this.scale = scale;
+	}
+	getPoint( t, optionalTarget = new THREE.Vector3() ) {
+		const tx = t * 3 - 1.5;
+		const ty = Math.sin( 2 * Math.PI * t );
+		const tz = 0;
+		return optionalTarget.set( tx, ty, tz ).multiplyScalar( this.scale );
+	}
+}
+const path = new CustomSinCurve( 10 );
+const geometry = new THREE.TubeGeometry( path, 20, 2, 8, false );
+const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+const mesh = new THREE.Mesh( geometry, material );
+scene.add( mesh );
+```
+
+<code src="./demo/TubeGeometry.tsx"></code>
+
+## EdgesGeometry 边缘几何体
+
+一个工具对象，将一个几何体作为输入，生成面夹角大于某个阈值的那条边。例如，你从顶上看一个盒子，你会看到有一条线穿过这个面，因为每个组成这个盒子的三角形都显示出来了。而如果使用 EdgesGeometry 中间的线就会被移除。调整下面的 thresholdAngle，你就会看到夹角小于这个值的边消失了。
+
+1. geometry — 任何一个几何体对象。
+2. thresholdAngle — 仅当相邻面的法线之间的角度（单位为角度）超过这个值时，才会渲染边缘。默认值为1。
+
+```js
+const geometry = new THREE.BoxGeometry( 100, 100, 100 );
+const edges = new THREE.EdgesGeometry( geometry );
+const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
+scene.add( line );
+```
+
+<code src="./demo/EdgesGeometry.tsx"></code>
+
+## WireframeGeometry 网格几何体
+
+这个类可以被用作一个辅助物体，来对一个geometry以线框的形式进行查看。
+
+对于给定的几何体，生成每个边包含一个线段（2 个点）的几何体。如果不这样，通常缺边或者多边，因为 WebGL 中每条边通常需要 2 个点。例如，如果你只有一个三角形，就只有 3 个点 。如果你用 wireframe: true 的材质来绘制它，你只能得到一条线。将这个三角形几何体传给 WireframeGeometry 就能生成一个新的几何体，这个几何体用 6 个点组成 3 条线段。
+
+1. geometry — 任意几何体对象。
+
+<code src="./demo/WireframeGeometry.tsx"></code>
+
+
+
+
+
+
+
+
+

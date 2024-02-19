@@ -15,3 +15,4 @@ order: 1
 # 基础
 
 - [图元](/threejs/manual/primitives '图元 primitives')
+- [场景图](/threejs/manual/scenegraph '场景图 scene graph')

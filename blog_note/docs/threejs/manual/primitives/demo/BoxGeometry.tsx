@@ -2,7 +2,7 @@ import React from 'react';
 import { BoxGeometry } from 'three';
 
 
-import { CommonGeometryDemo, FormUnitType } from "../component";
+import { CommonGeometry, FormUnitType } from "../component";
 
 const formConfig: FormUnitType[] = [
 
@@ -62,7 +62,7 @@ const BoxGeometryDemo = () => {
     return geometry;
   }
 
-  return <CommonGeometryDemo formConfig={formConfig} createGeometry={createGeometry} />;
+  return <CommonGeometry formConfig={formConfig} createGeometry={createGeometry} />;
 
 };
 

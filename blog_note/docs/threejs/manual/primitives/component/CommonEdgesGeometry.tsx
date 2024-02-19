@@ -17,12 +17,12 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import { FormUnit, FormUnitType } from '.';
 
-type CommonDemoProps = {
+type CommonEdgesGeometryProps = {
   formConfig: FormUnitType[];
   createGeometry: (data) => any;
 };
 
-export const CommonGeometryDemo: FC<CommonDemoProps> = ({
+export const CommonEdgesGeometry: FC<CommonEdgesGeometryProps> = ({
   formConfig,
   createGeometry,
 }) => {
@@ -41,8 +41,7 @@ export const CommonGeometryDemo: FC<CommonDemoProps> = ({
       groupRef.current.children.forEach((child) => {
         child.geometry.dispose();
       });
-      groupRef.current.children[0].geometry = new WireframeGeometry(geometry);
-      groupRef.current.children[1].geometry = geometry;
+      groupRef.current.children[0].geometry = geometry;
     }
   }, [data]);
 
@@ -83,15 +82,8 @@ export const CommonGeometryDemo: FC<CommonDemoProps> = ({
         transparent: true,
         opacity: 0.5,
       });
-      const meshMaterial = new MeshPhongMaterial({
-        color: 0x156289,
-        emissive: 0x072534,
-        side: DoubleSide,
-        flatShading: true,
-      });
 
       group.add(new LineSegments(geometry, lineMaterial));
-      group.add(new Mesh(geometry, meshMaterial));
       groupRef.current = group;
 
       scene.add(group);
@@ -132,4 +124,4 @@ export const CommonGeometryDemo: FC<CommonDemoProps> = ({
   );
 };
 
-export default CommonGeometryDemo;
+export default CommonEdgesGeometry;

@@ -4,6 +4,7 @@ export * from "./FormFiled"
 
 export * from "./type"
 
-export * from './CommonDemo'
+export * from './CommonGeometry'
+export * from './CommonEdgesGeometry'
 export * from './marks'
 
