@@ -83,3 +83,62 @@ class FoodViewSet(ModelViewSet):
         self.perform_update(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=200, headers=headers)
+
+
+class SellFoodViewSet(ModelViewSet):
+    queryset = Foods.objects.all()
+    serializer_class = FoodSerializer
+    filter_backends = [SearchFilter]
+    model = Foods
+    search_fields = ["name", "content", "description"]
+
+    # 购物车批量购买
+    def sellFoods(self, request, *args, **kwargs):
+        print("sell foods and update")
+        doesNotExist = []
+        notEnough = []
+        buySuccess = []
+        data = request.data
+        for item in data:
+            id, num = item["id"], item["num"]
+            try:
+                instance = self.model.objects.get(id=id)
+                inventory = instance.inventory
+                if inventory >= num:
+                    instance.inventory -= num
+                    instance.save()
+                    serializer = FoodsSerializer(instance)
+                    buySuccess.append(serializer.data)
+                else:
+                    serializer = FoodsSerializer(instance)
+                    notEnough.append(serializer.data)
+            except self.model.DoesNotExist:
+                doesNotExist.append(id)
+        return Response(
+            {
+                "data": {
+                    "buySuccess": buySuccess,
+                    "notEnough": notEnough,
+                    "doesNotExist": doesNotExist,
+                },
+            },
+            status=200,
+        )
+
+    # 单个商品销售
+    def sellFood(self, request, *args, **kwargs):
+        print("sell and update")
+        id = kwargs["pk"]
+        try:
+            instance = self.model.objects.get(id=id)
+            inventory = instance.inventory
+            if inventory >= 1:
+                instance.inventory -= 1
+                instance.save()
+                return Response({}, status=200)
+            else:
+                message = "商品库存不足"
+                return Response({"message": message, "data": None}, status=200)
+        except self.model.DoesNotExist:
+            message = "商品不存在"
+            return Response({"message": message, "data": None}, status=200)

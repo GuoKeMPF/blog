@@ -12,4 +12,12 @@ class FoodSerializer(serializers.ModelSerializer):
 class FoodsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Foods
-        fields = ["id", "name", "content", "description", "create_time", "update_time"]
+        fields = [
+            "id",
+            "name",
+            "content",
+            "inventory",
+            "description",
+            "create_time",
+            "update_time",
+        ]

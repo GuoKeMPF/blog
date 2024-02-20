@@ -11,6 +11,9 @@ class Foods(models.Model):
     description = models.CharField(
         max_length=255, help_text="描述", null=True, blank=True
     )
+    inventory = models.IntegerField(
+        verbose_name="库存", help_text="inventory", default=0
+    )
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="create time")
     update_time = models.DateTimeField(auto_now=True, verbose_name="update at")
 

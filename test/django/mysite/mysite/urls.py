@@ -14,10 +14,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, re_path
-from foods.views import FoodViewSet
-
+from foods.views import FoodViewSet, SellFoodViewSet
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -35,6 +35,24 @@ urlpatterns = [
                 "put": "update",
                 "patch": "partial_update",
                 "delete": "destroy",
+            }
+        ),
+        name="foods",
+    ),
+    re_path(
+        r"^sell/foods",
+        SellFoodViewSet.as_view(
+            {
+                "post": "sellFoods",
+            }
+        ),
+        name="foods",
+    ),
+    re_path(
+        r"^sell/food/(?P<pk>\w+)/?$",
+        SellFoodViewSet.as_view(
+            {
+                "put": "sellFood",
             }
         ),
         name="foods",
