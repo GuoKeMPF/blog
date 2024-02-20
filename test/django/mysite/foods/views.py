@@ -135,10 +135,33 @@ class SellFoodViewSet(ModelViewSet):
             if inventory >= 1:
                 instance.inventory -= 1
                 instance.save()
-                return Response({}, status=200)
+                serializer = FoodsSerializer(instance)
+                return Response(serializer.data, status=200)
             else:
                 message = "商品库存不足"
                 return Response({"message": message, "data": None}, status=200)
+        except self.model.DoesNotExist:
+            message = "商品不存在"
+            return Response({"message": message, "data": None}, status=200)
+
+
+class InventoryFoodViewSet(ModelViewSet):
+    queryset = Foods.objects.all()
+    serializer_class = FoodSerializer
+    filter_backends = [SearchFilter]
+    model = Foods
+
+    def supplement(self, request, *args, **kwargs):
+        print("supplement and update")
+        id = kwargs["pk"]
+        try:
+            instance = self.model.objects.get(id=id)
+            data = request.data
+            num =  data["num"]
+            instance.inventory += num
+            instance.save()
+            serializer = FoodsSerializer(instance)
+            return Response(serializer.data, status=200)
         except self.model.DoesNotExist:
             message = "商品不存在"
             return Response({"message": message, "data": None}, status=200)

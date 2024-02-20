@@ -17,7 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, re_path
-from foods.views import FoodViewSet, SellFoodViewSet
+from foods.views import FoodViewSet, SellFoodViewSet, InventoryFoodViewSet
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -53,6 +53,15 @@ urlpatterns = [
         SellFoodViewSet.as_view(
             {
                 "put": "sellFood",
+            }
+        ),
+        name="foods",
+    ),
+    re_path(
+        r"^inventory/food/(?P<pk>\w+)/?$",
+        InventoryFoodViewSet.as_view(
+            {
+                "put": "supplement",
             }
         ),
         name="foods",
