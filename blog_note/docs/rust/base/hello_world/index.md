@@ -1,3 +1,9 @@
+---
+title: hello world
+order: 2
+---
+
+
 # Rust 程序
 
 ### 编写 Rust 程序
@@ -7,7 +13,7 @@
   文件名小写，多个单词用下划线连接，如：`hello_world.rs`
 * 一个项目可以有多个文件，但只能有一个 `main` 函数
 
-```rs
+```rust
 fn main() {
     println!("hello word");
 }
@@ -35,14 +41,10 @@ fn main() {
 
 * 运行 Rust 程序之前必须先编译，命令为：`rustc 源文件名`
 
-```shell
+```sh
 rustc hello_world.rs
 ```
 
 * 编译成功后，会生成一个二进制文件，在windows下还会生成一个 .pdb 文件，里面包含调试信息。
 * Rust 是一个 ahead-of-time 编译语言，可以先编译程序，再把程序交给别人运行（无需安装 Rust）
 * rustc 只适合单个文件，如果要cargo
-
-
-
-
