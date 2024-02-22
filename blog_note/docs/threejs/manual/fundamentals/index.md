@@ -115,6 +115,7 @@ const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 ```javascript
 const scene = new THREE.Scene();
 ```
+5. 创建几何体
 
 然后创建一个包含盒子信息的立方几何体(BoxGeometry)。几乎所有希望在three.js中显示的物体都需要一个包含了组成三维物体的顶点信息的几何体。
 
@@ -140,12 +141,15 @@ const material = new THREE.MeshBasicMaterial({color: 0x44aa88});
 ```javascript
 const cube = new THREE.Mesh(geometry, material);
 ```
+6. 添加到场景中
 
 最后我们将网格添加到场景中。
 
 ```js
 scene.add(cube);
 ```
+
+7. 调用渲染器
 
 之后将场景和摄像机传递给渲染器来渲染出整个场景。
 
