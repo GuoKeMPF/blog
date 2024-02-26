@@ -53,3 +53,20 @@ cargo build --release
 * 编译时会进行优化
   * 代码会运行的更快，但是编译时间更长
 * 会在 target/release 目录下生成可执行文件 为不是 tarrget/debug 目录下的可执行文件
+
+## 安装/更新依赖包
+
+找到`dependencies`部分
+
+```toml
+[dependencies]
+<package name> = "<package version>"
+```
+
+`<package name>`表示要安装的包名，`<package version>` 表示依赖包的版本
+
+格式为 `xx.xx.xx`, 支持 `^` 和 `~`。表示最低版本号和最高版本号。
+
+例如 `0.3.0` 则会安装 `0.3.0` 和 `^0.3.0` 则会安装 `0.3.0` 及其以上版本，`~0.3.0` 则会安装 `0.3.0` 及其以下版本。
+
+如果需要更新版本，直接修改版本号即可。下次编译时会自动更新依赖包。
