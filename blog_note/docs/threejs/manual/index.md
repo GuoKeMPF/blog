@@ -16,3 +16,4 @@ order: 1
 
 - [图元](/threejs/manual/primitives '图元 primitives')
 - [场景图](/threejs/manual/scenegraph '场景图 scene graph')
+- [材质](/threejs/manual/materials '材质 materials')

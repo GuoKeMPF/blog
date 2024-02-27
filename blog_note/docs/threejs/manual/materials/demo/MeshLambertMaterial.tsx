@@ -7,9 +7,9 @@ const { Paragraph } = Typography;
 
 export const MeshPhongMaterialDemo: FC = ({ }) => {
   return <Row gutter={[16, 16]}>
-    <Col xs={2} sm={4} md={6} lg={8} xl={10}>
+    <Col xs={20} sm={16} md={12} lg={8} xl={8}>
 
-      <DemoCell type="MeshBasicMaterialCompare" />
+      <DemoCell type="MeshBasicMaterialCompare" style={{ width: '100%', height: 200 }} />
       <Paragraph>
         <pre>
           {
@@ -19,18 +19,18 @@ color: 'purple'`
         </pre>
       </Paragraph>
     </Col>
-    <Col xs={20} sm={16} md={12} lg={8} xl={4}>
+    <Col xs={20} sm={16} md={12} lg={8} xl={8}>
 
-      <DemoCell type="MeshLambertMaterialCompare" />
+      <DemoCell type="MeshLambertMaterialCompare" style={{ width: '100%', height: 200 }} />
       <Paragraph>
         <pre>{`Lambert
 color: 'black'
 emissive: 'purple'`}</pre>
       </Paragraph>
     </Col>
-    <Col xs={2} sm={4} md={6} lg={8} xl={10}>
+    <Col xs={20} sm={16} md={12} lg={8} xl={8}>
 
-      <DemoCell type="MeshPhongMaterialCompare" />
+      <DemoCell type="MeshPhongMaterialCompare" style={{ width: '100%', height: 200 }} />
       <Paragraph>
         <pre>{`Phong
 color: 'black'
