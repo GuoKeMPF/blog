@@ -1,7 +1,8 @@
 ---
-toc: menu
 title: 二叉树
+order: 6
 ---
+
 
 # 二叉树
 
