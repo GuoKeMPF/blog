@@ -13,8 +13,8 @@ Web 组件的一个关键特性是创建自定义元素：即由 Web 开发人�
 
 有两种类型的自定义元素：
 
-1. **自定义内置元素（Customized built-in element）**继承自标准的 HTML 元素，例如 HTMLImageElement 或 HTMLParagraphElement。它们的实现定义了标准元素的行为。
-2. **独立自定义元素（Autonomous custom element）**继承自 HTML 元素基类 HTMLElement。必须从头开始实现它们的行为。
+1. **自定义内置元素（Customized built-in element）** 继承自标准的 HTML 元素，例如 HTMLImageElement 或 HTMLParagraphElement。它们的实现定义了标准元素的行为。
+2. **独立自定义元素（Autonomous custom element）** 继承自 HTML 元素基类 HTMLElement。必须从头开始实现它们的行为。
 
 ### 自定义元素生命周期回调
 

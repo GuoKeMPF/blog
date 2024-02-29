@@ -2,12 +2,18 @@
 
 **/.DS_store
 
+# django
 **/blog_static/**
 **/db.sqlite3
 **/server_static/**
+blog_server/db.sqlite3
+
+# uim & dumi
 **/node_modules/**
 **/.umi/**
 **/dist/**
 **/docs-dist/**
-blog_server/db.sqlite3
-**/node_modules
+
+# rust
+**/target/*
+**/**/*.exe
