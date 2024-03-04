@@ -8,3 +8,4 @@
 - [猜数游戏](/rust/base/guess_num '猜数游戏')
 - [通用编程概念](/rust/base/concept '通用编程概念 concept')
 
+- [所有权](/rust/base/ownership '所有权 ownership')
