@@ -520,17 +520,99 @@ fn main(){
 ```
 
 
-:::
+:::info
 字符串切片范围索引必须发生在有效的 utf-8字符串边界内。
 
 如果尝试从一个多字节的字符串种创建字符串切片，程序会报错并退出。
 :::
 
+```rust
+fn main() {
+    let s: String = String::from("hello world");
+    let first_word: &str = first_word(&s);
+    println!("first word = {}", first_word);
+}
+fn first_word(s: &String) -> &str {
+    let bytes: &[u8] = s.as_bytes();
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[..i];
+        }
+    }
+    return &s[..];
+}
+
+```
 
 
 
+字符串字面值是切片
+
+字符串字面值被直接存储在二进制程序种
+
+```rust
+let s = "hello world";"
+```
+
+变量s的类型是&str，它是一个指向二进制程序特定位置的切片
+
+&str 是不可变引用，所以字符串字面值也是不可变的
+
+##### 字符串 slice 作为参数
+
+```rust
+fn first_word(s: &String) -> &str {}
+```
+
+采用 &str 作为参数类型，这样可以同时接受 String 和 &str 
+
+```rust
+fn first_word(s: &str) -> &str {}
+```
+
+定义一个获取字符串 slice 而不是 String 引用的函数使得我们的 API 更加通用并且不会丢失任何功能。
 
 
+```rust
+fn main() {
+    let s: String = String::from("hello world");
+    let first_word: &str = find_first_word(&s[..]);
+    println!("first word = {}", first_word);
+
+    let a2: &str = "hello world";
+
+    let first_word_a1: &str = find_first_word(a2);
+
+    println!("first word = {}", first_word_a1);
+}
+fn find_first_word(s: &str) -> &str {
+    let bytes: &[u8] = s.as_bytes();
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[..i];
+        }
+    }
+    return &s[..];
+}
+```
+
+
+### 其他类型的切片
+
+字符串 slice，正如想象的那样，是针对字符串的。不过也有更通用的 slice 类型。考虑一下这个数组：
+
+
+```rust
+
+let a = [1, 2, 3, 4, 5];
+
+let slice = &a[1..3];
+
+assert_eq!(slice, &[2, 3]);
+
+```
+
+这个 slice 的类型是 &[i32]。它跟字符串 slice 的工作方式一样，通过存储第一个集合元素的引用和一个集合总长度。你可以对其他所有集合使用这类 slice。第八章讲到 vector 时会详细讨论这些集合。
 
 
 

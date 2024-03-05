@@ -94,17 +94,59 @@
 //     &s
 // }
 
+// fn main() {
+//     let s = String::from("hello world");
+//     let first_word = find_first_word(&s);
+//     println!("first word = {}", first_word);
+// }
+// fn find_first_word(s: &String) -> usize {
+//     let bytes = s.as_bytes();
+//     for (i, &item) in bytes.iter().enumerate() {
+//         if item == b' ' {
+//             return i;
+//         }
+//     }
+//     return s.len();
+// }
+
+// fn main() {
+//     let s: String = String::from("hello world");
+//     let first_word: &str = find_first_word(&s);
+//     println!("first word = {}", first_word);
+// }
+// fn find_first_word(s: &String) -> &str {
+//     let bytes: &[u8] = s.as_bytes();
+//     for (i, &item) in bytes.iter().enumerate() {
+//         if item == b' ' {
+//             return &s[..i];
+//         }
+//     }
+//     return &s[..];
+// }
+
+// fn main() {
+//     let s: String = String::from("hello world");
+//     let first_word: &str = find_first_word(&s[..]);
+//     println!("first word = {}", first_word);
+
+//     let a2: &str = "hello world";
+
+//     let first_word_a1: &str = find_first_word(a2);
+
+//     println!("first word = {}", first_word_a1);
+// }
+// fn find_first_word(s: &str) -> &str {
+//     let bytes: &[u8] = s.as_bytes();
+//     for (i, &item) in bytes.iter().enumerate() {
+//         if item == b' ' {
+//             return &s[..i];
+//         }
+//     }
+//     return &s[..];
+// }
+
 fn main() {
-    let s = String::from("hello world");
-    let first_word = first_word(&s);
-    println!("first word = {}", first_word);
-}
-fn first_word(s: &String) -> usize {
-    let bytes = s.as_bytes();
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return i;
-        }
-    }
-    return s.len();
+    let a = [1, 2, 3, 4, 5];
+    let slice = &a[1..3];
+    assert_eq!(slice, &[2, 3]);
 }
