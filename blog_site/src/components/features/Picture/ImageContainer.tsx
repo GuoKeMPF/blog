@@ -86,8 +86,6 @@ const ImageContainer: FC<ImageProps> = ({ src, alt, data }) => {
 							onClick={serPicture}
 							className={styles.image}
 							src={src}
-							width={data.width}
-							height={data.height}
 							alt={alt || ""}
 						/>
 					)}

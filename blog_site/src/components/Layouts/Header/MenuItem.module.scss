@@ -1,17 +1,17 @@
 .item {
-  color: inherit;
+	color: inherit;
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
+	.content {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.3);
 
-    .icon {
-      font-size: 32px;
-      font-weight: 600;
-    }
-  }
+		.icon {
+			font-size: 40px;
+			font-weight: 700;
+		}
+	}
 }
