@@ -11,3 +11,5 @@
 **/docs-dist/**
 blog_server/db.sqlite3
 **/node_modules
+**/debug
+**/target
