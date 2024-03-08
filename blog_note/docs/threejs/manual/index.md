@@ -18,3 +18,4 @@ order: 1
 - [场景图](/threejs/manual/scenegraph '场景图 scene graph')
 - [材质](/threejs/manual/materials '材质 materials')
 - [纹理](/threejs/manual/textures '纹理 textures')
+- [光线](/three/manual/lights '光线 lights')
