@@ -1,6 +1,6 @@
 ---
 title: 排序
-toc: menu
+order: 4
 ---
 
 # 排序算法

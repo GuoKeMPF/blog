@@ -6,11 +6,11 @@ type RegFormProps = {
   regexp?: RegExp;
 };
 
-interface Status {
-  validateStatus: 'error' | 'success' | 'warning' | 'validating' | 'empty';
-  prefix?: React.ReactNode;
-  help?: string;
-}
+// interface Status {
+//   validateStatus: 'error' | 'success' | 'warning' | 'validating' | 'empty';
+//   prefix?: React.ReactNode;
+//   help?: string;
+// }
 
 export default function RegForm({ regexp = /[\s\S]/ }: RegFormProps) {
   const [form] = Form.useForm();
@@ -66,7 +66,6 @@ export default function RegForm({ regexp = /[\s\S]/ }: RegFormProps) {
     >
       <Form.List name="strings">
         {(fields, { add, remove }, mate) => {
-
           return (
             <>
               {fields.map((field) => {
