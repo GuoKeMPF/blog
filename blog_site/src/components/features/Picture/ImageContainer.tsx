@@ -19,17 +19,7 @@ const ErrorImage: FC<ErrorImageProps> = ({ description }) => {
 	return (
 		<div className={styles.container}>
 			<div className={styles.error}>
-				<div className={styles.number}>
-					<div className={styles.four}></div>
-				</div>
-				<div className={styles.number}>
-					<div className={styles.zero}>
-						<span></span>
-					</div>
-				</div>
-				<div className={styles.number}>
-					<div className={`${styles.four} ${styles.last}`}></div>
-				</div>
+				<p className={styles.number404}>404</p>
 				{description && <p className={styles.description}>{description}</p>}
 			</div>
 		</div>
@@ -86,8 +76,6 @@ const ImageContainer: FC<ImageProps> = ({ src, alt, data }) => {
 							onClick={serPicture}
 							className={styles.image}
 							src={src}
-							width={data.width}
-							height={data.height}
 							alt={alt || ""}
 						/>
 					)}

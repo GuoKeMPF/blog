@@ -15,8 +15,12 @@
 **/docs-dist/**
 **/.dumi/tep
 **/.dumi/tmp-production
+**/node_modules
+
 
 
 # rust
+**/debug
+**/target
 **/target/*
 **/**/*.exe

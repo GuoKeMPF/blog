@@ -102,80 +102,15 @@
 	text-align: center;
 }
 
-.number {
-	position: relative;
-	display: inline-block;
-	width: 150px;
-	transform: translateX(60%);
-}
-
-.four {
-	position: relative;
-	width: 30px;
-	height: 150px;
-	border: 1px solid var(--themeFontColor);
-}
-
-.four::before,
-.four::after {
-	content: "";
-	position: absolute;
-	border: 1px solid var(--themeFontColor);
-}
-
-.four::before {
-	top: 50%;
-	right: -1rem;
-	width: 120px;
-	height: 30px;
-}
-
-.four::after {
-	top: 0;
-	left: -60px;
-	width: 30px;
-	height: 120px;
-}
-
-.zero {
-	position: relative;
-	width: 30px;
-	height: 150px;
-	border: 1px solid var(--themeFontColor);
-}
-
-.zero span {
-	position: absolute;
-	top: 0;
-	left: -60px;
-	width: 30px;
-	height: 150px;
-	border: 1px solid var(--themeFontColor);
-}
-
-.zero::before,
-.zero::after {
-	content: "";
-	position: absolute;
-	border: 1px solid var(--themeFontColor);
-}
-
-.zero::before {
-	top: 1rem;
-	right: -1rem;
-	width: 120px;
-	height: 30px;
-}
-
-.zero::after {
-	bottom: 1rem;
-	right: -1rem;
-	width: 120px;
-	height: 30px;
+.number404 {
+	font-size: 80px;
+	letter-spacing: 1rem;
+	font-weight: 700;
 }
 
 .image {
 	max-width: 100%;
+	max-height: 100%;
 	margin: 0 auto;
 	display: block;
 	cursor: pointer;
