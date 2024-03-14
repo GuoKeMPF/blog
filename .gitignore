@@ -1,4 +1,4 @@
-**/__pycache__/**
+
 
 **/.DS_store
 
@@ -6,13 +6,17 @@
 **/blog_static/**
 **/db.sqlite3
 **/server_static/**
+**/__pycache__/**
 
 # uim & dumi
 **/node_modules/**
 **/.umi/**
 **/dist/**
 **/docs-dist/**
+**/.dumi/tep
+**/.dumi/tmp-production
 **/node_modules
+
 
 
 # rust

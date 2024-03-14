@@ -2,16 +2,12 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import {
   Color,
   DirectionalLight,
-  DoubleSide,
   Group,
   LineBasicMaterial,
   LineSegments,
-  Mesh,
-  MeshPhongMaterial,
   PerspectiveCamera,
   Scene,
   WebGLRenderer,
-  WireframeGeometry,
 } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 

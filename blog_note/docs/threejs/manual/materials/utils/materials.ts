@@ -1,5 +1,4 @@
 import { DoubleSide, FrontSide, Mesh, MeshBasicMaterial, MeshDepthMaterial, MeshLambertMaterial, MeshNormalMaterial, MeshPhongMaterial, MeshPhysicalMaterial, MeshStandardMaterial, MeshToonMaterial, Object3D, PlaneGeometry, SphereGeometry, TorusKnotGeometry } from 'three';
-import { threejsUtils } from './';
 
 
 function makeSphere(widthDivisions, heightDivisions) {
